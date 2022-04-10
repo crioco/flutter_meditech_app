@@ -35,6 +35,7 @@ dependencies:
   adaptive_dialog: ^1.1.0
   font_awesome_flutter: ^9.1.0
   chart_sparkline: ^1.0.5
+  expandable: ^5.0.1
 
 dev_dependencies:
   flutter_lints: ^1.0.4

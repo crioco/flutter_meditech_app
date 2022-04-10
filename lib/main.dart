@@ -21,15 +21,16 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      title: 'IoT Firestore App',
+      title: 'MediTECH App',
       theme: ThemeData(
         textTheme: GoogleFonts.poppinsTextTheme(Theme.of(context).textTheme),
-        scaffoldBackgroundColor: kMainBG,
+        // scaffoldBackgroundColor: kMainBG,
         primarySwatch: Colors.blue,
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
       onGenerateRoute: router.generateRoute,
-      initialRoute: SplashScreenRoute,
+      // initialRoute: SplashScreenRoute,
+      initialRoute: ReminderScreenRoute,
     );
   }
 }
