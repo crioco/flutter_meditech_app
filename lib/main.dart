@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:iot_firestore_flutter_app/route/router.dart' as router;
-import 'package:iot_firestore_flutter_app/route/routing_constants.dart';
+import 'package:flutter_meditech_app/route/router.dart' as router;
+import 'package:flutter_meditech_app/route/routing_constants.dart';
 
 import 'const/custom_colors.dart';
 
@@ -10,11 +10,13 @@ void main() {
   WidgetsFlutterBinding.ensureInitialized();
   SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp])
       .then((_) {
-    runApp(new MyApp());
+    runApp(const MyApp());
   });
 }
 
 class MyApp extends StatelessWidget {
+  const MyApp({Key? key}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(

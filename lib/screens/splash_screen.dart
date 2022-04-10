@@ -1,6 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:iot_firestore_flutter_app/const/custom_styles.dart';
-import 'package:iot_firestore_flutter_app/route/routing_constants.dart';
+import 'package:flutter_meditech_app/const/custom_styles.dart';
+import 'package:flutter_meditech_app/route/routing_constants.dart';
 import 'package:flutter/material.dart';
 
 import '../auth_helper.dart';
@@ -25,7 +25,7 @@ class SplashScreen extends StatelessWidget {
             return _getScreen(context);
           }
         }
-        return Center(
+        return const Center(
           child: CircularProgressIndicator(),
         );
       },
@@ -42,7 +42,7 @@ class SplashScreen extends StatelessWidget {
               children: [
                 Center(
                   child: Container(
-                    child: Image(
+                    child: const Image(
                       image: AssetImage(
                         'assets/images/iot_image.png',
                       ),
@@ -50,20 +50,20 @@ class SplashScreen extends StatelessWidget {
                     ),
                   ),
                 ),
-                SizedBox(
+                const SizedBox(
                   height: 20,
                 ),
-                Text(
+                const Text(
                   "Firebase\nCloud Firestore",
                   style: kHeadline,
                   textAlign: TextAlign.left,
                 ),
-                SizedBox(
+                const SizedBox(
                   height: 20,
                 ),
                 Container(
                   width: MediaQuery.of(context).size.width * 0.8,
-                  child: Text(
+                  child: const Text(
                     "This is a project that connects to hardware devices via Firebase and gets the readings from sensors. For detail, you can check out my channel.",
                     style: kBodyText,
                     textAlign: TextAlign.center,

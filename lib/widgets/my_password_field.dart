@@ -1,4 +1,4 @@
-import 'package:iot_firestore_flutter_app/const/custom_styles.dart';
+import 'package:flutter_meditech_app/const/custom_styles.dart';
 import 'package:flutter/material.dart';
 
 class MyPasswordField extends StatelessWidget {

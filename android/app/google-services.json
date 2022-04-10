@@ -1,0 +1,68 @@
+{
+  "project_info": {
+    "project_number": "953170183603",
+    "project_id": "meditech-9904d",
+    "storage_bucket": "meditech-9904d.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:953170183603:android:bc756a65bd5d11c0edf7c6",
+        "android_client_info": {
+          "package_name": "com.example.firebaseflutter"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "953170183603-0n2i65qamdv0lt7c8mnim91oivkobqii.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB_W92MUwXsxDKXv1q679Pnoo-OXVSQ6Ws"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "953170183603-0n2i65qamdv0lt7c8mnim91oivkobqii.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:953170183603:android:38ec942a683fec74edf7c6",
+        "android_client_info": {
+          "package_name": "com.flutter_meditech_app.android"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "953170183603-0n2i65qamdv0lt7c8mnim91oivkobqii.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB_W92MUwXsxDKXv1q679Pnoo-OXVSQ6Ws"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "953170183603-0n2i65qamdv0lt7c8mnim91oivkobqii.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

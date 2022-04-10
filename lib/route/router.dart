@@ -1,9 +1,9 @@
-import 'package:iot_firestore_flutter_app/route/routing_constants.dart';
-import 'package:iot_firestore_flutter_app/screens/dashboard_screen.dart';
-import 'package:iot_firestore_flutter_app/screens/signin_screen.dart';
-import 'package:iot_firestore_flutter_app/screens/signup_screen.dart';
-import 'package:iot_firestore_flutter_app/screens/splash_screen.dart';
-import 'package:iot_firestore_flutter_app/screens/undefined_screen.dart';
+import 'package:flutter_meditech_app/route/routing_constants.dart';
+import 'package:flutter_meditech_app/screens/dashboard_screen.dart';
+import 'package:flutter_meditech_app/screens/signin_screen.dart';
+import 'package:flutter_meditech_app/screens/signup_screen.dart';
+import 'package:flutter_meditech_app/screens/splash_screen.dart';
+import 'package:flutter_meditech_app/screens/undefined_screen.dart';
 import 'package:flutter/material.dart';
 
 Route<dynamic> generateRoute(RouteSettings settings) {

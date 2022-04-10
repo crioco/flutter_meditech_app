@@ -2,7 +2,7 @@ import 'package:flutter/foundation.dart';
 
 @immutable
 class Sensor {
-  Sensor({
+  const Sensor({
     required this.humidity,
     required this.temperature,
   });

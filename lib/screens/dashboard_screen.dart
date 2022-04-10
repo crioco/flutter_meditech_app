@@ -1,9 +1,9 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:iot_firestore_flutter_app/auth_helper.dart';
-import 'package:iot_firestore_flutter_app/const/custom_styles.dart';
-import 'package:iot_firestore_flutter_app/model/sensor.dart';
-import 'package:iot_firestore_flutter_app/route/routing_constants.dart';
-import 'package:iot_firestore_flutter_app/widgets/my_sensor_card.dart';
+import 'package:flutter_meditech_app/auth_helper.dart';
+import 'package:flutter_meditech_app/const/custom_styles.dart';
+import 'package:flutter_meditech_app/model/sensor.dart';
+import 'package:flutter_meditech_app/route/routing_constants.dart';
+import 'package:flutter_meditech_app/widgets/my_sensor_card.dart';
 import 'package:flutter/material.dart';
 
 class DashboardScreen extends StatefulWidget {
@@ -85,7 +85,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                             style: kHeadline,
                           ),
                         ),
-                        SizedBox(
+                        const SizedBox(
                           height: 30,
                         ),
                         Center(
@@ -96,20 +96,20 @@ class _DashboardScreenState extends State<DashboardScreen> {
                                 value: data.docs.first.data().humidity,
                                 unit: '%',
                                 name: 'Humidity',
-                                assetImage: AssetImage(
+                                assetImage: const AssetImage(
                                   'assets/images/humidity_icon.png',
                                 ),
                                 trendData: rhList!,
                                 linePoint: Colors.blueAccent,
                               ),
-                              SizedBox(
+                              const SizedBox(
                                 height: 20,
                               ),
                               MySensorCard(
                                 value: data.docs.first.data().temperature,
                                 unit: '\'C',
                                 name: 'Temperature',
-                                assetImage: AssetImage(
+                                assetImage: const AssetImage(
                                   'assets/images/temperature_icon.png',
                                 ),
                                 trendData: tempList!,
@@ -124,7 +124,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      Text(
+                      const Text(
                         "Sign out of Firebase? ",
                         style: kBodyText,
                       ),
@@ -139,7 +139,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                       ),
                     ],
                   ),
-                  SizedBox(
+                  const SizedBox(
                     height: 20,
                   ),
                 ],

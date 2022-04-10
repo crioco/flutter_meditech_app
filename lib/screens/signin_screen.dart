@@ -1,10 +1,10 @@
 import 'package:adaptive_dialog/adaptive_dialog.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:iot_firestore_flutter_app/const/custom_styles.dart';
-import 'package:iot_firestore_flutter_app/route/routing_constants.dart';
-import 'package:iot_firestore_flutter_app/widgets/my_password_field.dart';
-import 'package:iot_firestore_flutter_app/widgets/my_text_button.dart';
-import 'package:iot_firestore_flutter_app/widgets/my_text_field.dart';
+import 'package:flutter_meditech_app/const/custom_styles.dart';
+import 'package:flutter_meditech_app/route/routing_constants.dart';
+import 'package:flutter_meditech_app/widgets/my_password_field.dart';
+import 'package:flutter_meditech_app/widgets/my_text_button.dart';
+import 'package:flutter_meditech_app/widgets/my_text_field.dart';
 import 'package:flutter/material.dart';
 
 import '../auth_helper.dart';
@@ -50,18 +50,18 @@ class _SignInScreenState extends State<SignInScreen> {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text(
+                          const Text(
                             "Welcome back.",
                             style: kHeadline,
                           ),
-                          SizedBox(
+                          const SizedBox(
                             height: 10,
                           ),
-                          Text(
+                          const Text(
                             "You've been missed!",
                             style: kBodyText2,
                           ),
-                          SizedBox(
+                          const SizedBox(
                             height: 60,
                           ),
                           MyTextField(
@@ -85,7 +85,7 @@ class _SignInScreenState extends State<SignInScreen> {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        Text(
+                        const Text(
                           "Dont't have an account? ",
                           style: kBodyText,
                         ),
@@ -102,7 +102,7 @@ class _SignInScreenState extends State<SignInScreen> {
                         )
                       ],
                     ),
-                    SizedBox(
+                    const SizedBox(
                       height: 20,
                     ),
                     MyTextButton(

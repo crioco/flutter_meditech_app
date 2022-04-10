@@ -1,11 +1,11 @@
 import 'package:adaptive_dialog/adaptive_dialog.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:iot_firestore_flutter_app/auth_helper.dart';
-import 'package:iot_firestore_flutter_app/const/custom_styles.dart';
-import 'package:iot_firestore_flutter_app/route/routing_constants.dart';
-import 'package:iot_firestore_flutter_app/widgets/my_password_field.dart';
-import 'package:iot_firestore_flutter_app/widgets/my_text_button.dart';
-import 'package:iot_firestore_flutter_app/widgets/my_text_field.dart';
+import 'package:flutter_meditech_app/auth_helper.dart';
+import 'package:flutter_meditech_app/const/custom_styles.dart';
+import 'package:flutter_meditech_app/route/routing_constants.dart';
+import 'package:flutter_meditech_app/widgets/my_password_field.dart';
+import 'package:flutter_meditech_app/widgets/my_text_button.dart';
+import 'package:flutter_meditech_app/widgets/my_text_field.dart';
 import 'package:flutter/material.dart';
 
 class SignUpScreen extends StatefulWidget {
@@ -54,21 +54,21 @@ class _SignUpScreenState extends State<SignUpScreen> {
                             onPressed: () {
                               Navigator.pop(context);
                             },
-                            icon: Image(
+                            icon: const Image(
                               width: 24,
                               color: Colors.white,
                               image: AssetImage('assets/images/back_arrow.png'),
                             ),
                           ),
-                          Text(
+                          const Text(
                             "Register",
                             style: kHeadline,
                           ),
-                          Text(
+                          const Text(
                             "Create new account to get started.",
                             style: kBodyText2,
                           ),
-                          SizedBox(
+                          const SizedBox(
                             height: 50,
                           ),
                           MyTextField(
@@ -102,7 +102,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        Text(
+                        const Text(
                           "Already have an account? ",
                           style: kBodyText,
                         ),
@@ -122,7 +122,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                         ),
                       ],
                     ),
-                    SizedBox(
+                    const SizedBox(
                       height: 20,
                     ),
                     MyTextButton(
