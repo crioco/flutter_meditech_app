@@ -30,7 +30,7 @@ class _ReminderScreenState extends State<ReminderScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: const MyAppBar(title: 'Reminder'),
-      drawer: const MySideMenu(),
+      drawer: MySideMenu(),
       body: Padding(
         padding: const EdgeInsets.all(20),
         child: SingleChildScrollView(
