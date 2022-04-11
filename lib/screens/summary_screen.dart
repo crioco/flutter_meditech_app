@@ -1,11 +1,9 @@
-import 'dart:ffi';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_meditech_app/widgets/my_app_bar.dart';
 import 'package:flutter_meditech_app/widgets/my_side_menu.dart';
 import 'package:intl/intl.dart';
-
+import 'package:flutter_meditech_app/const/global_functions.dart';
 class SummaryScreen extends StatefulWidget {
   const SummaryScreen({Key? key}) : super(key: key);
 
@@ -44,10 +42,10 @@ class _SummaryScreenState extends State<SummaryScreen> {
                               var takenTime = data['takenTime'].toDate().add(const Duration(hours: 8));
                               var pills = data['pills'];
             
-                              print('Skipped: $isSkipped');
-                              print('Alarm Time: $alarmTime');
-                              print('Taken Time: $takenTime');
-                              print('Pill List: $pills');
+                              // print('Skipped: $isSkipped');
+                              // print('Alarm Time: $alarmTime');
+                              // print('Taken Time: $takenTime');
+                              // print('Pill List: $pills');
                               return Text(alarmTime.toString());
                             },
                           ).toList(),

@@ -1,6 +1,6 @@
 String convertToTwelveHour(int time) {
   String formattedTime, meridiem;
-  var hour = (time / 100).floor();
+  var hour = (time / 100).floor() - 12;
   var minute = time % 100;
 
   if (hour >= 12) {
