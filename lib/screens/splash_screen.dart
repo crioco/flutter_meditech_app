@@ -2,6 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_meditech_app/const/custom_styles.dart';
 import 'package:flutter_meditech_app/route/routing_constants.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_meditech_app/screens/reminder_screen.dart';
 
 import '../auth_helper.dart';
 
@@ -11,14 +12,14 @@ class SplashScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        body: FutureBuilder(
+      body: FutureBuilder(
       future: AuthHelper.initializeFirebase(context: context),
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.done) {
           User? user = AuthHelper.currentUser();
           if (user != null) {
             Future.delayed(Duration.zero, () async {
-              Navigator.pushNamedAndRemoveUntil(context, DashboardScreenRoute,
+              Navigator.pushNamedAndRemoveUntil(context, ReminderScreenRoute,
                   (Route<dynamic> route) => false);
             });
           } else {
