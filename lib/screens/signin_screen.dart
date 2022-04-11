@@ -96,7 +96,7 @@ class _SignInScreenState extends State<SignInScreen> {
                           child: Text(
                             'Register',
                             style: kBodyText.copyWith(
-                              color: Colors.white,
+                              color: Colors.black,
                             ),
                           ),
                         )
@@ -137,7 +137,7 @@ class _SignInScreenState extends State<SignInScreen> {
 
     if (obj is User) {
       Navigator.pushNamedAndRemoveUntil(
-          context, DashboardScreenRoute, (Route<dynamic> route) => false);
+          context, ReminderScreenRoute, (Route<dynamic> route) => false);
     } else {
       await showOkAlertDialog(
         context: context,

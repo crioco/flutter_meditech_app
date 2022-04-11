@@ -131,7 +131,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                           child: Text(
                             "Sign In",
                             style: kBodyText.copyWith(
-                              color: Colors.white,
+                              color: Colors.black,
                             ),
                           ),
                         ),
@@ -182,8 +182,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
     if (obj is User) {
       addUser(firstname: firstname, lastname: lastname, user: obj);
       Navigator.pushNamedAndRemoveUntil(
-          context, DashboardScreenRoute, (Route<dynamic> route) => false);
-      dispose();
+          context, ReminderScreenRoute, (Route<dynamic> route) => false);
     } else {
       await showOkAlertDialog(
         context: context,

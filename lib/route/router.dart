@@ -9,6 +9,10 @@ import 'package:flutter/material.dart';
 
 Route<dynamic> generateRoute(RouteSettings settings) {
   switch (settings.name) {
+
+    case ReminderScreenRoute:
+      return MaterialPageRoute(builder: (context) => ReminderScreen());
+
     case SplashScreenRoute:
       return MaterialPageRoute(builder: (context) => SplashScreen());
 
@@ -21,9 +25,6 @@ Route<dynamic> generateRoute(RouteSettings settings) {
     case DashboardScreenRoute:
       return MaterialPageRoute(builder: (context) => DashboardScreen());
 
-    case ReminderScreenRoute:
-      return MaterialPageRoute(builder: (context) => ReminderScreen());
-    
 
     default:
       return MaterialPageRoute(

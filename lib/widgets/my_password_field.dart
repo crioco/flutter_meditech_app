@@ -21,7 +21,7 @@ class MyPasswordField extends StatelessWidget {
       child: TextField(
         controller: textEditingController,
         style: kBodyText.copyWith(
-          color: Colors.white,
+          color: Colors.black,
         ),
         obscureText: isPasswordVisible,
         keyboardType: TextInputType.text,
@@ -53,7 +53,7 @@ class MyPasswordField extends StatelessWidget {
           ),
           focusedBorder: OutlineInputBorder(
             borderSide: BorderSide(
-              color: Colors.white,
+              color: Colors.grey.shade600,
               width: 1,
             ),
             borderRadius: BorderRadius.circular(18),

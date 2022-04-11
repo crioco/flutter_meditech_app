@@ -46,7 +46,7 @@ class SplashScreen extends StatelessWidget {
                       image: AssetImage(
                         'assets/images/iot_image.png',
                       ),
-                      color: Colors.white,
+                      color: Colors.black,
                     ),
                   ),
                 ),

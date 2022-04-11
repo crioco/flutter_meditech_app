@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_meditech_app/widgets/my_app_bar.dart';
+import 'package:flutter_meditech_app/widgets/my_side_menu.dart';
 
 var monday = [
   {
@@ -27,7 +29,8 @@ class _ReminderScreenState extends State<ReminderScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Reminder')),
+      appBar: const MyAppBar(title: 'Reminder'),
+      drawer: const MySideMenu(),
       body: Padding(
         padding: const EdgeInsets.all(20),
         child: SingleChildScrollView(
