@@ -17,6 +17,8 @@ class _SummaryScreenState extends State<SummaryScreen> {
       FirebaseFirestore.instance.collection('DEVICE001').snapshots();
   @override
   Widget build(BuildContext context) {
+    final timeNow = DateTime.now();
+
     return Scaffold(
       appBar: const MyAppBar(title: 'Summary'),
       drawer: MySideMenu(),
@@ -31,13 +33,15 @@ class _SummaryScreenState extends State<SummaryScreen> {
                     (DocumentSnapshot document) {
                       var data = document.data()! as Map<String, dynamic>;
                       var isSkipped = data['isSkipped'];
-                      print(isSkipped);
-                      var alarmTime = data['alarmTime'];
+                      var alarmTime = data['alarmTime'].toDate().add(const Duration(hours: 8));
+                      var takenTime = data['takenTime'].toDate().add(const Duration(hours: 8));
                       var pills = data['pills'];
-                      print(isSkipped);
-                      print(alarmTime);
-                      print(pills);
-                      return const Text('Text');
+
+                      print('Skipped: $isSkipped');
+                      print('Alarm Time: $alarmTime');
+                      print('Taken Time: $takenTime');
+                      print('Pill List: $pills');
+                      return Text(alarmTime.toString());
                     },
                   ).toList(),
                 );
