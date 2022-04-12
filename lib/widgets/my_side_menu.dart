@@ -22,9 +22,9 @@ class MySideMenu extends StatelessWidget {
                   ),
                 ),
                 SideMenuListTile(
-                    tileText: 'Reminder', navRoute: ReminderScreenRoute),
+                    tileText: 'Reminder', tileIcon: Icon(Icons.alarm),navRoute: ReminderScreenRoute),
                 SideMenuListTile(
-                    tileText: 'Summary', navRoute: SummaryScreenRoute),
+                    tileText: 'Summary', tileIcon: Icon(Icons.pie_chart), navRoute: SummaryScreenRoute),
               ],
             ),
           ),
