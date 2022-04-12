@@ -4,10 +4,13 @@ import 'package:flutter_meditech_app/screens/signin_screen.dart';
 import 'package:flutter_meditech_app/screens/signup_screen.dart';
 import 'package:flutter_meditech_app/screens/splash_screen.dart';
 import 'package:flutter_meditech_app/screens/undefined_screen.dart';
+import 'package:flutter_meditech_app/screens/reminder_screen.dart';
+import 'package:flutter_meditech_app/screens/summary_screen.dart';
 import 'package:flutter/material.dart';
 
 Route<dynamic> generateRoute(RouteSettings settings) {
   switch (settings.name) {
+
     case SplashScreenRoute:
       return MaterialPageRoute(builder: (context) => SplashScreen());
 
@@ -17,8 +20,15 @@ Route<dynamic> generateRoute(RouteSettings settings) {
     case SignUpScreenRoute:
       return MaterialPageRoute(builder: (context) => SignUpScreen());
 
+    case ReminderScreenRoute:
+      return MaterialPageRoute(builder: (context) => ReminderScreen());
+
+    case SummaryScreenRoute:
+      return MaterialPageRoute(builder: (context) => SummaryScreen());
+
     case DashboardScreenRoute:
       return MaterialPageRoute(builder: (context) => DashboardScreen());
+
 
     default:
       return MaterialPageRoute(

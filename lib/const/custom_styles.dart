@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 const kHeadline = TextStyle(
-  color: Colors.white,
+  color: Colors.black,
   fontSize: 34,
   fontWeight: FontWeight.bold,
 );
@@ -17,5 +17,8 @@ const kButtonText = TextStyle(
   fontWeight: FontWeight.bold,
 );
 
-const kBodyText2 =
-TextStyle(fontSize: 28, fontWeight: FontWeight.w500, color: Colors.white);
+const kBodyText2 = TextStyle(
+  fontSize: 28,
+  fontWeight: FontWeight.w500,
+  color: Colors.black,
+);

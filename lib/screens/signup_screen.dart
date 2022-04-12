@@ -1,4 +1,5 @@
 import 'package:adaptive_dialog/adaptive_dialog.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_meditech_app/auth_helper.dart';
 import 'package:flutter_meditech_app/const/custom_styles.dart';
@@ -21,12 +22,16 @@ class _SignUpScreenState extends State<SignUpScreen> {
   final TextEditingController _email = TextEditingController();
   final TextEditingController _password = TextEditingController();
   final TextEditingController _passwordConfirm = TextEditingController();
+  final TextEditingController _firstname = TextEditingController();
+  final TextEditingController _lastname = TextEditingController();
 
   @override
   void dispose() {
     _email.dispose();
     _password.dispose();
     _passwordConfirm.dispose();
+    _firstname.dispose();
+    _lastname.dispose();
     super.dispose();
   }
 
@@ -70,6 +75,16 @@ class _SignUpScreenState extends State<SignUpScreen> {
                           ),
                           const SizedBox(
                             height: 50,
+                          ),
+                          MyTextField(
+                            hintText: 'First Name',
+                            inputType: TextInputType.name,
+                            textEditingController: _firstname,
+                          ),
+                          MyTextField(
+                            hintText: 'Last Name',
+                            inputType: TextInputType.name,
+                            textEditingController: _lastname,
                           ),
                           MyTextField(
                             hintText: 'Email',
@@ -116,7 +131,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                           child: Text(
                             "Sign In",
                             style: kBodyText.copyWith(
-                              color: Colors.white,
+                              color: Colors.black,
                             ),
                           ),
                         ),
@@ -145,11 +160,19 @@ class _SignUpScreenState extends State<SignUpScreen> {
     var email = _email.text.trim();
     var pw = _password.text.trim();
     var pwConfirm = _passwordConfirm.text.trim();
+    var firstname = _firstname.text.trim();
+    var lastname = _lastname.text.trim();
 
-    if (email.isEmpty || pw.isEmpty || pw != pwConfirm) {
+    if (email.isEmpty || pw.isEmpty || firstname.isEmpty || lastname.isEmpty) {
       await showOkAlertDialog(
         context: context,
-        message: 'Check your email or password',
+        message: 'Fill all Textboxes',
+      );
+      return;
+    } else if (pw != pwConfirm) {
+      await showOkAlertDialog(
+        context: context,
+        message: 'Passwords entered does not match',
       );
       return;
     }
@@ -157,13 +180,22 @@ class _SignUpScreenState extends State<SignUpScreen> {
     var obj = await AuthHelper.signUp(email, pw);
 
     if (obj is User) {
+      addUser(firstname: firstname, lastname: lastname, user: obj);
       Navigator.pushNamedAndRemoveUntil(
-          context, DashboardScreenRoute, (Route<dynamic> route) => false);
+          context, ReminderScreenRoute, (Route<dynamic> route) => false);
     } else {
       await showOkAlertDialog(
         context: context,
         message: obj,
       );
     }
+  }
+
+  void addUser({required String firstname, required String lastname, required User user}) async{
+    DocumentReference users = FirebaseFirestore.instance.collection('Users').doc(user.uid);
+    await users
+    .set({'firstname': firstname, 'lastname': lastname, 'device': null})
+    .then((value) => print('User Added'))
+    .catchError((error)=>{print('Failed to add user. $error')});
   }
 }

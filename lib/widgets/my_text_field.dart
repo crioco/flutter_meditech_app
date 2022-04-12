@@ -18,7 +18,7 @@ class MyTextField extends StatelessWidget {
       padding: const EdgeInsets.symmetric(vertical: 10),
       child: TextField(
         controller: textEditingController,
-        style: kBodyText.copyWith(color: Colors.white),
+        style: kBodyText.copyWith(color: Colors.black),
         keyboardType: inputType,
         textInputAction: TextInputAction.next,
         decoration: InputDecoration(
@@ -34,7 +34,7 @@ class MyTextField extends StatelessWidget {
           ),
           focusedBorder: OutlineInputBorder(
             borderSide: BorderSide(
-              color: Colors.white,
+              color: Colors.grey.shade600,
               width: 1,
             ),
             borderRadius: BorderRadius.circular(18),

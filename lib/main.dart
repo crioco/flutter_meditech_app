@@ -3,7 +3,6 @@ import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:flutter_meditech_app/route/router.dart' as router;
 import 'package:flutter_meditech_app/route/routing_constants.dart';
-
 import 'const/custom_colors.dart';
 
 void main() {
@@ -21,15 +20,16 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      title: 'IoT Firestore App',
+      title: 'MediTECH App',
       theme: ThemeData(
         textTheme: GoogleFonts.poppinsTextTheme(Theme.of(context).textTheme),
-        scaffoldBackgroundColor: kMainBG,
+        scaffoldBackgroundColor: Colors.grey[200],
         primarySwatch: Colors.blue,
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
       onGenerateRoute: router.generateRoute,
       initialRoute: SplashScreenRoute,
+      // initialRoute: ReminderScreenRoute,
     );
   }
 }

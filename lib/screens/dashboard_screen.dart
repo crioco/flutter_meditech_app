@@ -28,7 +28,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        body: StreamBuilder<QuerySnapshot<Sensor>>(
+      body: StreamBuilder<QuerySnapshot<Sensor>>(
       stream: sensorRef.snapshots(),
       builder: (context, snapshot) {
         if (snapshot.hasError) {
