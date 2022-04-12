@@ -29,8 +29,8 @@ class _SummaryScreenState extends State<SummaryScreen> {
     DateTime(2022, 4, 6),
     DateTime(2022, 4, 7),
     DateTime(2022, 4, 8),
-    DateTime(2022, 4, 9),
     DateTime(2022, 4, 11),
+    DateTime(2022, 4, 12),
   ];
 
   _SummaryScreenState() {
@@ -43,7 +43,7 @@ class _SummaryScreenState extends State<SummaryScreen> {
     // print('After | $buildTimes');
     buildTimes++;
     if (buildTimes == 2) {
-      Timer(const Duration(milliseconds: 100), () {
+      Timer(const Duration(milliseconds: 500), () {
         setState(() {
           // print('Timers Up');
         });
@@ -116,10 +116,6 @@ class _SummaryScreenState extends State<SummaryScreen> {
                                             .add(const Duration(hours: 8));
                                         var pills = data['pills']
                                             as Map<String, dynamic>;
-
-                                        // pills.forEach((key, value) {
-
-                                        // },);
 
                                         // print('Skipped: $isSkipped');
                                         // print('Alarm Time: $alarmTime');
@@ -215,9 +211,7 @@ class _SummaryScreenState extends State<SummaryScreen> {
       if (query.docs.isNotEmpty) {
         dataList.add([getStream(context, date), date]);
       }
-      // for (var doc in query.docs){
-
-      // }
+      // print(dataList.toString());
     }
     return dataList;
   }
