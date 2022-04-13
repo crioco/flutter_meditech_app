@@ -6,6 +6,8 @@ import 'package:flutter_meditech_app/widgets/my_app_bar.dart';
 import 'package:flutter_meditech_app/widgets/my_side_menu.dart';
 import 'package:intl/intl.dart';
 import 'package:expansion_tile_card/expansion_tile_card.dart';
+import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
+import 'package:percent_indicator/percent_indicator.dart';
 
 class SummaryScreen extends StatefulWidget {
   const SummaryScreen({Key? key}) : super(key: key);
@@ -23,15 +25,19 @@ class _SummaryScreenState extends State<SummaryScreen> {
   var skippedPills = 0;
   var takenPills = 0;
 
-  List<DateTime> dateList = [
-    DateTime(2022, 4, 4),
-    DateTime(2022, 4, 5),
-    DateTime(2022, 4, 6),
-    DateTime(2022, 4, 7),
-    DateTime(2022, 4, 8),
-    DateTime(2022, 4, 11),
-    DateTime(2022, 4, 12),
-  ];
+  final timeNow = DateTime.now();
+  var displayTime = DateTime.now();
+  List<DateTime> dateList = getDateList(DateTime.now());
+
+  // List<DateTime> dateList = [
+  //   DateTime(2022, 4, 4),
+  //   DateTime(2022, 4, 5),
+  //   DateTime(2022, 4, 6),
+  //   DateTime(2022, 4, 7),
+  //   DateTime(2022, 4, 8),
+  //   DateTime(2022, 4, 11),
+  //   DateTime(2022, 4, 12),
+  // ];
 
   _SummaryScreenState() {
     getDataList(dateList).then((value) => setState(() {
@@ -56,7 +62,16 @@ class _SummaryScreenState extends State<SummaryScreen> {
   //   print('After | $buildTimes');
   // }
 
+  Future<void> updateDateList() async {
+    dataList = await getDataList(dateList);
+  }
+
   Future<void> countPills() async {
+    totalPills = 0;
+    missedPills = 0;
+    skippedPills = 0;
+    takenPills = 0;
+
     if (dataList.isNotEmpty) {
       for (var list in dataList) {
         QuerySnapshot querySnap = await list[0]; // QuerySnapshot
@@ -95,7 +110,6 @@ class _SummaryScreenState extends State<SummaryScreen> {
   @override
   Widget build(BuildContext context) {
     // WidgetsBinding.instance!.addPostFrameCallback((_) => afterBuild());
-    final timeNow = DateTime.now();
 
     // var dataList = [
     //   [getStream(context, DateTime(2022, 4, 4)), DateTime(2022, 4, 4)],
@@ -112,23 +126,67 @@ class _SummaryScreenState extends State<SummaryScreen> {
       drawer: MySideMenu(),
       body: Center(
         child: Column(
+            mainAxisSize: MainAxisSize.max,
             children: (dataList.isNotEmpty)
                 ? [
-                    Text(DateFormat('EEEE, MMM d y').format(timeNow)),
+                    ListTile(
+                      title: Text(
+                        DateFormat('EEEE, MMM d y').format(displayTime),
+                        textAlign: TextAlign.center,
+                      ),
+                      onTap: () {
+                        DatePicker.showDatePicker(context,
+                            showTitleActions: true,
+                            minTime: DateTime(2010, 1, 1),
+                            maxTime: DateTime(2050, 12, 31),
+                            onChanged: (date) {}, onConfirm: (date) {
+                          setState(() {
+                            displayTime = date;
+                            dateList = getDateList(date);
+                          });
+                          updateDateList().then((value) => setState(
+                                () {
+                                  countPills().then((value) => setState(() {}));
+                                },
+                              ));
+                        }, onCancel: () {});
+                      },
+                    ),
+                    Text(
+                      getWeekRange(displayTime),
+                    ),
                     Text(
                         'Total Pills: $totalPills, Taken: $takenPills Missed: $missedPills Skipped: $skippedPills'),
+                    CircularPercentIndicator(
+                      radius: 70,
+                      lineWidth: 20,
+                      animation: true,
+                      animationDuration: 800,
+                      percent: takenPills / totalPills,
+                      center: Text(
+                        '${((takenPills / totalPills) * 100).round().toString()}%',
+                        style: const TextStyle(
+                            fontWeight: FontWeight.bold, fontSize: 25),
+                      ),
+                      footer: const Text(
+                        'Weekly Adherence',
+                        style:
+                            TextStyle(fontWeight: FontWeight.bold, fontSize: 15),
+                      ),
+                      circularStrokeCap: CircularStrokeCap.round,
+                      progressColor: Colors.blue[800],
+                    ),
                     Expanded(
-                      child: Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 20),
-                        child: SingleChildScrollView(
-                          // physics: const NeverScrollableScrollPhysics(),
+                      child: SingleChildScrollView(
+                        physics: const NeverScrollableScrollPhysics(),
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 20),
                           child: ListView(
                             shrinkWrap: true,
                             children: dataList.map((dataList) {
                               var date = dataList[1] as DateTime;
                               return Padding(
-                                padding:
-                                    const EdgeInsets.symmetric(vertical: 10),
+                                padding: const EdgeInsets.symmetric(vertical: 10),
                                 child: ExpansionTileCard(
                                   title: Text(
                                       DateFormat('EEEE, MMM d y').format(date)),
@@ -148,8 +206,7 @@ class _SummaryScreenState extends State<SummaryScreen> {
                                             if (snapshot.hasData) {
                                               return ListView(
                                                 shrinkWrap: true,
-                                                children:
-                                                    snapshot.data!.docs.map(
+                                                children: snapshot.data!.docs.map(
                                                   (DocumentSnapshot document) {
                                                     var data = document.data()!
                                                         as Map<String, dynamic>;
@@ -167,7 +224,7 @@ class _SummaryScreenState extends State<SummaryScreen> {
                                                                 hours: 8));
                                                     var pills = data['pills']
                                                         as Map<String, dynamic>;
-
+        
                                                     return Column(
                                                       crossAxisAlignment:
                                                           CrossAxisAlignment
@@ -177,14 +234,12 @@ class _SummaryScreenState extends State<SummaryScreen> {
                                                             .format(alarmTime)),
                                                         ListView.builder(
                                                           shrinkWrap: true,
-                                                          itemCount:
-                                                              pills.length,
+                                                          itemCount: pills.length,
                                                           itemBuilder:
                                                               (context, index) {
                                                             var pillName = pills
                                                                 .keys
-                                                                .elementAt(
-                                                                    index);
+                                                                .elementAt(index);
                                                             var map =
                                                                 pills[pillName];
                                                             var dosage =
@@ -193,24 +248,17 @@ class _SummaryScreenState extends State<SummaryScreen> {
                                                             var isTaken =
                                                                 map['isTaken'];
                                                             String status;
-
+        
                                                             if (isTaken &&
                                                                 !isSkipped) {
                                                               status = 'Taken';
-                                                              // takenPills += dosage;
-                                                              // totalPills += dosage;
                                                             } else if (!isTaken &&
                                                                 isSkipped) {
-                                                              status =
-                                                                  'Skipped';
-                                                              // skippedPills += dosage;
-                                                              // totalPills += dosage;
+                                                              status = 'Skipped';
                                                             } else {
                                                               status = 'Missed';
-                                                              // missedPills += dosage;
-                                                              // totalPills += dosage;
                                                             }
-
+        
                                                             return Row(
                                                               mainAxisAlignment:
                                                                   MainAxisAlignment
@@ -221,7 +269,13 @@ class _SummaryScreenState extends State<SummaryScreen> {
                                                               children: [
                                                                 Text(dosage
                                                                     .toString()),
+                                                                const SizedBox(
+                                                                  width: 10,
+                                                                ),
                                                                 Text(pillName),
+                                                                const SizedBox(
+                                                                  width: 30,
+                                                                ),
                                                                 Text(status),
                                                               ],
                                                             );
@@ -281,4 +335,24 @@ class _SummaryScreenState extends State<SummaryScreen> {
     // print('[List Done]');
     return dataList;
   }
+}
+
+List<DateTime> getDateList(DateTime date) {
+  var recentMonday =
+      DateTime(date.year, date.month, date.day - (date.weekday - 1));
+  List<DateTime> tempList = [];
+
+  for (var i = 0; i < 7; i++) {
+    tempList.add(recentMonday.add(Duration(days: i)));
+  }
+
+  return tempList;
+}
+
+String getWeekRange(DateTime date) {
+  var recentMonday =
+      DateTime(date.year, date.month, date.day - (date.weekday - 1));
+  var nextSunday = recentMonday.add(const Duration(days: 6));
+
+  return '${DateFormat('MMM d').format(recentMonday)} - ${DateFormat('MMM d').format(nextSunday)}';
 }
