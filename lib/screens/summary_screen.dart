@@ -124,185 +124,195 @@ class _SummaryScreenState extends State<SummaryScreen> {
     return Scaffold(
       appBar: const MyAppBar(title: 'Summary'),
       drawer: MySideMenu(),
-      body: Center(
-        child: Column(
-            mainAxisSize: MainAxisSize.max,
-            children: (dataList.isNotEmpty)
-                ? [
-                    ListTile(
-                      title: Text(
-                        DateFormat('EEEE, MMM d y').format(displayTime),
-                        textAlign: TextAlign.center,
+      body: SingleChildScrollView(
+        child: Padding(
+          padding: const EdgeInsets.symmetric(vertical: 15),
+          child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: (dataList.isNotEmpty)
+                  ? [
+                      ListTile(
+                        title: Text(
+                          DateFormat('EEEE, MMM d y').format(displayTime),
+                          textAlign: TextAlign.center,
+                        ),
+                        onTap: () {
+                          DatePicker.showDatePicker(context,
+                              currentTime: displayTime,
+                              showTitleActions: true,
+                              minTime: DateTime(2010, 1, 1),
+                              maxTime: DateTime(2050, 12, 31),
+                              onChanged: (date) {}, onConfirm: (date) {
+                            setState(() {
+                              displayTime = date;
+                              dateList = getDateList(date);
+                            });
+                            updateDateList().then((value) => setState(
+                                  () {
+                                    countPills().then((value) => setState(() {}));
+                                  },
+                                ));
+                          }, onCancel: () {});
+                        },
                       ),
-                      onTap: () {
-                        DatePicker.showDatePicker(context,
-                            showTitleActions: true,
-                            minTime: DateTime(2010, 1, 1),
-                            maxTime: DateTime(2050, 12, 31),
-                            onChanged: (date) {}, onConfirm: (date) {
-                          setState(() {
-                            displayTime = date;
-                            dateList = getDateList(date);
-                          });
-                          updateDateList().then((value) => setState(
-                                () {
-                                  countPills().then((value) => setState(() {}));
-                                },
-                              ));
-                        }, onCancel: () {});
-                      },
-                    ),
-                    Text(
-                      getWeekRange(displayTime),
-                    ),
-                    Text(
-                        'Total Pills: $totalPills, Taken: $takenPills Missed: $missedPills Skipped: $skippedPills'),
-                    CircularPercentIndicator(
-                      radius: 70,
-                      lineWidth: 20,
-                      animation: true,
-                      animationDuration: 800,
-                      percent: takenPills / totalPills,
-                      center: Text(
-                        '${((takenPills / totalPills) * 100).round().toString()}%',
-                        style: const TextStyle(
-                            fontWeight: FontWeight.bold, fontSize: 25),
+                      Text(
+                        getWeekRange(displayTime),
                       ),
-                      footer: const Text(
-                        'Weekly Adherence',
-                        style:
-                            TextStyle(fontWeight: FontWeight.bold, fontSize: 15),
+                      Text(
+                          'Total Pills: $totalPills, Taken: $takenPills Missed: $missedPills Skipped: $skippedPills'),
+                      CircularPercentIndicator(
+                        radius: 70,
+                        lineWidth: 20,
+                        animation: true,
+                        animationDuration: 800,
+                        percent: takenPills / totalPills,
+                        center: Text(
+                          '${((takenPills / totalPills) * 100).round().toString()}%',
+                          style: const TextStyle(
+                              fontWeight: FontWeight.bold, fontSize: 25),
+                        ),
+                        footer: const Text(
+                          'Weekly Adherence',
+                          style: TextStyle(
+                              fontWeight: FontWeight.bold, fontSize: 15),
+                        ),
+                        circularStrokeCap: CircularStrokeCap.round,
+                        progressColor: Colors.blue[800],
                       ),
-                      circularStrokeCap: CircularStrokeCap.round,
-                      progressColor: Colors.blue[800],
-                    ),
-                    Expanded(
-                      child: SingleChildScrollView(
-                        physics: const NeverScrollableScrollPhysics(),
-                        child: Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 20),
-                          child: ListView(
-                            shrinkWrap: true,
-                            children: dataList.map((dataList) {
-                              var date = dataList[1] as DateTime;
-                              return Padding(
-                                padding: const EdgeInsets.symmetric(vertical: 10),
-                                child: ExpansionTileCard(
-                                  title: Text(
-                                      DateFormat('EEEE, MMM d y').format(date)),
-                                  children: [
-                                    const Divider(
-                                      thickness: 1.0,
-                                      height: 1.0,
-                                    ),
-                                    Padding(
-                                      padding: const EdgeInsets.all(10),
-                                      child: FutureBuilder<QuerySnapshot>(
-                                          future: dataList[0]
-                                              as Future<QuerySnapshot>,
-                                          builder: (BuildContext context,
-                                              AsyncSnapshot<QuerySnapshot>
-                                                  snapshot) {
-                                            if (snapshot.hasData) {
-                                              return ListView(
-                                                shrinkWrap: true,
-                                                children: snapshot.data!.docs.map(
-                                                  (DocumentSnapshot document) {
-                                                    var data = document.data()!
-                                                        as Map<String, dynamic>;
-                                                    var isSkipped =
-                                                        data['isSkipped'];
-                                                    var alarmTime =
-                                                        data['alarmTime']
-                                                            .toDate()
-                                                            .add(const Duration(
-                                                                hours: 8));
-                                                    var takenTime =
-                                                        data['takenTime']
-                                                            .toDate()
-                                                            .add(const Duration(
-                                                                hours: 8));
-                                                    var pills = data['pills']
-                                                        as Map<String, dynamic>;
-        
-                                                    return Column(
-                                                      crossAxisAlignment:
-                                                          CrossAxisAlignment
-                                                              .start,
-                                                      children: [
-                                                        Text(DateFormat('jm')
-                                                            .format(alarmTime)),
-                                                        ListView.builder(
-                                                          shrinkWrap: true,
-                                                          itemCount: pills.length,
-                                                          itemBuilder:
-                                                              (context, index) {
-                                                            var pillName = pills
-                                                                .keys
-                                                                .elementAt(index);
-                                                            var map =
-                                                                pills[pillName];
-                                                            var dosage =
-                                                                map['dosage']
-                                                                    as int;
-                                                            var isTaken =
-                                                                map['isTaken'];
-                                                            String status;
-        
-                                                            if (isTaken &&
-                                                                !isSkipped) {
-                                                              status = 'Taken';
-                                                            } else if (!isTaken &&
-                                                                isSkipped) {
-                                                              status = 'Skipped';
-                                                            } else {
-                                                              status = 'Missed';
-                                                            }
-        
-                                                            return Row(
-                                                              mainAxisAlignment:
-                                                                  MainAxisAlignment
-                                                                      .center,
-                                                              crossAxisAlignment:
-                                                                  CrossAxisAlignment
-                                                                      .center,
-                                                              children: [
-                                                                Text(dosage
-                                                                    .toString()),
-                                                                const SizedBox(
-                                                                  width: 10,
-                                                                ),
-                                                                Text(pillName),
-                                                                const SizedBox(
-                                                                  width: 30,
-                                                                ),
-                                                                Text(status),
-                                                              ],
-                                                            );
-                                                          },
-                                                        ),
-                                                      ],
-                                                    );
-                                                  },
-                                                ).toList(),
-                                              );
-                                            }
-                                            return const Text('Loading');
-                                          }),
-                                    ),
-                                  ],
-                                ),
-                              );
-                            }).toList(),
-                          ),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 20),
+                        child: ListView(
+                          physics: const NeverScrollableScrollPhysics(),
+                          shrinkWrap: true,
+                          children: dataList.map((dataList) {
+                            var date = dataList[1] as DateTime;
+                            return Padding(
+                              padding: const EdgeInsets.symmetric(vertical: 10),
+                              child: ExpansionTileCard(
+                                title: Text(
+                                    DateFormat('EEEE, MMM d y').format(date)),
+                                children: [
+                                  const Divider(
+                                    thickness: 1.0,
+                                    height: 1.0,
+                                  ),
+                                  Padding(
+                                    padding: const EdgeInsets.all(10),
+                                    child: FutureBuilder<QuerySnapshot>(
+                                        future:
+                                            dataList[0] as Future<QuerySnapshot>,
+                                        builder: (BuildContext context,
+                                            AsyncSnapshot<QuerySnapshot>
+                                                snapshot) {
+                                          if (snapshot.hasData) {
+                                            return ListView(
+                                              physics:
+                                                  const NeverScrollableScrollPhysics(),
+                                              shrinkWrap: true,
+                                              children: snapshot.data!.docs.map(
+                                                (DocumentSnapshot document) {
+                                                  var data = document.data()!
+                                                      as Map<String, dynamic>;
+                                                  var isSkipped =
+                                                      data['isSkipped'];
+                                                  var alarmTime =
+                                                      data['alarmTime']
+                                                          .toDate()
+                                                          .add(const Duration(
+                                                              hours: 8));
+                                                  var takenTime =
+                                                      data['takenTime']
+                                                          .toDate()
+                                                          .add(const Duration(
+                                                              hours: 8));
+                                                  var pills = data['pills']
+                                                      as Map<String, dynamic>;
+
+                                                  return Column(
+                                                    crossAxisAlignment:
+                                                        CrossAxisAlignment.start,
+                                                    children: [
+                                                      Text(DateFormat('jm')
+                                                          .format(alarmTime)),
+                                                      ListView.builder(
+                                                        physics:
+                                                            const NeverScrollableScrollPhysics(),
+                                                        shrinkWrap: true,
+                                                        itemCount: pills.length,
+                                                        itemBuilder:
+                                                            (context, index) {
+                                                          var pillName = pills
+                                                              .keys
+                                                              .elementAt(index);
+                                                          var map =
+                                                              pills[pillName];
+                                                          var dosage =
+                                                              map['dosage']
+                                                                  as int;
+                                                          var isTaken =
+                                                              map['isTaken'];
+                                                          String status;
+
+                                                          if (isTaken &&
+                                                              !isSkipped) {
+                                                            status = 'Taken';
+                                                          } else if (!isTaken &&
+                                                              isSkipped) {
+                                                            status = 'Skipped';
+                                                          } else {
+                                                            status = 'Missed';
+                                                          }
+
+                                                          return Row(
+                                                            mainAxisAlignment:
+                                                                MainAxisAlignment
+                                                                    .center,
+                                                            crossAxisAlignment:
+                                                                CrossAxisAlignment
+                                                                    .center,
+                                                            children: [
+                                                              Text(dosage
+                                                                  .toString()),
+                                                              const SizedBox(
+                                                                width: 10,
+                                                              ),
+                                                              Text(pillName),
+                                                              const SizedBox(
+                                                                width: 30,
+                                                              ),
+                                                              Text(status),
+                                                            ],
+                                                          );
+                                                        },
+                                                      ),
+                                                    ],
+                                                  );
+                                                },
+                                              ).toList(),
+                                            );
+                                          }
+                                          return const Text('Loading');
+                                        }),
+                                  ),
+                                ],
+                              ),
+                            );
+                          }).toList(),
                         ),
                       ),
-                    ),
-                  ]
-                : [
-                    const Expanded(
-                        child: Center(child: CircularProgressIndicator()))
-                  ]),
+                    ]
+                  : [
+                      SizedBox(
+                          width: MediaQuery.of(context).size.width,
+                          height: MediaQuery.of(context).size.height - 100 ,
+                          child: const Center(
+                              child: SizedBox(
+                                  height: 70,
+                                  width: 70,
+                                  child: CircularProgressIndicator())))
+                    ]),
+        ),
       ),
     );
   }
