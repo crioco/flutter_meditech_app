@@ -125,6 +125,7 @@ class _SummaryScreenState extends State<SummaryScreen> {
       appBar: const MyAppBar(title: 'Summary'),
       drawer: MySideMenu(),
       body: SingleChildScrollView(
+        physics: const AlwaysScrollableScrollPhysics(),
         child: Padding(
           padding: const EdgeInsets.symmetric(vertical: 15),
           child: Column(
@@ -191,7 +192,7 @@ class _SummaryScreenState extends State<SummaryScreen> {
                               padding: const EdgeInsets.symmetric(vertical: 10),
                               child: ExpansionTileCard(
                                 title: Text(
-                                    DateFormat('EEEE, MMM d y').format(date)),
+                                    DateFormat('EEEE, MMM d').format(date)),
                                 children: [
                                   const Divider(
                                     thickness: 1.0,
@@ -228,7 +229,7 @@ class _SummaryScreenState extends State<SummaryScreen> {
                                                               hours: 8));
                                                   var pills = data['pills']
                                                       as Map<String, dynamic>;
-
+              
                                                   return Column(
                                                     crossAxisAlignment:
                                                         CrossAxisAlignment.start,
@@ -253,7 +254,7 @@ class _SummaryScreenState extends State<SummaryScreen> {
                                                           var isTaken =
                                                               map['isTaken'];
                                                           String status;
-
+              
                                                           if (isTaken &&
                                                               !isSkipped) {
                                                             status = 'Taken';
@@ -263,7 +264,7 @@ class _SummaryScreenState extends State<SummaryScreen> {
                                                           } else {
                                                             status = 'Missed';
                                                           }
-
+              
                                                           return Row(
                                                             mainAxisAlignment:
                                                                 MainAxisAlignment
@@ -305,12 +306,14 @@ class _SummaryScreenState extends State<SummaryScreen> {
                   : [
                       SizedBox(
                           width: MediaQuery.of(context).size.width,
-                          height: MediaQuery.of(context).size.height - 100 ,
+                          height: MediaQuery.of(context).size.height - 160 ,
                           child: const Center(
                               child: SizedBox(
                                   height: 70,
                                   width: 70,
-                                  child: CircularProgressIndicator())))
+                                  child: CircularProgressIndicator(
+                                    strokeWidth: 8,
+                                  ))))
                     ]),
         ),
       ),
