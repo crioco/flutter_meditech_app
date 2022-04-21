@@ -11,7 +11,25 @@ var monday = [
     ],
   },
   {
-    'time': '9:00 PM',
+    'time': '6:00 PM',
+    'list': [
+      {'pill': 'Vitamin C', 'dosage': 2},
+    ],
+  },
+  {
+    'time': '8:00 PM',
+    'list': [
+      {'pill': 'Vitamin C', 'dosage': 2},
+    ],
+  },
+  {
+    'time': '1:00 PM',
+    'list': [
+      {'pill': 'Vitamin C', 'dosage': 2},
+    ],
+  },
+  {
+    'time': '2:00 PM',
     'list': [
       {'pill': 'Vitamin C', 'dosage': 2},
     ],
