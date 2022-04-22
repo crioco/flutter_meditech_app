@@ -201,34 +201,20 @@ class _SummaryScreenState extends State<SummaryScreen> {
                                   Padding(
                                     padding: const EdgeInsets.all(10),
                                     child: FutureBuilder<QuerySnapshot>(
-                                        future:
-                                            dataList[0] as Future<QuerySnapshot>,
-                                        builder: (BuildContext context,
-                                            AsyncSnapshot<QuerySnapshot>
-                                                snapshot) {
+                                        future: dataList[0] as Future<QuerySnapshot>,
+                                        builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
                                           if (snapshot.hasData) {
                                             return ListView(
-                                              physics:
-                                                  const NeverScrollableScrollPhysics(),
+                                              physics: const NeverScrollableScrollPhysics(),
                                               shrinkWrap: true,
                                               children: snapshot.data!.docs.map(
                                                 (DocumentSnapshot document) {
-                                                  var data = document.data()!
-                                                      as Map<String, dynamic>;
-                                                  var isSkipped =
-                                                      data['isSkipped'];
-                                                  var alarmTime =
-                                                      data['alarmTime']
-                                                          .toDate()
-                                                          .add(const Duration(
-                                                              hours: 8));
+                                                  var data = document.data()! as Map<String, dynamic>;
+                                                  var isSkipped = data['isSkipped'];
+                                                  var alarmTime = data['alarmTime'].toDate().add(const Duration(hours: 8));
                                                   var takenTime =
-                                                      data['takenTime']
-                                                          .toDate()
-                                                          .add(const Duration(
-                                                              hours: 8));
-                                                  var pills = data['pills']
-                                                      as Map<String, dynamic>;
+                                                      data['takenTime'].toDate() .add(const Duration(hours: 8));
+                                                  var pills = data['pills']as Map<String, dynamic>;
               
                                                   return Column(
                                                     crossAxisAlignment:
@@ -268,7 +254,7 @@ class _SummaryScreenState extends State<SummaryScreen> {
                                                           return Row(
                                                             mainAxisAlignment:
                                                                 MainAxisAlignment
-                                                                    .center,
+                                                                    .spaceAround,
                                                             crossAxisAlignment:
                                                                 CrossAxisAlignment
                                                                     .center,
@@ -325,7 +311,7 @@ class _SummaryScreenState extends State<SummaryScreen> {
         .collection('DEVICE001')
         .where('alarmTime', isGreaterThan: docDate)
         .where('alarmTime', isLessThan: docDate.add(const Duration(days: 1)))
-        .orderBy('alarmTime', descending: true)
+        .orderBy('alarmTime', descending: false)
         .get();
   }
 
@@ -335,8 +321,8 @@ class _SummaryScreenState extends State<SummaryScreen> {
       QuerySnapshot<Map<String, dynamic>> query = await FirebaseFirestore
           .instance
           .collection('DEVICE001')
-          .where('alarmTime', isGreaterThan: date)
-          .where('alarmTime', isLessThan: date.add(const Duration(days: 1)))
+          .where('alarmTime', isGreaterThanOrEqualTo: DateTime(date.year, date.month, date.day))
+          .where('alarmTime', isLessThan: DateTime(date.year, date.month, date.day).add(const Duration(days: 1)))
           .limit(1)
           .get();
 
