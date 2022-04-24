@@ -6,7 +6,6 @@ import 'package:flutter_meditech_app/widgets/my_side_menu.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:intl/intl.dart';
 import 'package:flutter_meditech_app/widgets/reminder_dialog.dart';
-import 'package:flutter_meditech_app/widgets/stateful_dialog.dart';
 
 class ReminderScreen extends StatefulWidget {
   const ReminderScreen({Key? key}) : super(key: key);
