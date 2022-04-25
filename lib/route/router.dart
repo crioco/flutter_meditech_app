@@ -1,5 +1,6 @@
 import 'package:flutter_meditech_app/route/routing_constants.dart';
 import 'package:flutter_meditech_app/screens/dashboard_screen.dart';
+import 'package:flutter_meditech_app/screens/clock_view.dart';
 import 'package:flutter_meditech_app/screens/signin_screen.dart';
 import 'package:flutter_meditech_app/screens/signup_screen.dart';
 import 'package:flutter_meditech_app/screens/splash_screen.dart';
@@ -7,6 +8,7 @@ import 'package:flutter_meditech_app/screens/undefined_screen.dart';
 import 'package:flutter_meditech_app/screens/reminder_screen.dart';
 import 'package:flutter_meditech_app/screens/summary_screen.dart';
 import 'package:flutter/material.dart';
+
 
 Route<dynamic> generateRoute(RouteSettings settings) {
   switch (settings.name) {
@@ -28,6 +30,9 @@ Route<dynamic> generateRoute(RouteSettings settings) {
 
     case DashboardScreenRoute:
       return MaterialPageRoute(builder: (context) => DashboardScreen());
+    
+    case ClockViewScreenRoute:
+      return MaterialPageRoute(builder: (context) => ClockView());
 
 
     default:
