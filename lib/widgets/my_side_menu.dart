@@ -22,28 +22,27 @@ class MySideMenu extends StatelessWidget {
                   ),
                 ),
                 SideMenuListTile(
-                    tileText: 'Reminder', tileIcon: Icon(Icons.alarm),navRoute: ReminderScreenRoute),
+                    tileText: 'Reminder',
+                    tileIcon: Icon(Icons.alarm),
+                    navRoute: ReminderScreenRoute),
                 SideMenuListTile(
-                    tileText: 'Summary', tileIcon: Icon(Icons.pie_chart), navRoute: SummaryScreenRoute),
+                    tileText: 'Summary',
+                    tileIcon: Icon(Icons.pie_chart),
+                    navRoute: SummaryScreenRoute),
               ],
             ),
           ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: [
-              Padding(
-                padding: const EdgeInsets.fromLTRB(20, 0, 0, 25),
-                child: GestureDetector(
-                  child: const Text('Sign Out'),
-                  onTap: () async {
-                    await AuthHelper.signOut();
-                    Navigator.pushNamedAndRemoveUntil(
-                        context, SignInScreenRoute, (route) => false);
-                  },
-                ),
-              ),
-            ],
-          )
+          Padding(
+              padding: const EdgeInsets.only(bottom: 20),
+              child: ListTile(
+                title: const Text('Sign Out'),
+                leading: const Icon(Icons.input),
+                onTap: () async {
+                  await AuthHelper.signOut();
+                  Navigator.pushNamedAndRemoveUntil(
+                      context, SignInScreenRoute, (route) => false);
+                },
+              )),
         ],
       ),
     );
