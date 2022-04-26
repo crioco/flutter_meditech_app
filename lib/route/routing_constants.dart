@@ -4,3 +4,4 @@ const String SignUpScreenRoute = '/SignUp';
 const String DashboardScreenRoute = '/Dashboard';
 const String ReminderScreenRoute = '/Reminder';
 const String SummaryScreenRoute = '/Summary';
+const String ClockViewScreenRoute = '/ClockView';

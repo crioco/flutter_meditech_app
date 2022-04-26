@@ -1,5 +1,4 @@
 import 'dart:async';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_meditech_app/widgets/my_app_bar.dart';
@@ -24,20 +23,10 @@ class _SummaryScreenState extends State<SummaryScreen> {
   var missedPills = 0;
   var skippedPills = 0;
   var takenPills = 0;
-
+  var noDataFound = false;
   final timeNow = DateTime.now();
   var displayTime = DateTime.now();
   List<DateTime> dateList = getDateList(DateTime.now());
-
-  // List<DateTime> dateList = [
-  //   DateTime(2022, 4, 4),
-  //   DateTime(2022, 4, 5),
-  //   DateTime(2022, 4, 6),
-  //   DateTime(2022, 4, 7),
-  //   DateTime(2022, 4, 8),
-  //   DateTime(2022, 4, 11),
-  //   DateTime(2022, 4, 12),
-  // ];
 
   _SummaryScreenState() {
     getDataList(dateList).then((value) => setState(() {
@@ -82,7 +71,7 @@ class _SummaryScreenState extends State<SummaryScreen> {
           var map =
               docSnap.data() as Map<String, dynamic>; // Map<String, dynamic>
           var pills = map['pills'] as Map<String, dynamic>;
-          var isSkipped = map['isSkipped'];
+          var isMissed = map['isMissed'];
 
           for (var i = 0; i < pills.length; i++) {
             var mapValue = pills.values.elementAt(i);
@@ -90,49 +79,50 @@ class _SummaryScreenState extends State<SummaryScreen> {
             var dosage = mapValue['dosage'] as int;
             var isTaken = mapValue['isTaken'];
 
-            if (isTaken && !isSkipped) {
+            if (isTaken && !isMissed) {
               takenPills += dosage;
               totalPills += dosage;
-            } else if (!isTaken && isSkipped) {
-              skippedPills += dosage;
+            } else if (!isTaken && isMissed) {
+              missedPills += dosage;
               totalPills += dosage;
             } else {
-              missedPills += dosage;
+              skippedPills += dosage;
               totalPills += dosage;
             }
           }
         }
       }
     }
-    // print('[Count Done]');
   }
 
   @override
   Widget build(BuildContext context) {
     // WidgetsBinding.instance!.addPostFrameCallback((_) => afterBuild());
-
-    // var dataList = [
-    //   [getStream(context, DateTime(2022, 4, 4)), DateTime(2022, 4, 4)],
-    //   [getStream(context, DateTime(2022, 4, 5)), DateTime(2022, 4, 5)],
-    //   [getStream(context, DateTime(2022, 4, 6)), DateTime(2022, 4, 6)],
-    //   [getStream(context, DateTime(2022, 4, 7)), DateTime(2022, 4, 7)],
-    //   [getStream(context, DateTime(2022, 4, 8)), DateTime(2022, 4, 8)],
-    //   [getStream(context, DateTime(2022, 4, 9)), DateTime(2022, 4, 9)],
-    //   [getStream(context, DateTime(2022, 4, 11)), DateTime(2022, 4, 11)],
-    // ];
-
     return Scaffold(
       appBar: const MyAppBar(title: 'Summary'),
       drawer: MySideMenu(),
       body: SingleChildScrollView(
-        physics: const AlwaysScrollableScrollPhysics(),
+        // physics: const AlwaysScrollableScrollPhysics(),
         child: Padding(
           padding: const EdgeInsets.symmetric(vertical: 15),
           child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.center,
-              children: (dataList.isNotEmpty)
-                  ? [
+              children: (dataList.isEmpty && noDataFound == false)
+                  ? 
+                  [
+                      SizedBox(
+                          width: MediaQuery.of(context).size.width,
+                          height: MediaQuery.of(context).size.height - 160,
+                          child: const Center(
+                              child: SizedBox(
+                                  height: 70,
+                                  width: 70,
+                                  child: CircularProgressIndicator(
+                                    strokeWidth: 8,
+                                  )))),
+                    ]:
+                  [
                       ListTile(
                         title: Text(
                           DateFormat('EEEE, MMM d y').format(displayTime),
@@ -151,181 +141,213 @@ class _SummaryScreenState extends State<SummaryScreen> {
                             });
                             updateDateList().then((value) => setState(
                                   () {
-                                    countPills().then((value) => setState(() {}));
+                                    countPills()
+                                        .then((value) => setState(() {}));
                                   },
                                 ));
                           }, onCancel: () {});
                         },
                       ),
-                      Text(
-                        getWeekRange(displayTime),
-                      ),
-                      Text(
-                          'Total Pills: $totalPills, Taken: $takenPills Missed: $missedPills Skipped: $skippedPills'),
-                      CircularPercentIndicator(
-                        radius: 70,
-                        lineWidth: 20,
-                        animation: true,
-                        animationDuration: 800,
-                        percent: takenPills / totalPills,
-                        center: Text(
-                          '${((takenPills / totalPills) * 100).round().toString()}%',
-                          style: const TextStyle(
-                              fontWeight: FontWeight.bold, fontSize: 25),
-                        ),
-                        footer: const Text(
-                          'Weekly Adherence',
-                          style: TextStyle(
-                              fontWeight: FontWeight.bold, fontSize: 15),
-                        ),
-                        circularStrokeCap: CircularStrokeCap.round,
-                        progressColor: Colors.blue[800],
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 20),
-                        child: ListView(
-                          physics: const NeverScrollableScrollPhysics(),
-                          shrinkWrap: true,
-                          children: dataList.map((dataList) {
-                            var date = dataList[1] as DateTime;
-                            return Padding(
-                              padding: const EdgeInsets.symmetric(vertical: 10),
-                              child: ExpansionTileCard(
-                                title: Text(
-                                    DateFormat('EEEE, MMM d').format(date)),
-                                children: [
-                                  const Divider(
-                                    thickness: 1.0,
-                                    height: 1.0,
+                      Column(
+                          children: (dataList.isEmpty)
+                              ? [
+                                  SizedBox(
+                                    width: MediaQuery.of(context).size.width,
+                                    height: MediaQuery.of(context).size.height - 210,
+                                    child: const Center(
+                                        child: SizedBox(
+                                      height: 70,
+                                      width: 70,
+                                      child: Text('No Data'),
+                                    )),
+                                  )
+                                ]
+                              : [
+                                  Text(getWeekRange(displayTime)),
+                                  Text(
+                                      'Total Pills: $totalPills, Taken: $takenPills Missed: $missedPills Skipped: $skippedPills'),
+                                  CircularPercentIndicator(
+                                    radius: 70,
+                                    lineWidth: 20,
+                                    animation: true,
+                                    animationDuration: 800,
+                                    percent: takenPills / totalPills,
+                                    center: Text(
+                                      '${((takenPills / totalPills) * 100).round().toString()}%',
+                                      style: const TextStyle(
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: 25),
+                                    ),
+                                    footer: const Text(
+                                      'Weekly Adherence',
+                                      style: TextStyle(
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: 15),
+                                    ),
+                                    circularStrokeCap: CircularStrokeCap.round,
+                                    progressColor: Colors.blue[800],
                                   ),
                                   Padding(
-                                    padding: const EdgeInsets.all(10),
-                                    child: FutureBuilder<QuerySnapshot>(
-                                        future:
-                                            dataList[0] as Future<QuerySnapshot>,
-                                        builder: (BuildContext context,
-                                            AsyncSnapshot<QuerySnapshot>
-                                                snapshot) {
-                                          if (snapshot.hasData) {
-                                            return ListView(
-                                              physics:
-                                                  const NeverScrollableScrollPhysics(),
-                                              shrinkWrap: true,
-                                              children: snapshot.data!.docs.map(
-                                                (DocumentSnapshot document) {
-                                                  var data = document.data()!
-                                                      as Map<String, dynamic>;
-                                                  var isSkipped =
-                                                      data['isSkipped'];
-                                                  var alarmTime =
-                                                      data['alarmTime']
-                                                          .toDate()
-                                                          .add(const Duration(
-                                                              hours: 8));
-                                                  var takenTime =
-                                                      data['takenTime']
-                                                          .toDate()
-                                                          .add(const Duration(
-                                                              hours: 8));
-                                                  var pills = data['pills']
-                                                      as Map<String, dynamic>;
-              
-                                                  return Column(
-                                                    crossAxisAlignment:
-                                                        CrossAxisAlignment.start,
-                                                    children: [
-                                                      Text(DateFormat('jm')
-                                                          .format(alarmTime)),
-                                                      ListView.builder(
-                                                        physics:
-                                                            const NeverScrollableScrollPhysics(),
-                                                        shrinkWrap: true,
-                                                        itemCount: pills.length,
-                                                        itemBuilder:
-                                                            (context, index) {
-                                                          var pillName = pills
-                                                              .keys
-                                                              .elementAt(index);
-                                                          var map =
-                                                              pills[pillName];
-                                                          var dosage =
-                                                              map['dosage']
-                                                                  as int;
-                                                          var isTaken =
-                                                              map['isTaken'];
-                                                          String status;
-              
-                                                          if (isTaken &&
-                                                              !isSkipped) {
-                                                            status = 'Taken';
-                                                          } else if (!isTaken &&
-                                                              isSkipped) {
-                                                            status = 'Skipped';
-                                                          } else {
-                                                            status = 'Missed';
-                                                          }
-              
-                                                          return Row(
-                                                            mainAxisAlignment:
-                                                                MainAxisAlignment
-                                                                    .center,
-                                                            crossAxisAlignment:
-                                                                CrossAxisAlignment
-                                                                    .center,
-                                                            children: [
-                                                              Text(dosage
-                                                                  .toString()),
-                                                              const SizedBox(
-                                                                width: 10,
-                                                              ),
-                                                              Text(pillName),
-                                                              const SizedBox(
-                                                                width: 30,
-                                                              ),
-                                                              Text(status),
-                                                            ],
-                                                          );
-                                                        },
-                                                      ),
-                                                    ],
-                                                  );
-                                                },
-                                              ).toList(),
-                                            );
-                                          }
-                                          return const Text('Loading');
-                                        }),
+                                    padding: const EdgeInsets.symmetric(
+                                        horizontal: 20),
+                                    child: ListView(
+                                      physics:
+                                          const NeverScrollableScrollPhysics(),
+                                      shrinkWrap: true,
+                                      children: dataList.map((dataList) {
+                                        var date = dataList[1] as DateTime;
+                                        return Padding(
+                                          padding: const EdgeInsets.symmetric(
+                                              vertical: 10),
+                                          child: ExpansionTileCard(
+                                            title: Text(
+                                                DateFormat('EEEE, MMM d')
+                                                    .format(date)),
+                                            children: [
+                                              const Divider(
+                                                thickness: 1.0,
+                                                height: 1.0,
+                                              ),
+                                              Padding(
+                                                padding:
+                                                    const EdgeInsets.all(10),
+                                                child: FutureBuilder<
+                                                        QuerySnapshot>(
+                                                    future: dataList[0]
+                                                        as Future<
+                                                            QuerySnapshot>,
+                                                    builder: (BuildContext
+                                                            context,
+                                                        AsyncSnapshot<
+                                                                QuerySnapshot>
+                                                            snapshot) {
+                                                      if (snapshot.hasData) {
+                                                        return ListView(
+                                                          physics:const NeverScrollableScrollPhysics(),
+                                                          shrinkWrap: true,
+                                                          children: snapshot
+                                                              .data!.docs
+                                                              .map(
+                                                            (DocumentSnapshot
+                                                                document) {
+                                                              var data = document
+                                                                      .data()!
+                                                                  as Map<String,
+                                                                      dynamic>;
+                                                              var isMissed = data[
+                                                                  'isMissed'];
+                                                              var alarmTime = data[
+                                                                      'alarmTime']
+                                                                  .toDate();
+                                                              var pills = data[
+                                                                      'pills']
+                                                                  as Map<String,
+                                                                      dynamic>;
+
+                                                              return Column(
+                                                                crossAxisAlignment:
+                                                                    CrossAxisAlignment
+                                                                        .start,
+                                                                children: [
+                                                                  Text(DateFormat(
+                                                                          'jm')
+                                                                      .format(
+                                                                          alarmTime)),
+                                                                  ListView
+                                                                      .builder(
+                                                                    physics:
+                                                                        const NeverScrollableScrollPhysics(),
+                                                                    shrinkWrap:
+                                                                        true,
+                                                                    itemCount: pills
+                                                                        .length,
+                                                                    itemBuilder:
+                                                                        (context,
+                                                                            index) {
+                                                                      var pillName = pills
+                                                                          .keys
+                                                                          .elementAt(
+                                                                              index);
+                                                                      var map =
+                                                                          pills[
+                                                                              pillName];
+                                                                      var dosage =
+                                                                          map['dosage']
+                                                                              as int;
+                                                                      var isTaken =
+                                                                          map['isTaken'];
+                                                                      String
+                                                                          status;
+
+                                                                      if (isTaken &&
+                                                                          !isMissed) {
+                                                                        status =
+                                                                            'Taken';
+                                                                      } else if (isMissed &&
+                                                                          !isTaken) {
+                                                                        status =
+                                                                            'Missed';
+                                                                      } else {
+                                                                        status =
+                                                                            'Skipped';
+                                                                      }
+
+                                                                      return Row(
+                                                                        mainAxisAlignment:
+                                                                            MainAxisAlignment.spaceAround,
+                                                                        crossAxisAlignment:
+                                                                            CrossAxisAlignment.center,
+                                                                        children: [
+                                                                          Text(dosage
+                                                                              .toString()),
+                                                                          const SizedBox(
+                                                                            width:
+                                                                                10,
+                                                                          ),
+                                                                          Text(
+                                                                              pillName),
+                                                                          const SizedBox(
+                                                                            width:
+                                                                                30,
+                                                                          ),
+                                                                          Text(
+                                                                              status),
+                                                                        ],
+                                                                      );
+                                                                    },
+                                                                  ),
+                                                                ],
+                                                              );
+                                                            },
+                                                          ).toList(),
+                                                        );
+                                                      }
+                                                      return Container();
+                                                    }),
+                                              ),
+                                            ],
+                                          ),
+                                        );
+                                      }).toList(),
+                                    ),
                                   ),
-                                ],
-                              ),
-                            );
-                          }).toList(),
-                        ),
-                      ),
+                                ]),
                     ]
-                  : [
-                      SizedBox(
-                          width: MediaQuery.of(context).size.width,
-                          height: MediaQuery.of(context).size.height - 160 ,
-                          child: const Center(
-                              child: SizedBox(
-                                  height: 70,
-                                  width: 70,
-                                  child: CircularProgressIndicator(
-                                    strokeWidth: 8,
-                                  ))))
-                    ]),
+                  ),
         ),
       ),
     );
   }
 
-  Future<QuerySnapshot<Object?>> getQuerySnapshot(DateTime docDate) async {
+  Future<QuerySnapshot<Object?>> getQuerySnapshot(DateTime date) {
     return FirebaseFirestore.instance
         .collection('DEVICE001')
-        .where('alarmTime', isGreaterThan: docDate)
-        .where('alarmTime', isLessThan: docDate.add(const Duration(days: 1)))
-        .orderBy('alarmTime', descending: true)
+        .where('alarmTime',
+            isGreaterThanOrEqualTo: DateTime(date.year, date.month, date.day))
+        .where('alarmTime',
+            isLessThan: DateTime(date.year, date.month, date.day)
+                .add(const Duration(days: 1)))
+        .orderBy('alarmTime', descending: false)
         .get();
   }
 
@@ -335,17 +357,21 @@ class _SummaryScreenState extends State<SummaryScreen> {
       QuerySnapshot<Map<String, dynamic>> query = await FirebaseFirestore
           .instance
           .collection('DEVICE001')
-          .where('alarmTime', isGreaterThan: date)
-          .where('alarmTime', isLessThan: date.add(const Duration(days: 1)))
+          .where('alarmTime',
+              isGreaterThanOrEqualTo: DateTime(date.year, date.month, date.day))
+          .where('alarmTime',
+              isLessThan: DateTime(date.year, date.month, date.day)
+                  .add(const Duration(days: 1)))
           .limit(1)
           .get();
 
       if (query.docs.isNotEmpty) {
         dataList.add([getQuerySnapshot(date), date]);
       }
-      // print(dataList.toString());
     }
-    // print('[List Done]');
+    if (dataList.isEmpty) {
+      noDataFound = true;
+    }
     return dataList;
   }
 }

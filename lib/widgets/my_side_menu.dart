@@ -29,6 +29,10 @@ class MySideMenu extends StatelessWidget {
                     tileText: 'Summary',
                     tileIcon: Icon(Icons.pie_chart),
                     navRoute: SummaryScreenRoute),
+                 SideMenuListTile(
+                    tileText: 'Try Alarm',
+                    tileIcon: Icon(Icons.access_alarm),
+                    navRoute: ClockViewScreenRoute),
               ],
             ),
           ),
