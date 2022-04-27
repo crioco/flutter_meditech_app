@@ -2,8 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_meditech_app/const/custom_styles.dart';
 import 'package:flutter_meditech_app/route/routing_constants.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_meditech_app/screens/reminder_screen.dart';
-
+import 'package:flutter_meditech_app/model/pill_object.dart';
 import '../auth_helper.dart';
 
 class SplashScreen extends StatelessWidget {
@@ -22,6 +21,7 @@ class SplashScreen extends StatelessWidget {
               Navigator.pushNamedAndRemoveUntil(context, ReminderScreenRoute,
                   (Route<dynamic> route) => false);
             });
+            // GET DATA FROM SHARED PREFERRENCE TO GLOBAL VARIABLES
           } else {
             return _getScreen(context);
           }

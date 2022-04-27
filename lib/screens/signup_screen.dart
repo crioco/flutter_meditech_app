@@ -194,7 +194,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
   void addUser({required String firstname, required String lastname, required User user}) async{
     DocumentReference users = FirebaseFirestore.instance.collection('Users').doc(user.uid);
     await users
-    .set({'firstname': firstname, 'lastname': lastname, 'device': null})
+    .set({'firstname': firstname, 'lastname': lastname, 'device': 'NULL'})
     .then((value) => print('User Added'))
     .catchError((error)=>{print('Failed to add user. $error')});
   }

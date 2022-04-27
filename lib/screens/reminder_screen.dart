@@ -1,11 +1,13 @@
 import 'package:expansion_tile_card/expansion_tile_card.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
+import 'package:flutter_meditech_app/model/data_provider.dart';
 import 'package:flutter_meditech_app/widgets/my_app_bar.dart';
 import 'package:flutter_meditech_app/widgets/my_side_menu.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:intl/intl.dart';
 import 'package:flutter_meditech_app/widgets/reminder_dialog.dart';
+import 'package:provider/provider.dart';
 
 class ReminderScreen extends StatefulWidget {
   const ReminderScreen({Key? key}) : super(key: key);
@@ -16,43 +18,49 @@ class ReminderScreen extends StatefulWidget {
 
 class _ReminderScreenState extends State<ReminderScreen> {
 
-  Map<int, Map<int, Map<String, int>>> arrangedAlarms = {
-    1: <int, Map<String, int>>{       
-      830: {'Melatonin': 1, 'Vitamin C': 2},
-      1500: {'Vitamin C': 1},
-      2000: {'Melatonin': 3}},
-    2: <int, Map<String, int>>{
-      830: {'Melatonin': 1, 'Vitamin C': 2},
-      1500: {'Vitamin C': 1},
-      2000: {'Melatonin': 3}
-    },
-    3: <int, Map<String, int>>{       
-      830: {'Melatonin': 1, 'Vitamin C': 2},
-      1500: {'Vitamin C': 1},
-      2000: {'Melatonin': 3}},
-    4: <int, Map<String, int>>{},
-    5: <int, Map<String, int>>{
-      830: {'Melatonin': 1, 'Vitamin C': 2},
-      1500: {'Vitamin C': 1},
-      2000: {'Melatonin': 3}
-    },
-    6: <int, Map<String, int>>{},
-    7: <int, Map<String, int>>{
-       830: {'Melatonin': 1, 'Vitamin C': 2},
-      1500: {'Vitamin C': 1},
-      2000: {'Melatonin': 3}
-    }
-  };
+  // Map<int, Map<int, Map<String, int>>> arrangedAlarms = {
+  //   1: <int, Map<String, int>>{       
+  //     830: {'Melatonin': 1, 'Vitamin C': 2},
+  //     1500: {'Vitamin C': 1},
+  //     2000: {'Melatonin': 3}
+  //     },
+  //   2: <int, Map<String, int>>{
+  //     943: {'Melatonin': 1, 'Vitamin C': 2},
+  //     948: {'Vitamin C': 1},
+  //     2000: {'Melatonin': 3}
+  //   },
+  //   3: <int, Map<String, int>>{       
+  //     // 947: {'Melatonin': 1, 'Vitamin C': 2},
+  //     // 1500: {'Vitamin C': 1},
+  //     // 2000: {'Melatonin': 3}
+  //     },
+  //   4: <int, Map<String, int>>{},
+  //   5: <int, Map<String, int>>{
+  //     // 944: {'Melatonin': 1, 'Vitamin C': 2},
+  //     // 1500: {'Vitamin C': 1},
+  //     // 2000: {'Melatonin': 3}
+  //   },
+  //   6: <int, Map<String, int>>{},
+  //   7: <int, Map<String, int>>{
+  //     //  944: {'Melatonin': 1, 'Vitamin C': 2},
+  //     // 1500: {'Vitamin C': 1},
+  //     // 2000: {'Melatonin': 3}
+  //   }
+  // };
 
-  Map<int, List<Map<String, dynamic>>> alarms = {};
+  Map<int, Map<int, Map<String, int>>> arrangedAlarms = {};
   var timeNow = DateTime.now();
   DateTime displayTime = DateTime.now();
+  bool alarmListEmpty = true;
 
   @override
   Widget build(BuildContext context) {
+    arrangedAlarms = Provider.of<DataProvider>(context, listen: false).arrangedAlarms;
+    print(arrangedAlarms.toString());
+
     return Scaffold(
       appBar: const MyAppBar(title: 'Reminder'),
-      drawer: MySideMenu(),
+      drawer: const MySideMenu(),
       body: SingleChildScrollView(
         child: Padding(
           padding: const EdgeInsets.symmetric(vertical: 10),
@@ -67,11 +75,11 @@ class _ReminderScreenState extends State<ReminderScreen> {
                             children: [
                               Text(
                                 DateFormat.EEEE().format(displayTime),
-                                style: const TextStyle(fontSize: 30),
+                                style: const TextStyle(fontSize: 25),
                               ),
                               Text(
                                 DateFormat.yMMMMd().format(displayTime),
-                                style: const TextStyle(fontSize: 30),
+                                style: const TextStyle(fontSize: 25),
                               ),
                             ],
                           ),
@@ -79,8 +87,8 @@ class _ReminderScreenState extends State<ReminderScreen> {
                             DatePicker.showDatePicker(context,
                               currentTime: displayTime,
                               showTitleActions: true,
-                              minTime: timeNow.subtract(const Duration(days: 2)),
-                              maxTime: timeNow,
+                              minTime: timeNow.subtract(const Duration(days: 6)),
+                              maxTime: timeNow.add(const Duration(days: 6)),
                               onConfirm: (date) {
                                 setState(() {
                                 displayTime = date;
@@ -88,7 +96,18 @@ class _ReminderScreenState extends State<ReminderScreen> {
                           },);
                           },
                         ),
-                        Padding(
+                        (alarmListEmpty) ?
+                        SizedBox(
+                          width: MediaQuery.of(context).size.width,
+                          height: MediaQuery.of(context).size.height - 210,
+                          child: const Center(
+                              child: SizedBox(
+                            height: 70,
+                            width: 70,
+                            child: Text('No Alarm'),
+                          )),
+                        )  
+                        : Padding(
                           padding: const EdgeInsets.symmetric(horizontal: 20),
                           child: ListView.builder(
                             physics: const NeverScrollableScrollPhysics(),
@@ -147,7 +166,7 @@ class _ReminderScreenState extends State<ReminderScreen> {
                                         ).toList(),
                                       ),
                                     ),
-                                    (alarmPassed)
+                                    (alarmPassed && displayTime.isAfter(timeNow.subtract(const Duration(days: 3))))
                                         ? Container(
                                             padding: const EdgeInsets.fromLTRB( 0, 10, 20, 10),
                                             alignment: Alignment.centerRight,
@@ -237,8 +256,7 @@ class _ReminderScreenState extends State<ReminderScreen> {
       }
     }
 
-    var alarmMap =
-        arrangedAlarms[timeNow.weekday] as Map<int, Map<String, int>>;
+    var alarmMap = arrangedAlarms[date.weekday] as Map<int, Map<String, int>>;
     alarmMap.forEach((key, value) {
       var time = key;
       var valueMap = value;
@@ -255,9 +273,13 @@ class _ReminderScreenState extends State<ReminderScreen> {
         tempList.add(tempMap);
       });
 
-      temp[time] = tempList;
+      temp.putIfAbsent(time, () => tempList);
     });
-
+    if (temp.isEmpty) {
+      alarmListEmpty = true;
+    } else {
+      alarmListEmpty = false;
+    }
     return temp;
   }
 }

@@ -123,30 +123,33 @@ class _SummaryScreenState extends State<SummaryScreen> {
                                   )))),
                     ]:
                   [
-                      ListTile(
-                        title: Text(
-                          DateFormat('EEEE, MMM d y').format(displayTime),
-                          textAlign: TextAlign.center,
+                      Container(
+                        padding: const EdgeInsets.symmetric(horizontal: 20),
+                        child: ListTile(
+                          title: Text(
+                            DateFormat('EEEE, MMM d y').format(displayTime),
+                            textAlign: TextAlign.center,
+                          ),
+                          onTap: () {
+                            DatePicker.showDatePicker(context,
+                                currentTime: displayTime,
+                                showTitleActions: true,
+                                minTime: DateTime(2010, 1, 1),
+                                maxTime: timeNow,
+                                onChanged: (date) {}, onConfirm: (date) {
+                              setState(() {
+                                displayTime = date;
+                                dateList = getDateList(date);
+                              });
+                              updateDateList().then((value) => setState(
+                                    () {
+                                      countPills()
+                                          .then((value) => setState(() {}));
+                                    },
+                                  ));
+                            }, onCancel: () {});
+                          },
                         ),
-                        onTap: () {
-                          DatePicker.showDatePicker(context,
-                              currentTime: displayTime,
-                              showTitleActions: true,
-                              minTime: DateTime(2010, 1, 1),
-                              maxTime: DateTime(2050, 12, 31),
-                              onChanged: (date) {}, onConfirm: (date) {
-                            setState(() {
-                              displayTime = date;
-                              dateList = getDateList(date);
-                            });
-                            updateDateList().then((value) => setState(
-                                  () {
-                                    countPills()
-                                        .then((value) => setState(() {}));
-                                  },
-                                ));
-                          }, onCancel: () {});
-                        },
                       ),
                       Column(
                           children: (dataList.isEmpty)
