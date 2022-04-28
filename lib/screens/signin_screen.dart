@@ -14,6 +14,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_meditech_app/model/pill_object.dart';
 import 'package:provider/provider.dart';
 import '../auth_helper.dart';
+import '../functions/global_functions.dart';
 
 class SignInScreen extends StatefulWidget {
   const SignInScreen({Key? key}) : super(key: key);
@@ -143,7 +144,7 @@ class _SignInScreenState extends State<SignInScreen> {
 
     if (user is User) {
       if (await getUserDevice(user)){
-        getData();
+        await getData();
       }
       Navigator.pushNamedAndRemoveUntil(
           context, ReminderScreenRoute, (Route<dynamic> route) => false);
@@ -207,13 +208,13 @@ class _SignInScreenState extends State<SignInScreen> {
     Provider.of<DataProvider>(context, listen: false).changeAlarmSettings(snoozeDuration: snoozeDuration, snoozeAmount: snoozeAmount, ringDuration: ringDuration);
     Provider.of<DataProvider>(context, listen: false).changePillList(pillList);
 
-    print(Provider.of<DataProvider>(context, listen: false).deviceID);
-    print(Provider.of<DataProvider>(context, listen: false).userID);
-    print(Provider.of<DataProvider>(context, listen: false).firstName);
-    print(Provider.of<DataProvider>(context, listen: false).lastName);
-    print(Provider.of<DataProvider>(context, listen: false).ringDuration);
-    print(Provider.of<DataProvider>(context, listen: false).snoozeDuration);
-    print(Provider.of<DataProvider>(context, listen: false).snoozeAmount);
+    // print(Provider.of<DataProvider>(context, listen: false).deviceID);
+    // print(Provider.of<DataProvider>(context, listen: false).userID);
+    // print(Provider.of<DataProvider>(context, listen: false).firstName);
+    // print(Provider.of<DataProvider>(context, listen: false).lastName);
+    // print(Provider.of<DataProvider>(context, listen: false).ringDuration);
+    // print(Provider.of<DataProvider>(context, listen: false).snoozeDuration);
+    // print(Provider.of<DataProvider>(context, listen: false).snoozeAmount);
 
     // var temp = Provider.of<DataProvider>(context, listen: false).pillList;
 
@@ -261,42 +262,15 @@ class _SignInScreenState extends State<SignInScreen> {
     //   print('${map.key}: ${map.value}');
     // }
     Provider.of<DataProvider>(context, listen: false).changeArrangedAlarms(arrangedAlarms);
-    print(Provider.of<DataProvider>(context, listen: false).arrangedAlarms.toString());
+    // print(Provider.of<DataProvider>(context, listen: false).arrangedAlarms.toString());
 
     String jsonPillList = jsonEncode(pillList);
-    print(jsonPillList);
 
     await DataSharedPreferences.setPillList(jsonPillList);
     await DataSharedPreferences.setRingDuration(ringDuration);
     await DataSharedPreferences.setSnoozeDuration(snoozeDuration);
     await DataSharedPreferences.setSnoozeAmount(snoozeDuration);
 
-  }
-  
-  // For Pill Alarm List Sorted by Day of Week
-  void mergeMap(Map<int, Map<String, int>> map1, Map<int, Map<String, int>> map2){
-    var mergedMap = <int, Map<String, int>> {};
-    
-    // MERGE TWO MAPS
-    for (var map in [map1, map2]) {
-      for (var entry in map.entries) {
-        // Add an empty `List` to `mergedMap` if the key doesn't already exist
-        // and then merge the `List`s.
-        (mergedMap[entry.key] ??= {}).addAll(entry.value); 
-      }
-    }
-
-    // SORT MAP BY ALARM TIME (KEY)
-    var sortedMap = Map.fromEntries(mergedMap.entries.toList()..sort((e1, e2) => e1.key.compareTo(e2.key)));
-    map1.clear();
-    map1.addAll(sortedMap);
-    
-    // SORT VALUE (MAP) BY PILL NAME
-    for (var valueMap in mergedMap.values){
-      var sortMapByTime = Map.fromEntries(valueMap.entries.toList()..sort((e1, e2) => e1.key.compareTo(e2.key)));
-      valueMap.clear();
-      valueMap.addAll(sortMapByTime);
-    }
   }
 
 }

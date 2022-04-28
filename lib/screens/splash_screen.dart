@@ -1,9 +1,14 @@
+import 'dart:convert';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_meditech_app/const/custom_styles.dart';
+import 'package:flutter_meditech_app/functions/data_shared_preferences.dart';
+import 'package:flutter_meditech_app/providers/data_provider.dart';
 import 'package:flutter_meditech_app/route/routing_constants.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_meditech_app/model/pill_object.dart';
+import 'package:provider/provider.dart';
 import '../auth_helper.dart';
+import '../functions/global_functions.dart';
 
 class SplashScreen extends StatelessWidget {
   const SplashScreen({Key? key}) : super(key: key);
@@ -18,10 +23,58 @@ class SplashScreen extends StatelessWidget {
           User? user = AuthHelper.currentUser();
           if (user != null) {
             Future.delayed(Duration.zero, () async {
+
+              Provider.of<DataProvider>(context, listen: false).changeDeviceID(DataSharedPreferences.getDeviceID());
+              Provider.of<DataProvider>(context, listen: false).changeUser(
+                firstName: DataSharedPreferences.getFirstName(),
+                lastName: DataSharedPreferences.getLastName(),
+                userID:  DataSharedPreferences.getUserID()
+              );
+              Provider.of<DataProvider>(context, listen: false).changeAlarmSettings(
+                ringDuration: DataSharedPreferences.getRingDuration(),
+                snoozeDuration: DataSharedPreferences.getSnoozeDuration(),
+                snoozeAmount: DataSharedPreferences.getSnoozeAmount()
+              );
+              
+              var jsonPillList = jsonDecode(DataSharedPreferences.getPillList()) as List;
+              List<Pill> pillList = jsonPillList.map((pill) => Pill.fromJson(pill)).toList();
+
+              Provider.of<DataProvider>(context, listen: false).changePillList(pillList);
+
+              Map<int, Map<int, Map<String, int>>> arrangedAlarms = { 
+                1: <int, Map<String, int>>{},
+                2: <int, Map<String, int>>{},
+                3: <int, Map<String, int>>{},
+                4: <int, Map<String, int>>{},
+                5: <int, Map<String, int>>{},
+                6: <int, Map<String, int>>{},
+                7: <int, Map<String, int>>{}
+              };
+
+              for (Pill pill in pillList){
+                Map<int, Map<String, int>> temp = {};
+
+                var pillName = pill.pillName;
+                var alarmList = pill.alarmList;
+                var days = pill.days;
+                for (Map<String, dynamic> map in alarmList){
+                  var time = map['time'];
+                  var dosage = map['dosage'];
+                  temp[time as int] = {pillName : dosage as int};
+                }
+              
+                // MERGE CREATED MAP INTO arrangeAlarm MAP BY days IN Pill OBJECT
+                for (int day in days){
+                  if (day == 0) day = 7;
+                  mergeMap(arrangedAlarms[day] as Map<int, Map<String, int>>, temp);
+                }
+              }         
+              Provider.of<DataProvider>(context, listen: false).changeArrangedAlarms(arrangedAlarms);
+              
               Navigator.pushNamedAndRemoveUntil(context, ReminderScreenRoute,
                   (Route<dynamic> route) => false);
             });
-            // GET DATA FROM SHARED PREFERRENCE TO GLOBAL VARIABLES
+            
           } else {
             return _getScreen(context);
           }

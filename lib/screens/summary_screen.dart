@@ -134,7 +134,7 @@ class _SummaryScreenState extends State<SummaryScreen> {
                             DatePicker.showDatePicker(context,
                                 currentTime: displayTime,
                                 showTitleActions: true,
-                                minTime: DateTime(2010, 1, 1),
+                                minTime: DateTime(2022, 1, 1),
                                 maxTime: timeNow,
                                 onChanged: (date) {}, onConfirm: (date) {
                               setState(() {

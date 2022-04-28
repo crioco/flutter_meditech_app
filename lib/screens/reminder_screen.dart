@@ -1,7 +1,7 @@
 import 'package:expansion_tile_card/expansion_tile_card.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
-import 'package:flutter_meditech_app/model/data_provider.dart';
+import 'package:flutter_meditech_app/providers/data_provider.dart';
 import 'package:flutter_meditech_app/widgets/my_app_bar.dart';
 import 'package:flutter_meditech_app/widgets/my_side_menu.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -56,7 +56,6 @@ class _ReminderScreenState extends State<ReminderScreen> {
   @override
   Widget build(BuildContext context) {
     arrangedAlarms = Provider.of<DataProvider>(context, listen: false).arrangedAlarms;
-    print(arrangedAlarms.toString());
 
     return Scaffold(
       appBar: const MyAppBar(title: 'Reminder'),
@@ -92,8 +91,8 @@ class _ReminderScreenState extends State<ReminderScreen> {
                               onConfirm: (date) {
                                 setState(() {
                                 displayTime = date;
-                            });
-                          },);
+                                });
+                              },);
                           },
                         ),
                         (alarmListEmpty) ?
