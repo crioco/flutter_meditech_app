@@ -1,12 +1,12 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class Pill {
-  String pillName;
-  List<int> days;
-  List<Map<String, dynamic>> alarmList;
-  int containerSlot;
+  final String pillName;
+  final List<int> days;
+  final List<Map<String, dynamic>> alarmList;
+  final int containerSlot;
 
-  Pill({
+  const Pill({
     required this.pillName,
     required this.days,
     required this.alarmList,
