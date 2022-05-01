@@ -6,7 +6,6 @@ import 'package:flutter_meditech_app/const/container_maps.dart';
 import 'package:flutter_meditech_app/const/day_of_week.dart';
 import 'package:flutter_meditech_app/functions/data_shared_preferences.dart';
 import 'package:flutter_meditech_app/functions/global_functions.dart';
-import 'package:flutter_meditech_app/model/pill_object.dart';
 import 'package:flutter_meditech_app/providers/data_provider.dart';
 import 'package:flutter_meditech_app/providers/selected_pill_provider.dart';
 import 'package:flutter_meditech_app/route/routing_constants.dart';
@@ -146,6 +145,7 @@ class PillSettingDrawer extends StatelessWidget {
                   Provider.of<SelectedPillProvider>(context, listen: false).changeSelectedInitialSlot(containerSlot);
                   Provider.of<SelectedPillProvider>(context, listen: false).changeSelectedDays(days);
                   Provider.of<SelectedPillProvider>(context, listen: false).changeSelectedAlarmList(alarmList);
+
                   Navigator.of(context).pop();
                   Navigator.pushNamed(context, EditPillSettingScreenRoute);
                 }),
@@ -167,8 +167,6 @@ class PillSettingDrawer extends StatelessWidget {
   }
 
   void showDeleteDialog(BuildContext context){
-    
-    
     showDialog(context: context,  builder: (BuildContext context){
       return AlertDialog(
         title: const Text('Delete Pill Setting?'),
@@ -182,6 +180,7 @@ class PillSettingDrawer extends StatelessWidget {
           ElevatedButton(
             onPressed: () async{
               await updateData(context);
+              Navigator.of(context).pop();
             },
             child: const Text('Delete')
           ),
@@ -211,13 +210,13 @@ class PillSettingDrawer extends StatelessWidget {
       Provider.of<DataProvider>(context, listen: false).changeArrangedAlarms(arrangedAlarms);
 
       ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-      content: Text('Data Has Been Updated'),
+      content: Text('Pill has been removed from Pill Settings'),
       backgroundColor: Color.fromARGB(255, 74, 204, 79),
       ));
     })
     .catchError((error){
       ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-      content: Text('Failed to Update Data'),
+      content: Text('Failed to remove Pill from Pill Settings'),
       backgroundColor: Color.fromARGB(255, 196, 69, 69),
       ));
     });

@@ -1,5 +1,4 @@
 import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_meditech_app/functions/data_shared_preferences.dart';
@@ -46,19 +45,20 @@ class MyAppBar extends StatelessWidget implements PreferredSizeWidget {
           // OPEN ALARM SETTINGS SCREEN
         }),
       ]
-      : (title == 'Add Pill' || title == 'Edit Pill') 
+      : (title == 'Edit Pill') 
       ? [
         IconButton( icon: const Iconify(Ion.md_checkmark, color: Colors.white), onPressed: () async{
           
-          await updateData(context);
+          await editPillSettings(context);
           Navigator.of(context).pop();
-
-          // print(pillName);
-          // print(containerSlot);
-          // print(days.toString());
-          // print(alarmList.toString());
-          // print(index);
           
+        }),
+      ]
+      : (title == 'Add Pill')
+      ? [
+        IconButton( icon: const Iconify(Ion.md_checkmark, color: Colors.white), onPressed: () async{
+          await addPillSettings(context);
+          Navigator.of(context).pop();
         }),
       ]
       : [
@@ -67,7 +67,7 @@ class MyAppBar extends StatelessWidget implements PreferredSizeWidget {
     );
   }
 
-  Future updateData(BuildContext context) async {
+  Future editPillSettings(BuildContext context) async {
     var pillName = Provider.of<SelectedPillProvider>(context, listen: false).pillName;
     var containerSlot = Provider.of<SelectedPillProvider>(context, listen: false).containerSlot;
     var days = Provider.of<SelectedPillProvider>(context, listen: false).days;
@@ -85,6 +85,7 @@ class MyAppBar extends StatelessWidget implements PreferredSizeWidget {
     var docRef =  FirebaseFirestore.instance.collection('DEVICES').doc(deviceID);
     await docRef.update({'pillSettings': pillSettings})
     .then((value) async{
+      Provider.of<SelectedPillProvider>(context, listen:false).changeSelectedInitialSlot(containerSlot);
       Provider.of<SelectedPillProvider>(context, listen:false).changeSelectedPill(pillList.elementAt(index));
       Provider.of<DataProvider>(context, listen:false).changePillList(pillList);
       String jsonPillList = jsonEncode(pillList);
@@ -92,15 +93,50 @@ class MyAppBar extends StatelessWidget implements PreferredSizeWidget {
 
       var arrangedAlarms = getArrangedAlarm(pillList);
       Provider.of<DataProvider>(context, listen: false).changeArrangedAlarms(arrangedAlarms);
-
       ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-      content: Text('Data Has Been Updated'),
+      content: Text('Pill Settings Has Been Updated'),
       backgroundColor: Color.fromARGB(255, 74, 204, 79),
       ));
     })
     .catchError((error){
       ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-      content: Text('Failed to Update Data'),
+      content: Text('Failed to Update Pill Settings'),
+      backgroundColor: Color.fromARGB(255, 196, 69, 69),
+      ));
+    });
+  }
+
+  Future addPillSettings(BuildContext context) async {
+    var pillName = Provider.of<SelectedPillProvider>(context, listen: false).pillName;
+    var containerSlot = Provider.of<SelectedPillProvider>(context, listen: false).initialAvailSlot;
+    var days = Provider.of<SelectedPillProvider>(context, listen: false).days;
+    var alarmList = Provider.of<SelectedPillProvider>(context, listen: false).alarmList;
+    var pillList = List.of(Provider.of<DataProvider>(context, listen:false).pillList);
+
+    pillList.add(Pill(pillName: pillName, days: days, alarmList: alarmList, containerSlot: containerSlot));
+    pillList.sort((a,b)=>a.containerSlot.compareTo(b.containerSlot));
+    
+    List<Map<String, dynamic>> pillSettings = pillList.map((pill)=> pill.toMap()).toList();
+
+    var deviceID = Provider.of<DataProvider>(context, listen: false).deviceID;
+    var docRef =  FirebaseFirestore.instance.collection('DEVICES').doc(deviceID);
+    await docRef.update({'pillSettings': pillSettings})
+    .then((value) async{
+      Provider.of<DataProvider>(context, listen:false).changePillList(pillList);
+      String jsonPillList = jsonEncode(pillList);
+      await DataSharedPreferences.setPillList(jsonPillList);
+
+      var arrangedAlarms = getArrangedAlarm(pillList);
+      Provider.of<DataProvider>(context, listen: false).changeArrangedAlarms(arrangedAlarms);
+      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+      content: Text('Pill Settings Has Been Updated'),
+      backgroundColor: Color.fromARGB(255, 74, 204, 79),
+      ));
+    })
+    .catchError((error){
+      print(error);
+      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+      content: Text('Failed to Update Pill Settings'),
       backgroundColor: Color.fromARGB(255, 196, 69, 69),
       ));
     });

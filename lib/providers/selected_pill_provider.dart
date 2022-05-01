@@ -9,6 +9,8 @@ class SelectedPillProvider extends ChangeNotifier{
   String pillName;
   int containerSlot;
   int initialSlot;
+  int initialAvailSlot;
+  List<int> availableSlots;
   List<int> days;
   List<Map<String, dynamic>> alarmList;
  
@@ -18,6 +20,8 @@ class SelectedPillProvider extends ChangeNotifier{
     this.pillName = '',
     this.containerSlot = 0,
     this.initialSlot = 0,
+    this.initialAvailSlot = 0,
+    this.availableSlots = const [],
     this.days = const [],
     this.alarmList = const []
   });
@@ -57,6 +61,15 @@ class SelectedPillProvider extends ChangeNotifier{
     notifyListeners();
   }
 
+  void changeAvailableSlots(List<int> availableSlots){
+    this.availableSlots = availableSlots;
+    notifyListeners();
+  }
+
+  void changeInitialAvailSlot(int initialAvailSlot){
+    this.initialAvailSlot = initialAvailSlot;
+    notifyListeners();
+  }
 
 
 }

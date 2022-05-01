@@ -1,4 +1,5 @@
 import 'package:flutter_meditech_app/route/routing_constants.dart';
+import 'package:flutter_meditech_app/screens/add_pill_setting_screen.dart';
 import 'package:flutter_meditech_app/screens/dashboard_screen.dart';
 import 'package:flutter_meditech_app/screens/edit_pill_setting_screen.dart';
 import 'package:flutter_meditech_app/screens/pill_settings_screen.dart';
@@ -36,7 +37,9 @@ Route<dynamic> generateRoute(RouteSettings settings) {
 
     case EditPillSettingScreenRoute:
       return MaterialPageRoute(builder: (context) => EditPillSettingScreen());
-
+    
+    case AddPillSettingScreenRoute:
+      return MaterialPageRoute(builder: (context) => AddPillSettingScreen());
     default:
       return MaterialPageRoute(
           builder: (context) => UndefinedView(

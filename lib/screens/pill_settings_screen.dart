@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_meditech_app/model/pill_object.dart';
 import 'package:flutter_meditech_app/providers/data_provider.dart';
 import 'package:flutter_meditech_app/providers/selected_pill_provider.dart';
+import 'package:flutter_meditech_app/route/routing_constants.dart';
 import 'package:flutter_meditech_app/widgets/my_app_bar.dart';
 import 'package:flutter_meditech_app/widgets/my_side_menu.dart';
 import 'package:flutter_meditech_app/const/container_maps.dart';
@@ -18,13 +19,12 @@ class PillSettingsScreen extends StatefulWidget {
 }
 
 class _PillSettingsScreenState extends State<PillSettingsScreen> {
-  List<Pill> pillList = [];
   var endDrawer = const PillSettingDrawer();
   final GlobalKey<ScaffoldState> _key = GlobalKey();
 
   @override
   Widget build(BuildContext context) {
-    pillList = Provider.of<DataProvider>(context).pillList;
+    List<Pill> pillList = Provider.of<DataProvider>(context).pillList;
     return Scaffold(
         key: _key,
         appBar: const MyAppBar(title: 'Pill Settings'),
@@ -73,7 +73,25 @@ class _PillSettingsScreenState extends State<PillSettingsScreen> {
                             tileColor: Colors.grey,
                             trailing: const Iconify(Ion.plus, color: Colors.black),
                             onTap: () {
-                              print('Add Screen');
+                              List<int> availableSlots = [];
+                              List<int> takenSlots = [];
+                              for (var pill in Provider.of<DataProvider>(context, listen: false).pillList) {
+                                takenSlots.add(pill.containerSlot);
+                              }
+
+                              for (var index = 1; index <= 5; index++){
+                                if(!takenSlots.contains(index)){
+                                  availableSlots.add(index);
+                                }
+                              }
+
+                              Provider.of<SelectedPillProvider>(context, listen: false).changeSelectedPillName('');
+                              Provider.of<SelectedPillProvider>(context, listen: false).changeInitialAvailSlot(availableSlots[0]);
+                              Provider.of<SelectedPillProvider>(context, listen: false).changeSelectedDays([1]); 
+                              Provider.of<SelectedPillProvider>(context, listen: false).changeSelectedAlarmList([]); 
+                              Provider.of<SelectedPillProvider>(context, listen: false).changeAvailableSlots(availableSlots);
+                              
+                              Navigator.pushNamed(context, AddPillSettingScreenRoute);
                             },
                           )
                           ,

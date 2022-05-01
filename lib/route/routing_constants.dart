@@ -6,3 +6,4 @@ const String ReminderScreenRoute = '/Reminder';
 const String SummaryScreenRoute = '/Summary';
 const String PillSettingsScreenRoute = '/PillSettings';
 const String EditPillSettingScreenRoute = '/EditPillSetting';
+const String AddPillSettingScreenRoute = '/AddPillSetting';

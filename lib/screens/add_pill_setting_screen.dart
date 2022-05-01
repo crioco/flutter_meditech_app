@@ -10,29 +10,25 @@ import 'package:provider/provider.dart';
 import 'package:day_night_time_picker/day_night_time_picker.dart';
 
 
-class EditPillSettingScreen extends StatefulWidget {
-  const EditPillSettingScreen({ Key? key }) : super(key: key);
+class AddPillSettingScreen extends StatefulWidget {
+  const AddPillSettingScreen({ Key? key }) : super(key: key);
 
   @override
-  State<EditPillSettingScreen> createState() => _EditPillSettingScreenState();
+  State<AddPillSettingScreen> createState() => _AddPillSettingScreenState();
 }
 
-class _EditPillSettingScreenState extends State<EditPillSettingScreen> {
+class _AddPillSettingScreenState extends State<AddPillSettingScreen> {
   final GlobalKey<ScaffoldState> _key = GlobalKey();
 
   @override
   Widget build(BuildContext context) {
-    var pillList = List.of(Provider.of<DataProvider>(context).pillList);
-    var index = Provider.of<SelectedPillProvider>(context).pillIndex;
     var pillName = Provider.of<SelectedPillProvider>(context).pillName;
-    var containerSlot = Provider.of<SelectedPillProvider>(context).containerSlot;
-    var initialSlot = Provider.of<SelectedPillProvider>(context).initialSlot;
     var days = List.of(Provider.of<SelectedPillProvider>(context).days);
-    var alarmList = List.of(Provider.of<SelectedPillProvider>(context).alarmList);
-    bool isDaysSeries = true;
-    List<int> availableSlots = [];
-    List<int> takenSlots = [];
+    var alarmList = Provider.of<SelectedPillProvider>(context).alarmList;
+    var containerSlot = Provider.of<SelectedPillProvider>(context).initialAvailSlot;
+    var availableSlots = List.of(Provider.of<SelectedPillProvider>(context).availableSlots);
    
+    bool isDaysSeries = true;
     if (days.length <= 2){
       isDaysSeries = false;
     } else{
@@ -41,19 +37,9 @@ class _EditPillSettingScreenState extends State<EditPillSettingScreen> {
       } 
     }
 
-    for (var pill in pillList) {
-      takenSlots.add(pill.containerSlot);
-    }
-
-    for (var index = 1; index <= 5; index++){
-      if(!takenSlots.contains(index) || index == initialSlot){
-        availableSlots.add(index);
-      }
-    } 
-
     return Scaffold(
       key: _key,
-      appBar: const MyAppBar(title: 'Edit Pill'),
+      appBar: const MyAppBar(title: 'Add Pill'),
       body: SingleChildScrollView(
         child: Padding(
           padding: const EdgeInsets.all(40),
@@ -74,7 +60,6 @@ class _EditPillSettingScreenState extends State<EditPillSettingScreen> {
                       child: TextFormField(
                         textAlignVertical: TextAlignVertical.center,
                         initialValue: pillName,
-                        // controller: pillNameController,
                         keyboardType: TextInputType.name,
                         textInputAction: TextInputAction.done,
                         decoration: const InputDecoration(
@@ -109,7 +94,7 @@ class _EditPillSettingScreenState extends State<EditPillSettingScreen> {
                       ),
                       onChanged: (value) {
                         setState(() {
-                          Provider.of<SelectedPillProvider>(context, listen: false).changeSelectedContainerSlot(value as int);          
+                          Provider.of<SelectedPillProvider>(context, listen: false).changeInitialAvailSlot(value as int);          
                         });
                       },
                       items: availableSlots
@@ -224,11 +209,12 @@ class _EditPillSettingScreenState extends State<EditPillSettingScreen> {
                             IconButton(icon: const Iconify(Ion.trash_sharp, size: 23,), onPressed: (){
                               showDeleteDialog(context, alarmList, index);
                             }),
-                          ]),                    
+                          ]),
                           const Divider(thickness: 1, height: 1,)
                         ],
                       );
                     }),
+                    
               ]),
             ),
             ],
