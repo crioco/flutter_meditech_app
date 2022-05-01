@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_meditech_app/functions/data_shared_preferences.dart';
+import 'package:flutter_meditech_app/providers/selected_pill_provider.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:flutter_meditech_app/route/router.dart' as router;
 import 'package:flutter_meditech_app/route/routing_constants.dart';
@@ -23,7 +24,8 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: [
-        ChangeNotifierProvider(create: (context) => DataProvider())
+        ChangeNotifierProvider(create: (context) => DataProvider()),
+        ChangeNotifierProvider(create: (context) => SelectedPillProvider())
       ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,

@@ -49,7 +49,12 @@ class _ReminderDialogState extends State<ReminderDialog> {
                   mapCopy = json.decode(json.encode(widget.mapItem));
                   Navigator.of(context).pop();
                 },
-                child: const Text('Cancel')),
+                child: const Text('Cancel'),
+                style: ElevatedButton.styleFrom(
+                      fixedSize: const Size(100, 30),
+                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+                      primary: Colors.grey)
+            ),
             ElevatedButton(
                 onPressed: () async {
                   Map<String, Map<String, dynamic>> nameMap = {};
@@ -68,7 +73,6 @@ class _ReminderDialogState extends State<ReminderDialog> {
                       'isTaken': boolStatus
                     };
                   }
-
                   var docRef = FirebaseFirestore.instance
                       .collection('DEVICE001')
                       .doc(widget.docID);
@@ -88,6 +92,10 @@ class _ReminderDialogState extends State<ReminderDialog> {
 
                   Navigator.of(context).pop();               
                 },
+                style: ElevatedButton.styleFrom(
+                  fixedSize: const Size(100, 30),
+                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+                  primary: Colors.blueAccent),
                 child: const Text('Confirm'))
           ],
         )

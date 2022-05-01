@@ -20,6 +20,15 @@ class Pill {
     'containerSlot' : containerSlot,
   };
 
+  Map<String,dynamic> toMap(){
+    return {
+      'pillName' : pillName,
+      'days' : days,
+      'alarmList' : alarmList,
+      'containerSlot' : containerSlot,
+    };
+  }
+
   factory Pill.fromJson(Map<String, dynamic> jsonData){
     return Pill(
       pillName: jsonData['pillName'] as String,

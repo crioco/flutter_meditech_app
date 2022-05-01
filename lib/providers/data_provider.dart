@@ -24,7 +24,7 @@ class DataProvider extends ChangeNotifier{
     this.ringDuration = 0,
     this.snoozeDuration = 0,
     this.snoozeAmount = 0,
-    this.arrangedAlarms = const {}
+    this.arrangedAlarms = const {},
   });
 
   void changePillList(List<Pill> pillList){
@@ -34,7 +34,7 @@ class DataProvider extends ChangeNotifier{
     notifyListeners();
   }
 
-    void changeDeviceID(String deviceID){
+  void changeDeviceID(String deviceID){
     this.deviceID = deviceID;
     notifyListeners();
   }
@@ -59,5 +59,4 @@ class DataProvider extends ChangeNotifier{
     // this.arrangedAlarms.addAll(arrangedAlarms);
     notifyListeners();
   }
-
 }

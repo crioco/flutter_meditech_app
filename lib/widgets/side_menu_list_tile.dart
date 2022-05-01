@@ -16,7 +16,7 @@ class SideMenuListTile extends StatelessWidget {
   Widget build(BuildContext context) {
     return ListTile(
         leading: Iconify(tileIcon, color: const Color.fromARGB(255, 126, 126, 126), size: 28),
-        title: Text(tileText, style: TextStyle(),),
+        title: Text(tileText, style: const TextStyle(),),
         onTap: () {
           Navigator.pop(context);
           Navigator.pushNamedAndRemoveUntil(

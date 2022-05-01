@@ -55,7 +55,7 @@ class _ReminderScreenState extends State<ReminderScreen> {
 
   @override
   Widget build(BuildContext context) {
-    arrangedAlarms = Provider.of<DataProvider>(context, listen: false).arrangedAlarms;
+    arrangedAlarms = Provider.of<DataProvider>(context).arrangedAlarms;
 
     return Scaffold(
       appBar: const MyAppBar(title: 'Reminder'),
@@ -165,7 +165,7 @@ class _ReminderScreenState extends State<ReminderScreen> {
                                         ).toList(),
                                       ),
                                     ),
-                                    (alarmPassed && displayTime.isAfter(timeNow.subtract(const Duration(days: 3))))
+                                    (alarmPassed && displayTime.isAfter(timeNow.subtract(const Duration(days: 6))))
                                         ? Container(
                                             padding: const EdgeInsets.fromLTRB( 0, 10, 20, 10),
                                             alignment: Alignment.centerRight,

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_meditech_app/model/pill_object.dart';
 import 'package:flutter_meditech_app/providers/data_provider.dart';
+import 'package:flutter_meditech_app/providers/selected_pill_provider.dart';
 import 'package:flutter_meditech_app/widgets/my_app_bar.dart';
 import 'package:flutter_meditech_app/widgets/my_side_menu.dart';
 import 'package:flutter_meditech_app/const/container_maps.dart';
@@ -23,12 +24,13 @@ class _PillSettingsScreenState extends State<PillSettingsScreen> {
 
   @override
   Widget build(BuildContext context) {
-    pillList = Provider.of<DataProvider>(context, listen: false).pillList;
+    pillList = Provider.of<DataProvider>(context).pillList;
     return Scaffold(
         key: _key,
         appBar: const MyAppBar(title: 'Pill Settings'),
         drawer: const MySideMenu(),
         endDrawer: endDrawer,
+        endDrawerEnableOpenDragGesture: false,
         body: Padding(
             padding: const EdgeInsets.all(8),
             child: Column(
@@ -42,29 +44,32 @@ class _PillSettingsScreenState extends State<PillSettingsScreen> {
                   child: ListView.builder(
                       itemCount: 5,
                       itemBuilder: (context, index) {
-                        var pill = pillList[index];
+                        Pill pill = const Pill(pillName: '', containerSlot: 0, days: [], alarmList: []);
+                        if(index <= pillList.length-1) {pill = pillList[index];}
                         return Padding(
                           padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-                          child: (index <= pillList.length) 
+                          child: (index <= pillList.length-1) 
                           ? ListTile(
                             shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(10)),
                             title: Text(
                               pill.pillName,
-                              style: const TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.bold),
+                              style: const TextStyle(color: Colors.white, fontSize: 18, fontWeight: FontWeight.w900),
                             ),
                             tileColor: containerColorMap[pill.containerSlot],
                             trailing: const Iconify(Ion.ellipsis_horizontal_sharp, color: Colors.white),
                             onTap: () {
                               setState(() {
-                                endDrawer = PillSettingDrawer(pill: pill);
+                                Provider.of<SelectedPillProvider>(context, listen: false).changeSelectedPill(pill);
+                                Provider.of<SelectedPillProvider>(context, listen: false).changeSelectedPillIndex(index); 
+                                endDrawer = const PillSettingDrawer();
                               });
                               _key.currentState!.openEndDrawer();
                             },
                           )
                           : ListTile(
                             shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
-                            title: const Text('Empty', style: TextStyle(color: Colors.black, fontSize: 16, fontWeight: FontWeight.bold),),
+                            title: const Text('Empty', style: TextStyle(color: Colors.black, fontSize: 18, fontWeight: FontWeight.bold),),
                             tileColor: Colors.grey,
                             trailing: const Iconify(Ion.plus, color: Colors.black),
                             onTap: () {

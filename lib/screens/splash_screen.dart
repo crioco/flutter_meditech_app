@@ -38,37 +38,9 @@ class SplashScreen extends StatelessWidget {
               
               var jsonPillList = jsonDecode(DataSharedPreferences.getPillList()) as List;
               List<Pill> pillList = jsonPillList.map((pill) => Pill.fromJson(pill)).toList();
-
               Provider.of<DataProvider>(context, listen: false).changePillList(pillList);
 
-              Map<int, Map<int, Map<String, int>>> arrangedAlarms = { 
-                1: <int, Map<String, int>>{},
-                2: <int, Map<String, int>>{},
-                3: <int, Map<String, int>>{},
-                4: <int, Map<String, int>>{},
-                5: <int, Map<String, int>>{},
-                6: <int, Map<String, int>>{},
-                7: <int, Map<String, int>>{}
-              };
-
-              for (Pill pill in pillList){
-                Map<int, Map<String, int>> temp = {};
-
-                var pillName = pill.pillName;
-                var alarmList = pill.alarmList;
-                var days = pill.days;
-                for (Map<String, dynamic> map in alarmList){
-                  var time = map['time'];
-                  var dosage = map['dosage'];
-                  temp[time as int] = {pillName : dosage as int};
-                }
-              
-                // MERGE CREATED MAP INTO arrangeAlarm MAP BY days IN Pill OBJECT
-                for (int day in days){
-                  if (day == 0) day = 7;
-                  mergeMap(arrangedAlarms[day] as Map<int, Map<String, int>>, temp);
-                }
-              }         
+              var arrangedAlarms = getArrangedAlarm(pillList);     
               Provider.of<DataProvider>(context, listen: false).changeArrangedAlarms(arrangedAlarms);
               
               Navigator.pushNamedAndRemoveUntil(context, ReminderScreenRoute,
