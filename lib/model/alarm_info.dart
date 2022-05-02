@@ -1,11 +1,41 @@
 class AlarmInfo{
-  late DateTime alarmDateTime;
-  String description;
-  late bool isActive;
+int? id;
+  String? title;
+  DateTime? alarmDateTime;
+  bool? isPending;
+  int? gradientColorIndex;
 
-  AlarmInfo(this.alarmDateTime,{required this.description});
-}
-List<AlarmInfo> alarms =[
-  AlarmInfo(DateTime.now().add(Duration(hours: 1)), description:'Medicine a'),
-  AlarmInfo(DateTime.now().add(Duration(hours: 2)), description:'Sport'),
+  
+  AlarmInfo (
+    {  this.id,
+       this.title,
+       this.alarmDateTime,
+       this.isPending,
+       this.gradientColorIndex});
+
+factory AlarmInfo.fromMap(Map<String, dynamic> json) => AlarmInfo(
+        id: json["id"],
+        title: json["title"],
+        alarmDateTime: DateTime.parse(json["alarmDateTime"]),
+        isPending: json["isPending"],
+        gradientColorIndex: json["gradientColorIndex"],
+      );
+
+   Map<String, dynamic> toMap() => {
+        "id": id,
+        "title": title,
+        "alarmDateTime": alarmDateTime!.toIso8601String(),
+        "isPending": isPending,
+        "gradientColorIndex": gradientColorIndex,
+      };
+}     
+List<AlarmInfo> alarms = [
+  AlarmInfo(
+      alarmDateTime: DateTime.now().add(Duration(hours: 1)),
+      title: 'Office',
+      gradientColorIndex: 0),
+  AlarmInfo(
+      alarmDateTime: DateTime.now().add(Duration(hours: 2)),
+      title: 'Sport',
+      gradientColorIndex: 1),
 ];

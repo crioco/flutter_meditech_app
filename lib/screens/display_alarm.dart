@@ -2,7 +2,10 @@ import 'dart:ui';
 import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:intl/intl.dart';
+import '../model/alarm_helper.dart';
 import '../model/alarm_info.dart';
+import '../model/schedule_Alarm.dart';
 import '../widgets/add_Alarm.dart';
 
 
@@ -10,10 +13,30 @@ class DisplayAlarm extends StatefulWidget {
   const DisplayAlarm({Key? key}) : super(key: key);
 
   @override
-  State<DisplayAlarm> createState() => _DisplayAlarmState();
+  State<DisplayAlarm> createState() => DisplayAlarmState();
 }
 
-class _DisplayAlarmState extends State<DisplayAlarm> {
+class DisplayAlarmState extends State<DisplayAlarm> {
+  static DateTime? alarmTime;
+  static AlarmHelper alarmHelper = AlarmHelper();
+  static Future<List<AlarmInfo>>? alarms;
+  static List<AlarmInfo>? currentAlarms;
+
+  @override
+  void initState() {
+    alarmTime = DateTime.now();
+    alarmHelper.initializeDatabase().then((value) {
+      print('------database intialized');
+      loadAlarms();
+    });
+    super.initState();
+  }
+
+  void loadAlarms() {
+    alarms = alarmHelper.getAlarms();
+    if (mounted) setState(() {});
+  }
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -27,84 +50,103 @@ class _DisplayAlarmState extends State<DisplayAlarm> {
                 TextStyle(color: Color.fromARGB(255, 20, 63, 30), fontSize: 24),
           ),
           Expanded(
-            child: ListView(
-              children: alarms.map<Widget>((alarm) {
-                return Container(
-                  margin: const EdgeInsets.only(bottom: 32),
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-                  decoration: BoxDecoration(
-                      gradient: LinearGradient(
-                        colors: [
-                          Color.fromARGB(255, 168, 168, 168),
-                          Color.fromARGB(255, 68, 67, 67)
-                        ],
-                        begin: Alignment.centerLeft,
-                        end: Alignment.centerRight,
-                      ),
-                      boxShadow: [
-                        BoxShadow(
-                          color: Colors.black.withOpacity(0.5),
-                          blurRadius: 8,
-                          spreadRadius: 4,
-                          offset: Offset(4, 4),
-                        ),
-                      ],
-                      borderRadius: BorderRadius.all(Radius.circular(24))),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: <Widget>[
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: <Widget>[
-                          Row(
-                            children: <Widget>[
-                              Icon(
-                                Icons.label,
-                                color: Colors.white,
-                                size: 24,
-                              ),
-                              SizedBox(width: 8),
-                              Text(
-                                'Test 1',
-                                style: TextStyle(color: Colors.white),
+            child: FutureBuilder<List<AlarmInfo>>(
+              future: alarms,
+              builder: (context, snapshot) {
+                if (snapshot.hasData) {
+                  currentAlarms = snapshot.data;
+                  return ListView(
+                    children: snapshot.data!.map<Widget>((alarm) {
+                      var alarmTime =
+                          DateFormat('jm').format(alarm.alarmDateTime!);
+                      return Container(
+                        margin: const EdgeInsets.only(bottom: 32),
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 16, vertical: 8),
+                        decoration: BoxDecoration(
+                            gradient: LinearGradient(
+                              colors: [
+                                Color.fromARGB(255, 168, 168, 168),
+                                Color.fromARGB(255, 68, 67, 67)
+                              ],
+                              begin: Alignment.centerLeft,
+                              end: Alignment.centerRight,
+                            ),
+                            boxShadow: [
+                              BoxShadow(
+                                color: Colors.black.withOpacity(0.5),
+                                blurRadius: 8,
+                                spreadRadius: 4,
+                                offset: Offset(4, 4),
                               ),
                             ],
-                          ),
-                          Switch(
-                            value: true,
-                            onChanged: (bool value) {},
-                            activeColor: Colors.white,
-                          ),
-                        ],
-                      ),
-                      Text(
-                        'Mon-Fri',
-                        style: TextStyle(
-                            color: Color.fromARGB(255, 20, 63, 30),
-                            fontSize: 12),
-                      ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: <Widget>[
-                          Text(
-                            '7:00 am',
-                            style: TextStyle(
-                                color: Color.fromARGB(255, 20, 63, 30),
-                                fontSize: 25),
-                          ),
-                          Icon(
-                            Icons.keyboard_arrow_down,
-                            size: 36,
-                          ),
-                        ],
-                      ),
-                    ],
+                            borderRadius:
+                                BorderRadius.all(Radius.circular(24))),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: <Widget>[
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: <Widget>[
+                                Row(
+                                  children: <Widget>[
+                                    Icon(
+                                      Icons.label,
+                                      color: Colors.white,
+                                      size: 24,
+                                    ),
+                                    SizedBox(width: 8),
+                                    Text(
+                                      alarm.title!,
+                                      style: TextStyle(color: Colors.white),
+                                    ),
+                                  ],
+                                ),
+                                Switch(
+                                  value: true,
+                                  onChanged: (bool value) {},
+                                  activeColor: Colors.white,
+                                ),
+                              ],
+                            ),
+                            Text(
+                              'Mon-Fri',
+                              style: TextStyle(
+                                  color: Color.fromARGB(255, 20, 63, 30),
+                                  fontSize: 12),
+                            ),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: <Widget>[
+                                Text(
+                                  alarmTime.toString(),
+                                  style: TextStyle(
+                                      color: Color.fromARGB(255, 20, 63, 30),
+                                      fontSize: 25),
+                                ),
+                                IconButton(
+                                    icon: Icon(Icons.delete),
+                                    color: Colors.white,
+                                    onPressed: () {
+                                      deleteAlarm(alarm.id!);
+                                    }),
+                              ],
+                            ),
+                          ],
+                        ),
+                      );
+                    }).followedBy([
+                      if (currentAlarms!.length < 5) const AddAlarmButton(),
+                    ]).toList(),
+                  );
+                }
+                return const Center(
+                  child: Text(
+                    'Loading..',
+                    style: TextStyle(color: Color.fromARGB(255, 0, 0, 0)),
                   ),
                 );
-              }).followedBy([
-               AddAlarmButton(),
-              ]).toList(),
+              },
             ),
           ),
         ],
@@ -112,6 +154,27 @@ class _DisplayAlarmState extends State<DisplayAlarm> {
     );
   }
 
+  void onSaveAlarm() {
+    DateTime? scheduleAlarmDateTime;
+    if (alarmTime!.isAfter(DateTime.now()))
+      scheduleAlarmDateTime = alarmTime;
+    else
+      scheduleAlarmDateTime = alarmTime!.add(Duration(days: 1));
 
+    var alarmInfo = AlarmInfo(
+      alarmDateTime: scheduleAlarmDateTime,
+      // gradientColorIndex: _currentAlarms!.length,
+      title: 'alarm',
+    );
+    alarmHelper.insertAlarm(alarmInfo);
+    scheduleAlarm(scheduleAlarmDateTime, alarmInfo);
+    Navigator.pop(context);
+    loadAlarms();
+  }
 
+  void deleteAlarm(int id) {
+    alarmHelper.delete(id);
+    //unsubscribe for notification
+    loadAlarms();
+  }
 }
