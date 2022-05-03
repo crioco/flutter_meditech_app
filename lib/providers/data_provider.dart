@@ -13,9 +13,14 @@ class DataProvider extends ChangeNotifier{
   int snoozeAmount;
   int snoozeDuration;
 
+  String qrResult;
+
+  String monitorID;
+
   Map<int, Map<int, Map<String, int>>> arrangedAlarms;
  
   DataProvider({
+    this.monitorID = '',
     this.deviceID = '',
     this.userID = '',
     this.firstName = '',
@@ -25,12 +30,11 @@ class DataProvider extends ChangeNotifier{
     this.snoozeDuration = 0,
     this.snoozeAmount = 0,
     this.arrangedAlarms = const {},
+    this.qrResult = ''
   });
 
   void changePillList(List<Pill> pillList){
     this.pillList = pillList;
-    // this.pillList.clear();
-    // this.pillList.addAll(pillList);
     notifyListeners();
   }
 
@@ -55,8 +59,28 @@ class DataProvider extends ChangeNotifier{
 
   void changeArrangedAlarms(Map<int, Map<int, Map<String, int>>> arrangedAlarms){
     this.arrangedAlarms = arrangedAlarms;
-    // this.arrangedAlarms.clear();
-    // this.arrangedAlarms.addAll(arrangedAlarms);
     notifyListeners();
+  }
+
+  void changeRingDuration(int ringDuration){
+    this.ringDuration = ringDuration;
+    notifyListeners();
+  }
+  void changeSnoozeDuration(int snoozeDuration){
+    this.snoozeDuration = snoozeDuration;
+    notifyListeners();
+  }
+  void changeSnoozeAmount(int snoozeAmount){
+    this.snoozeAmount = snoozeAmount;
+    notifyListeners();
+  }
+
+  void changeQRResult(String result){
+    qrResult = result;
+    notifyListeners();
+  }
+
+  void changeMonitorID(String monitorID){
+    this.monitorID = monitorID;
   }
 }

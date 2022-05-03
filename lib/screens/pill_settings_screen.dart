@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_meditech_app/functions/data_shared_preferences.dart';
 import 'package:flutter_meditech_app/model/pill_object.dart';
 import 'package:flutter_meditech_app/providers/data_provider.dart';
 import 'package:flutter_meditech_app/providers/selected_pill_provider.dart';
@@ -21,17 +22,19 @@ class PillSettingsScreen extends StatefulWidget {
 class _PillSettingsScreenState extends State<PillSettingsScreen> {
   var endDrawer = const PillSettingDrawer();
   final GlobalKey<ScaffoldState> _key = GlobalKey();
+  String deviceID = DataSharedPreferences.getDeviceID();
 
   @override
   Widget build(BuildContext context) {
     List<Pill> pillList = Provider.of<DataProvider>(context).pillList;
     return Scaffold(
         key: _key,
-        appBar: const MyAppBar(title: 'Pill Settings'),
+        appBar: MyAppBar(title: 'Pill Settings'),
         drawer: const MySideMenu(),
         endDrawer: endDrawer,
         endDrawerEnableOpenDragGesture: false,
-        body: Padding(
+        body: (deviceID != 'NULL') 
+        ? Padding(
             padding: const EdgeInsets.all(8),
             child: Column(
               children: [
@@ -84,7 +87,6 @@ class _PillSettingsScreenState extends State<PillSettingsScreen> {
                                   availableSlots.add(index);
                                 }
                               }
-
                               Provider.of<SelectedPillProvider>(context, listen: false).changeSelectedPillName('');
                               Provider.of<SelectedPillProvider>(context, listen: false).changeInitialAvailSlot(availableSlots[0]);
                               Provider.of<SelectedPillProvider>(context, listen: false).changeSelectedDays([1]); 
@@ -99,6 +101,12 @@ class _PillSettingsScreenState extends State<PillSettingsScreen> {
                       }),
                 )
               ],
-            )));
+            ))
+            : const Center(
+                child: SizedBox(
+              height: 70,
+              width: 200,
+              child: Text('No Device Registered'),
+            )),);
   }
 }

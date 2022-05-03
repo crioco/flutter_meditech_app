@@ -30,18 +30,22 @@ class SplashScreen extends StatelessWidget {
                 lastName: DataSharedPreferences.getLastName(),
                 userID:  DataSharedPreferences.getUserID()
               );
-              Provider.of<DataProvider>(context, listen: false).changeAlarmSettings(
-                ringDuration: DataSharedPreferences.getRingDuration(),
-                snoozeDuration: DataSharedPreferences.getSnoozeDuration(),
-                snoozeAmount: DataSharedPreferences.getSnoozeAmount()
-              );
-              
-              var jsonPillList = jsonDecode(DataSharedPreferences.getPillList()) as List;
-              List<Pill> pillList = jsonPillList.map((pill) => Pill.fromJson(pill)).toList();
-              Provider.of<DataProvider>(context, listen: false).changePillList(pillList);
 
-              var arrangedAlarms = getArrangedAlarm(pillList);     
-              Provider.of<DataProvider>(context, listen: false).changeArrangedAlarms(arrangedAlarms);
+              if (DataSharedPreferences.getDeviceID() != 'NULL'){
+                Provider.of<DataProvider>(context, listen: false).changeAlarmSettings(
+                  ringDuration: DataSharedPreferences.getRingDuration(),
+                  snoozeDuration: DataSharedPreferences.getSnoozeDuration(),
+                  snoozeAmount: DataSharedPreferences.getSnoozeAmount()
+                );
+                
+                var jsonPillList = jsonDecode(DataSharedPreferences.getPillList()) as List;
+                List<Pill> pillList = jsonPillList.map((pill) => Pill.fromJson(pill)).toList();
+                Provider.of<DataProvider>(context, listen: false).changePillList(pillList);
+
+                var arrangedAlarms = getArrangedAlarm(pillList);     
+                Provider.of<DataProvider>(context, listen: false).changeArrangedAlarms(arrangedAlarms);
+              }
+              
               
               Navigator.pushNamedAndRemoveUntil(context, ReminderScreenRoute,
                   (Route<dynamic> route) => false);

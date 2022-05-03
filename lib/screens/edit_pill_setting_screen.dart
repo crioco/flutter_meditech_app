@@ -53,10 +53,10 @@ class _EditPillSettingScreenState extends State<EditPillSettingScreen> {
 
     return Scaffold(
       key: _key,
-      appBar: const MyAppBar(title: 'Edit Pill'),
+      appBar: MyAppBar(title: 'Edit Pill'),
       body: SingleChildScrollView(
         child: Padding(
-          padding: const EdgeInsets.all(40),
+          padding: const EdgeInsets.all(20),
           child: Column(
             children: [
             // PILL NAME

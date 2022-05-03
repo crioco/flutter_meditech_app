@@ -166,16 +166,23 @@ class _SignInScreenState extends State<SignInScreen> {
     var firstName = data!['firstname'];
     var lastName = data['lastname'];
     Provider.of<DataProvider>(context, listen: false).changeUser(userID: userID, firstName: firstName, lastName: lastName);
-    
-    var deviceID = data['device'];
-    if(deviceID == 'NULL'){return false;} 
-    Provider.of<DataProvider>(context, listen: false).changeDeviceID(deviceID);
-
-    await DataSharedPreferences.setDeviceID(deviceID);
     await DataSharedPreferences.setUserID(userID);
     await DataSharedPreferences.setFirstName(firstName);
     await DataSharedPreferences.setLastName(lastName);
 
+    var deviceID = data['device'];
+
+    if(deviceID == 'NULL'){
+      await DataSharedPreferences.setPillList('');
+      await DataSharedPreferences.setRingDuration(0);
+      await DataSharedPreferences.setSnoozeDuration(0);
+      await DataSharedPreferences.setSnoozeAmount(0);
+      await DataSharedPreferences.setDeviceID('NULL');
+      return false;
+    } 
+
+    Provider.of<DataProvider>(context, listen: false).changeDeviceID(deviceID);
+    await DataSharedPreferences.setDeviceID(deviceID);
     return true;
   }
 
@@ -207,26 +214,6 @@ class _SignInScreenState extends State<SignInScreen> {
 
     Provider.of<DataProvider>(context, listen: false).changeAlarmSettings(snoozeDuration: snoozeDuration, snoozeAmount: snoozeAmount, ringDuration: ringDuration);
     Provider.of<DataProvider>(context, listen: false).changePillList(pillList);
-
-    // print(Provider.of<DataProvider>(context, listen: false).deviceID);
-    // print(Provider.of<DataProvider>(context, listen: false).userID);
-    // print(Provider.of<DataProvider>(context, listen: false).firstName);
-    // print(Provider.of<DataProvider>(context, listen: false).lastName);
-    // print(Provider.of<DataProvider>(context, listen: false).ringDuration);
-    // print(Provider.of<DataProvider>(context, listen: false).snoozeDuration);
-    // print(Provider.of<DataProvider>(context, listen: false).snoozeAmount);
-
-    // var temp = Provider.of<DataProvider>(context, listen: false).pillList;
-
-    // for (var item in temp){
-    //   print(item.pillName);
-    //   print(item.containerSlot.toString());
-    //   print(item.days.toString());
-      
-    //   for (var map in item.alarmList){
-    //     print('dosage: ${map['dosage']} time: ${map['time']}');
-    //   }
-    // }
 
     var arrangedAlarms = getArrangedAlarm(pillList);
     Provider.of<DataProvider>(context, listen: false).changeArrangedAlarms(arrangedAlarms);

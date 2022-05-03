@@ -37,5 +37,9 @@ class DataSharedPreferences {
   static Future setUserID(String userID) async =>
     await _preferences?.setString('userID', userID);
   static String getUserID() => _preferences?.get('userID') as String;
+
+  static Future setMonitorID(String monitorID) async =>
+    await _preferences?.setString('monitorID', monitorID);
+  static String getMonitorID() => _preferences?.get('pillList') as String;
   
 }

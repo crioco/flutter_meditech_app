@@ -49,7 +49,7 @@ class _ReminderDialogState extends State<ReminderDialog> {
                   mapCopy = json.decode(json.encode(widget.mapItem));
                   Navigator.of(context).pop();
                 },
-                child: const Text('Cancel'),
+                child: const Text('CANCEL'),
                 style: ElevatedButton.styleFrom(
                       fixedSize: const Size(100, 30),
                       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
@@ -96,7 +96,7 @@ class _ReminderDialogState extends State<ReminderDialog> {
                   fixedSize: const Size(100, 30),
                   shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
                   primary: Colors.blueAccent),
-                child: const Text('Confirm'))
+                child: const Text('CONFIRM'))
           ],
         )
       ],

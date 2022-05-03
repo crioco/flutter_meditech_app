@@ -9,14 +9,15 @@ import 'package:expansion_tile_card/expansion_tile_card.dart';
 import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
 import 'package:percent_indicator/percent_indicator.dart';
 
-class SummaryScreen extends StatefulWidget {
-  const SummaryScreen({Key? key}) : super(key: key);
+class MonitorSummary extends StatefulWidget {
+  const MonitorSummary({Key? key,
+  }) : super(key: key);
 
   @override
-  State<SummaryScreen> createState() => _SummaryScreenState();
+  State<MonitorSummary> createState() => _MonitorSummaryState();
 }
 
-class _SummaryScreenState extends State<SummaryScreen> {
+class _MonitorSummaryState extends State<MonitorSummary> {
   var dataList = [];
   var totalPills = 0;
   var missedPills = 0;
@@ -27,9 +28,9 @@ class _SummaryScreenState extends State<SummaryScreen> {
   var displayTime = DateTime.now();
   List<DateTime> dateList = getDateList(DateTime.now());
 
-  String deviceID = DataSharedPreferences.getDeviceID();
+  String deviceID = DataSharedPreferences.getMonitorID();
 
-  _SummaryScreenState() {
+  _MonitorSummaryState() {
     getDataList(dateList).then((value) => setState(() {
       dataList = value;
 

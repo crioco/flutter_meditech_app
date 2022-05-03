@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_meditech_app/const/day_of_week.dart';
 import 'package:flutter_meditech_app/functions/global_functions.dart';
-import 'package:flutter_meditech_app/providers/data_provider.dart';
 import 'package:flutter_meditech_app/providers/selected_pill_provider.dart';
 import 'package:flutter_meditech_app/widgets/my_app_bar.dart';
 import 'package:iconify_flutter/iconify_flutter.dart';
@@ -39,7 +38,7 @@ class _AddPillSettingScreenState extends State<AddPillSettingScreen> {
 
     return Scaffold(
       key: _key,
-      appBar: const MyAppBar(title: 'Add Pill'),
+      appBar: MyAppBar(title: 'Add Pill'),
       body: SingleChildScrollView(
         child: Padding(
           padding: const EdgeInsets.all(40),
@@ -233,7 +232,7 @@ class _AddPillSettingScreenState extends State<AddPillSettingScreen> {
             onPressed: () {
               Navigator.of(context).pop();
             },
-            child: const Text('Cancel')
+            child: const Text('CANCEL')
           ),
           ElevatedButton(
             onPressed: () {
@@ -243,7 +242,7 @@ class _AddPillSettingScreenState extends State<AddPillSettingScreen> {
               });
               Navigator.of(context).pop();
             },
-            child: const Text('Delete')
+            child: const Text('DELETE')
           ),
         ],
       );
