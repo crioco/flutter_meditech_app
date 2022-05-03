@@ -9,6 +9,7 @@ import '../model/schedule_Alarm.dart';
 import '../widgets/add_Alarm.dart';
 
 
+
 class DisplayAlarm extends StatefulWidget {
   const DisplayAlarm({Key? key}) : super(key: key);
 
@@ -31,10 +32,10 @@ class DisplayAlarmState extends State<DisplayAlarm> {
     });
     super.initState();
   }
-
-  void loadAlarms() {
+void loadAlarms() {
     alarms = alarmHelper.getAlarms();
-    if (mounted) setState(() {});
+    if (mounted) setState(() =>{});
+    print('loaded');
   }
 
   @override
@@ -154,23 +155,7 @@ class DisplayAlarmState extends State<DisplayAlarm> {
     );
   }
 
-  void onSaveAlarm() {
-    DateTime? scheduleAlarmDateTime;
-    if (alarmTime!.isAfter(DateTime.now()))
-      scheduleAlarmDateTime = alarmTime;
-    else
-      scheduleAlarmDateTime = alarmTime!.add(Duration(days: 1));
 
-    var alarmInfo = AlarmInfo(
-      alarmDateTime: scheduleAlarmDateTime,
-      // gradientColorIndex: _currentAlarms!.length,
-      title: 'alarm',
-    );
-    alarmHelper.insertAlarm(alarmInfo);
-    scheduleAlarm(scheduleAlarmDateTime, alarmInfo);
-    Navigator.pop(context);
-    loadAlarms();
-  }
 
   void deleteAlarm(int id) {
     alarmHelper.delete(id);

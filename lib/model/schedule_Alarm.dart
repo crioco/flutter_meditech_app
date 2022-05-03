@@ -3,7 +3,7 @@ import '../main.dart';
 import 'alarm_info.dart';
 
 
-void scheduleAlarm(DateTime? scheduledNotificationDateTime, AlarmInfo alarmInfo) async {
+void scheduleAlarm(DateTime scheduledNotificationDateTime, AlarmInfo alarmInfo) async {
     var androidPlatformChannelSpecifics = AndroidNotificationDetails(
       'alarm_notif',
       'alarm_notif',
@@ -22,5 +22,5 @@ void scheduleAlarm(DateTime? scheduledNotificationDateTime, AlarmInfo alarmInfo)
         android: androidPlatformChannelSpecifics, iOS: iOSPlatformChannelSpecifics);
 
     await flutterLocalNotificationsPlugin.schedule(0, '', alarmInfo.title,
-        scheduledNotificationDateTime!, platformChannelSpecifics);
+        scheduledNotificationDateTime, platformChannelSpecifics);
   }

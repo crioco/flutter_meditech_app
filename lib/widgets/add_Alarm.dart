@@ -1,9 +1,12 @@
 import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_meditech_app/screens/clock_view.dart';
 import 'package:intl/intl.dart';
 
+import '../model/alarm_info.dart';
+import '../model/schedule_Alarm.dart';
 import '../screens/display_alarm.dart';
-import 'schedule_Alarm.dart';
+
 
 class AddAlarmButton extends StatefulWidget {
   const AddAlarmButton({ Key? key }) : super(key: key);
@@ -60,9 +63,11 @@ class AddAlarmButtonState extends State<AddAlarmButton> {
                                       builder: (context, setModalState) {
                                         return Container(
                                           padding: const EdgeInsets.all(32),
+                                          
                                           child: Column(
                                             children: [
                                               FlatButton(
+                                                color: Color.fromARGB(255, 0, 255, 255),
                                                 onPressed: () async {
                                                   var selectedTime =
                                                       await showTimePicker(
@@ -111,10 +116,11 @@ class AddAlarmButtonState extends State<AddAlarmButton> {
                                                 trailing: Icon(
                                                     Icons.arrow_forward_ios),
                                               ),
-                                              FloatingActionButton.extended(
-                                                onPressed: DisplayAlarmState().onSaveAlarm,
+                                              FloatingActionButton.extended( 
+                                                onPressed: onSaveAlarm,
                                                 icon: Icon(Icons.alarm),
                                                 label: Text('Save'),
+                                                
                                               ),
                                             ],
                                           ),
@@ -148,7 +154,38 @@ class AddAlarmButtonState extends State<AddAlarmButton> {
       
     );
   }
-  
+  void onSaveAlarm() {
+    
+    DateTime? scheduleAlarmDateTime;
+    if (DisplayAlarmState.alarmTime!.isAfter(DateTime.now())) {
+      scheduleAlarmDateTime = DisplayAlarmState.alarmTime!;
+      print('1');
+    } else 
+      scheduleAlarmDateTime = DisplayAlarmState.alarmTime!.add(Duration(days: 1));
+     print('2');
+    
+
+    var alarmInfo = AlarmInfo(
+      alarmDateTime: scheduleAlarmDateTime,
+      gradientColorIndex: DisplayAlarmState.currentAlarms!.length,
+      title: 'alarm',
+    );
+    
+    DisplayAlarmState.alarmHelper.insertAlarm(alarmInfo);
+    scheduleAlarm(scheduleAlarmDateTime, alarmInfo);
+      DisplayAlarmState().loadAlarms();
+    Navigator.pop(context);
+  Navigator.pushAndRemoveUntil(
+  context,
+  MaterialPageRoute(builder: (context) => ClockView()),
+  (Route<dynamic> route) => false,
+);
+       
+     print('4');
+     
+
+  }
+    
   
   
   
