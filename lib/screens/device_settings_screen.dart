@@ -22,92 +22,122 @@ class _DeviceSettingsScreenState extends State<DeviceSettingsScreen> {
     int ringDuration = Provider.of<DataProvider>(context).ringDuration;
     int snoozeDuration = Provider.of<DataProvider>(context).snoozeDuration;
     int snoozeAmount = Provider.of<DataProvider>(context).snoozeAmount;
+
+    String wifiSSID = Provider.of<DataProvider>(context).wifiSSID;
+    String wifiPassword = Provider.of<DataProvider>(context).wifiPassword;
     
     return Scaffold(
       appBar: MyAppBar(title: 'Device Settings'),
+      resizeToAvoidBottomInset: false,
       body: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+        padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 10),
         child: Column(
           children: [
             Expanded(
-              flex: 3,
-              child: Column(children: [
-                const Padding(
-                  padding: EdgeInsets.all(8.0),
-                  child: Text('Alarm Configuration', style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold)),
-                ),
-                const Divider(thickness: 1, height: 1,),
-                ListTile(
-                  title: Row(children: [
-                    Text('Ring Duration: '),
-                    const Spacer(),
-                    (ringDuration > 1)
-                    ? Text('$ringDuration  minutes')
-                    : Text('$ringDuration  minute')
-                  ]),
-                  trailing: const Iconify(Ion.chevron_right),
-                  onTap: (){
-                    showRingDurationDialog(context, ringDuration);
-                  },
-                ),
-                ListTile(
-                  title: Row(children: [
-                    Text('Snooze Duration: '),
-                    const Spacer(),
-                    (snoozeDuration > 1)
-                    ? Text('$snoozeDuration  minutes')
-                    : Text('$snoozeDuration  minute')
-                  ]),
-                  trailing: const Iconify(Ion.chevron_right),
-                  onTap: (){
-                    showSnoozeDurationDialog(context, snoozeDuration);
-                  },
-                ),
-                ListTile(
-                  title: Row(children: [
-                    Text('Snooze Amount: '),
-                    const Spacer(),
-                    (snoozeAmount > 1)
-                    ? Text('$snoozeAmount  times')
-                    : Text('$snoozeAmount  time')
-                  ]),
-                  trailing: const Iconify(Ion.chevron_right),
-                  onTap: (){
-                    showSnoozeAmountDialog(context, snoozeAmount);
-                  },
-               ),
-               const SizedBox(height: 30),
-               OutlinedButton( 
-                child: const Text('UPDATE SETTINGS', style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)), 
-                style: OutlinedButton.styleFrom(
-                        fixedSize: const Size(215, 50),
-                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
-                        side: const BorderSide(color: Colors.blueAccent, width: 2),
-                        primary: Colors.blueAccent,),
-                onPressed: (){  
-                  updateDeviceSettings(context);
-               },)
-              ]),
+              flex: 1,
+              child: Padding(
+                padding: const EdgeInsets.only(top: 10),
+                child: Column(children: [
+                  const Padding(
+                    padding: EdgeInsets.all(8.0),
+                    child: Text('Alarm Configuration', style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold)),
+                  ),
+                  const Divider(thickness: 1, height: 1,),
+                  ListTile(
+                    title: Row(children: [
+                      const Text('Ring Duration: '),
+                      const Spacer(),
+                      (ringDuration > 1)
+                      ? Text('$ringDuration  minutes')
+                      : Text('$ringDuration  minute')
+                    ]),
+                    trailing: const Iconify(Ion.chevron_right),
+                    onTap: (){
+                      showRingDurationDialog(context, ringDuration);
+                    },
+                  ),
+                  ListTile(
+                    title: Row(children: [
+                      const Text('Snooze Duration: '),
+                      const Spacer(),
+                      (snoozeDuration > 1)
+                      ? Text('$snoozeDuration  minutes')
+                      : Text('$snoozeDuration  minute')
+                    ]),
+                    trailing: const Iconify(Ion.chevron_right),
+                    onTap: (){
+                      showSnoozeDurationDialog(context, snoozeDuration);
+                    },
+                  ),
+                  ListTile(
+                    title: Row(children: [
+                      const Text('Snooze Amount: '),
+                      const Spacer(),
+                      (snoozeAmount > 1)
+                      ? Text('$snoozeAmount  times')
+                      : Text('$snoozeAmount  time')
+                    ]),
+                    trailing: const Iconify(Ion.chevron_right),
+                    onTap: (){
+                      showSnoozeAmountDialog(context, snoozeAmount);
+                    },
+                 ),
+                 const SizedBox(height: 30),
+                //  OutlinedButton( 
+                //   child: const Text('UPDATE SETTINGS', style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)), 
+                //   style: OutlinedButton.styleFrom(
+                //           fixedSize: const Size(215, 50),
+                //           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+                //           side: const BorderSide(color: Colors.blueAccent, width: 2),
+                //           primary: Colors.blueAccent,),
+                //   onPressed: (){  
+                //     updateDeviceSettings(context);
+                //  },)
+                ]),
+              ),
             ),
             Expanded(
-              flex: 2,
+              flex: 1,
               child: Column(children: [
                 const Padding(
                   padding: EdgeInsets.all(8.0),
                   child: Text('WiFi Configuration', style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold)),
                 ),
                 const Divider(thickness: 1, height: 1,),
-                const SizedBox(height: 80),
-                OutlinedButton( 
-                child: const Text('UPDATE WiFI SETTINGS', style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)), 
-                style: OutlinedButton.styleFrom(
-                        fixedSize: const Size(215, 50),
-                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
-                        side: const BorderSide(color: Colors.blueAccent, width: 2),
-                        primary: Colors.blueAccent,),
-                onPressed: (){  
+                Column(children: [
+                  ListTile(
+                    title: Row(children: [
+                      const Text('WiFi SSID:'),
+                      const Spacer(),
+                      Text(wifiSSID)
+                    ]),
+                    onTap: (){
+                      showSSIDDialog(context);
+                    },
+                    trailing: const Iconify(Ion.chevron_right),
+                  ),
+                   ListTile(
+                    title: Row(children: [
+                    const Text('WiFi Password:'),
+                    const Spacer(),
+                    Text(wifiPassword)
+                    ],),
+                    onTap: (){
+                      showPasswordDialog(context);
+                    },
+                    trailing: const Iconify(Ion.chevron_right),
+                  ),
+                ],),
+                // OutlinedButton( 
+                // child: const Text('UPDATE WiFI SETTINGS', style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)), 
+                // style: OutlinedButton.styleFrom(
+                //         fixedSize: const Size(215, 50),
+                //         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+                //         side: const BorderSide(color: Colors.blueAccent, width: 2),
+                //         primary: Colors.blueAccent,),
+                // onPressed: (){  
                   
-                },)
+                // },)
             ],))
           ],
         ),
@@ -153,7 +183,7 @@ class _DeviceSettingsScreenState extends State<DeviceSettingsScreen> {
                   },
                   child: const Text('CANCEL'),
                   style: ElevatedButton.styleFrom(
-                  fixedSize: const Size(100, 30),
+                  fixedSize: const Size(115, 30),
                   shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
                   primary: Colors.grey
                 )
@@ -167,7 +197,7 @@ class _DeviceSettingsScreenState extends State<DeviceSettingsScreen> {
                   },
                   child: const Text('CONFIRM'),
                   style: ElevatedButton.styleFrom(
-                  fixedSize: const Size(100, 30),
+                  fixedSize: const Size(115, 30),
                   shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
                   primary: Colors.blueAccent
                 )
@@ -250,7 +280,7 @@ class _DeviceSettingsScreenState extends State<DeviceSettingsScreen> {
                   },
                   child: const Text('CANCEL'),
                   style: ElevatedButton.styleFrom(
-                  fixedSize: const Size(100, 30),
+                  fixedSize: const Size(115, 30),
                   shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
                   primary: Colors.grey
                 )
@@ -264,7 +294,7 @@ class _DeviceSettingsScreenState extends State<DeviceSettingsScreen> {
                   },
                   child: const Text('CONFIRM'),
                   style: ElevatedButton.styleFrom(
-                  fixedSize: const Size(100, 30),
+                  fixedSize: const Size(115, 30),
                   shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
                   primary: Colors.blueAccent
                 )
@@ -347,7 +377,7 @@ class _DeviceSettingsScreenState extends State<DeviceSettingsScreen> {
                   },
                   child: const Text('CANCEL'),
                   style: ElevatedButton.styleFrom(
-                  fixedSize: const Size(100, 30),
+                  fixedSize: const Size(115, 30),
                   shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
                   primary: Colors.grey
                 )
@@ -361,7 +391,7 @@ class _DeviceSettingsScreenState extends State<DeviceSettingsScreen> {
                   },
                   child: const Text('CONFIRM'),
                   style: ElevatedButton.styleFrom(
-                  fixedSize: const Size(100, 30),
+                  fixedSize: const Size(115, 30),
                   shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
                   primary: Colors.blueAccent
                 )
@@ -406,32 +436,188 @@ class _DeviceSettingsScreenState extends State<DeviceSettingsScreen> {
     });
   }
 
+
+  void showSSIDDialog(BuildContext context){
+    var wifiSSID = Provider.of<DataProvider>(context, listen: false).wifiSSID;
+    showDialog(context: context,  builder: (BuildContext context){
+      return StatefulBuilder(
+        builder: (context, setState){
+        return AlertDialog(
+          insetPadding: const EdgeInsets.all(15),
+          titlePadding: const EdgeInsets.all(10),
+          alignment: Alignment.bottomCenter,
+          title: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: const [
+              Padding(
+                padding: EdgeInsets.all(8.0),
+                child: Text('WiFI SSID', style: TextStyle(fontSize: 25)),
+              ),
+              Divider(thickness: 1, height: 1)
+            ],
+          ),
+          actions: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                ElevatedButton(
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                  child: const Text('CANCEL'),
+                  style: ElevatedButton.styleFrom(
+                  fixedSize: const Size(115, 30),
+                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+                  primary: Colors.grey
+                )
+                ),
+                ElevatedButton(
+                  onPressed: () {
+                   
+                    Navigator.of(context).pop();
+                  },
+                  child: const Text('CONFIRM'),
+                  style: ElevatedButton.styleFrom(
+                  fixedSize: const Size(115, 30),
+                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+                  primary: Colors.blueAccent
+                )
+                ),
+              ],
+            ),
+          ],
+          content: SizedBox(          
+            width: double.maxFinite,
+            height: 75,
+            child: Column(
+              children: [
+                TextFormField(
+                  textAlignVertical: TextAlignVertical.center,
+                  initialValue: wifiSSID,
+                  keyboardType: TextInputType.name,
+                  textInputAction: TextInputAction.done,
+                  decoration: const InputDecoration(
+                    labelText: 'WiFi SSID',
+                    border: OutlineInputBorder(),
+                  ),
+                  onChanged: (text){
+                      Provider.of<DataProvider>(context, listen: false)
+                    .changeWiFiSSID(text);
+                  },                      
+                )
+              ],
+            ),
+          ),
+        );
+        });
+    });
+  }
+
+  void showPasswordDialog(BuildContext context){
+    var wifiPassword = Provider.of<DataProvider>(context, listen: false).wifiPassword;
+    showDialog(context: context,  builder: (BuildContext context){
+      return StatefulBuilder(
+        builder: (context, setState){
+        return AlertDialog(
+          insetPadding: const EdgeInsets.all(15),
+          titlePadding: const EdgeInsets.all(10),
+          alignment: Alignment.bottomCenter,
+          title: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: const [
+              Padding(
+                padding: EdgeInsets.all(8.0),
+                child: Text('WiFI SSID', style: TextStyle(fontSize: 25)),
+              ),
+              Divider(thickness: 1, height: 1)
+            ],
+          ),
+          actions: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                ElevatedButton(
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                  child: const Text('CANCEL'),
+                  style: ElevatedButton.styleFrom(
+                  fixedSize: const Size(115, 30),
+                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+                  primary: Colors.grey
+                )
+                ),
+                ElevatedButton(
+                  onPressed: () {
+                   
+                    Navigator.of(context).pop();
+                  },
+                  child: const Text('CONFIRM'),
+                  style: ElevatedButton.styleFrom(
+                  fixedSize: const Size(115, 30),
+                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+                  primary: Colors.blueAccent
+                )
+                ),
+              ],
+            ),
+          ],
+          content: SizedBox(          
+            width: double.maxFinite,
+            height: 75,
+            child: Column(
+              children: [
+                TextFormField(
+                  textAlignVertical: TextAlignVertical.center,
+                  initialValue: wifiPassword,
+                  keyboardType: TextInputType.name,
+                  textInputAction: TextInputAction.done,
+                  decoration: const InputDecoration(
+                    labelText: 'WiFi Password',
+                    border: OutlineInputBorder(),
+                  ),
+                  onChanged: (text){
+                      Provider.of<DataProvider>(context, listen: false)
+                    .changeWiFiPassword(text);
+                  },                      
+                )
+              ],
+            ),
+          ),
+        );
+        });
+    });
+  }
+
+
   Future updateDeviceSettings(BuildContext context) async {
     var ringDuration = Provider.of<DataProvider>(context, listen: false).ringDuration;
     var snoozeDuration = Provider.of<DataProvider>(context, listen: false).snoozeDuration;
     var snoozeAmount = Provider.of<DataProvider>(context, listen: false).snoozeAmount;
 
-    var deviceID = Provider.of<DataProvider>(context, listen: false).deviceID;
-    var docRef =  FirebaseFirestore.instance.collection('DEVICES').doc(deviceID);
-    await docRef.update({'ringDuration':ringDuration, 'snoozeDuration': snoozeDuration, 'snoozeAmount': snoozeAmount})
-    .then((value) async{
+    var deviceJson = '{"ringDuration":${ringDuration*60000},"snoozeDuration":${snoozeDuration*60000},"snoozeAmount":$snoozeAmount}';
+    print(deviceJson);
+    // var deviceID = Provider.of<DataProvider>(context, listen: false).deviceID;
+    // var docRef =  FirebaseFirestore.instance.collection('DEVICES').doc(deviceID);
+    // await docRef.update({'ringDuration':ringDuration, 'snoozeDuration': snoozeDuration, 'snoozeAmount': snoozeAmount})
+    // .then((value) async{
      
-      await DataSharedPreferences.setRingDuration(ringDuration);
-      await DataSharedPreferences.setSnoozeDuration(snoozeDuration);
-      await DataSharedPreferences.setSnoozeAmount(snoozeAmount);
+    //   await DataSharedPreferences.setRingDuration(ringDuration);
+    //   await DataSharedPreferences.setSnoozeDuration(snoozeDuration);
+    //   await DataSharedPreferences.setSnoozeAmount(snoozeAmount);
 
-      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-      content: Text('Device Settings Has Been Updated'),
-      backgroundColor: Color.fromARGB(255, 74, 204, 79),
-      ));
-    })
-    .catchError((error){
-      print(error);
-      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-      content: Text('Failed to Update Device Settings'),
-      backgroundColor: Color.fromARGB(255, 196, 69, 69),
-      ));
-    });
+    //   ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+    //   content: Text('Device Settings Has Been Updated'),
+    //   backgroundColor: Color.fromARGB(255, 74, 204, 79),
+    //   ));
+    // })
+    // .catchError((error){
+    //   print(error);
+    //   ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+    //   content: Text('Failed to Update Device Settings'),
+    //   backgroundColor: Color.fromARGB(255, 196, 69, 69),
+    //   ));
+    // });
   }
 
   buildLabel({
@@ -441,8 +627,7 @@ class _DeviceSettingsScreenState extends State<DeviceSettingsScreen> {
   }) => SizedBox(
     width: width,
     child: Text(label, textAlign: TextAlign.center, style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold).copyWith(color: color)),
-  );
-  
+  ); 
 }
 
 class Utils {

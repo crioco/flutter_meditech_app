@@ -48,7 +48,7 @@ class _AccountScreenState extends State<AccountScreen> {
         padding: const EdgeInsets.all(15),
         child: Column(
           children: [
-            Row(
+             Row(
               mainAxisSize: MainAxisSize.max,
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
@@ -60,49 +60,60 @@ class _AccountScreenState extends State<AccountScreen> {
                 IconButton(onPressed: () => showUserIDQR(context), icon: const Iconify(Ion.qr_code_sharp))
               ],
             ),
-            Text('Email:  $email', style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
-            (deviceID != 'NULL')
-                ? Row(children: [
-                    const Text('Device:   Device Registered',
-                        style: TextStyle(fontSize: 16)),
-                    const Spacer(),
-                    ElevatedButton(
-                        onPressed: () {
-                          setState(() {
-                            showDeleteDialog(context);
-                          });
-                        },
-                        child: const Text('REMOVE'),
-                        style: ElevatedButton.styleFrom(
-                            fixedSize: const Size(115, 30),
-                            shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(10)),
-                            primary: Colors.redAccent))
-                  ])
-                : Row(
-                    children: [
-                      const Text('Device:   No Registed Device',
-                          style: TextStyle(fontSize: 16)),
-                      const Spacer(),
-                      ElevatedButton(
-                        onPressed: () async{
-                          await Navigator.pushNamed(context, QRScanScreenRoute);
-                          
-                            if (Provider.of<DataProvider>(context, listen: false).qrResult != 'NULL'){
-                            setState(() async {
-                              await registerDevice();    
-                            });      
-                            }        
-                        },
-                        child: const Text('REGISTER'),
-                        style: ElevatedButton.styleFrom(
-                            fixedSize: const Size(115, 30),
-                            shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(10)),
-                            primary: Colors.blueAccent)),
-                    ],
-                  ),
-              // Text(qrResult)
+            Expanded(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  (deviceID != 'NULL')
+                      ? Column(
+                        children: [
+                          const Text('Device: Device Registered', style: TextStyle(fontSize: 24)),
+                          const SizedBox(height: 50),
+                          ElevatedButton(
+                              onPressed: () {
+                                setState(() {
+                                  showDeleteDialog(context);
+                                });
+                              },
+                              child: const Text('REMOVE DEVICE', style: TextStyle(fontSize: 22)),
+                              style: ElevatedButton.styleFrom(
+                                  fixedSize: const Size(250, 50),
+                                  shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(10)),
+                                  primary: Colors.redAccent))
+                        ],
+                      )
+                      : Column(
+                        children: [
+                          Row(
+                              children: const [
+                                Text('Device: No Registed Device',
+                                    style: TextStyle(fontSize: 24)),
+                              ],
+                            ),
+                           const SizedBox(height: 50),
+                           ElevatedButton(
+                              onPressed: () async{
+                                await Navigator.pushNamed(context, QRScanScreenRoute);
+                                
+                                if (Provider.of<DataProvider>(context, listen: false).qrResult != 'NULL'){
+                                  setState(() async {
+                                    await registerDevice();    
+                                  });      
+                                }        
+                              },
+                              child: const Text('REGISTER', style: TextStyle(fontSize: 22)),
+                              style: ElevatedButton.styleFrom(
+                                   fixedSize: const Size(250, 50),
+                                  shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(10)),
+                                  primary: Colors.blueAccent)),
+                        ],
+                      ),
+                    // Text(qrResult)
+                ],
+              ),
+            ),
           ],
         ),
       ),

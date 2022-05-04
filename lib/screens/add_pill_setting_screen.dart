@@ -1,6 +1,11 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_meditech_app/const/day_of_week.dart';
+import 'package:flutter_meditech_app/functions/data_shared_preferences.dart';
 import 'package:flutter_meditech_app/functions/global_functions.dart';
+import 'package:flutter_meditech_app/model/pill_object.dart';
+import 'package:flutter_meditech_app/providers/data_provider.dart';
 import 'package:flutter_meditech_app/providers/selected_pill_provider.dart';
 import 'package:flutter_meditech_app/widgets/my_app_bar.dart';
 import 'package:iconify_flutter/iconify_flutter.dart';
@@ -38,7 +43,15 @@ class _AddPillSettingScreenState extends State<AddPillSettingScreen> {
 
     return Scaffold(
       key: _key,
-      appBar: MyAppBar(title: 'Add Pill'),
+      appBar: AppBar(
+        title: const Text('Add Pill'),
+        actions: [
+        IconButton( icon: const Iconify(Ion.md_checkmark, color: Colors.white), onPressed: () async{
+          await addPillSettings(context);
+          Navigator.of(context).pop();
+        }),
+      ]
+      ),
       body: SingleChildScrollView(
         child: Padding(
           padding: const EdgeInsets.all(40),
@@ -417,6 +430,46 @@ class _AddPillSettingScreenState extends State<AddPillSettingScreen> {
         );},
       );
     });
+  }
+
+   Future addPillSettings(BuildContext context) async {
+    var pillName = Provider.of<SelectedPillProvider>(context, listen: false).pillName;
+    var containerSlot = Provider.of<SelectedPillProvider>(context, listen: false).initialAvailSlot;
+    var days = Provider.of<SelectedPillProvider>(context, listen: false).days;
+    var alarmList = Provider.of<SelectedPillProvider>(context, listen: false).alarmList;
+    var pillList = List.of(Provider.of<DataProvider>(context, listen:false).pillList);
+
+    pillList.add(Pill(pillName: pillName, days: days, alarmList: alarmList, containerSlot: containerSlot));
+    pillList.sort((a,b)=>a.containerSlot.compareTo(b.containerSlot));
+    
+    
+    Provider.of<DataProvider>(context, listen:false).changePillList(pillList);
+    String jsonPillList = jsonEncode(pillList);
+    await DataSharedPreferences.setPillList(jsonPillList);
+    
+    // List<Map<String, dynamic>> pillSettings = pillList.map((pill)=> pill.toMap()).toList();
+    // var deviceID = Provider.of<DataProvider>(context, listen: false).deviceID;
+    // var docRef =  FirebaseFirestore.instance.collection('DEVICES').doc(deviceID);
+    // await docRef.update({'pillSettings': pillSettings})
+    // .then((value) async{
+    //   Provider.of<DataProvider>(context, listen:false).changePillList(pillList);
+    //   String jsonPillList = jsonEncode(pillList);
+    //   await DataSharedPreferences.setPillList(jsonPillList);
+
+    //   var arrangedAlarms = getArrangedAlarm(pillList);
+    //   Provider.of<DataProvider>(context, listen: false).changeArrangedAlarms(arrangedAlarms);
+    //   ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+    //   content: Text('Pill Settings Has Been Updated'),
+    //   backgroundColor: Color.fromARGB(255, 74, 204, 79),
+    //   ));
+    // })
+    // .catchError((error){
+    //   print(error);
+    //   ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+    //   content: Text('Failed to Update Pill Settings'),
+    //   backgroundColor: Color.fromARGB(255, 196, 69, 69),
+    //   ));
+    // });
   }
 }
 

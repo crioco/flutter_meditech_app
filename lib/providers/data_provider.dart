@@ -14,12 +14,16 @@ class DataProvider extends ChangeNotifier{
   int snoozeDuration;
 
   String qrResult;
+  String wifiSSID;
+  String wifiPassword;
 
   String monitorID;
 
   Map<int, Map<int, Map<String, int>>> arrangedAlarms;
  
   DataProvider({
+    this.wifiSSID = '',
+    this.wifiPassword = '',
     this.monitorID = '',
     this.deviceID = '',
     this.userID = '',
@@ -77,6 +81,16 @@ class DataProvider extends ChangeNotifier{
 
   void changeQRResult(String result){
     qrResult = result;
+    notifyListeners();
+  }
+  
+  void changeWiFiSSID(String wifiSSID){
+    this.wifiSSID = wifiSSID;
+    notifyListeners();
+  }
+
+  void changeWiFiPassword(String wifiPassword){
+    this.wifiPassword = wifiPassword;
     notifyListeners();
   }
 

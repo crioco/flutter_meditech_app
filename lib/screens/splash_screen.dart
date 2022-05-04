@@ -31,6 +31,12 @@ class SplashScreen extends StatelessWidget {
                 userID:  DataSharedPreferences.getUserID()
               );
 
+              var wifiPassword = DataSharedPreferences.getWiFiPassword();
+              var wifiSSID = DataSharedPreferences.getWiFiSSID();
+
+              Provider.of<DataProvider>(context, listen: false).changeWiFiSSID(wifiSSID);
+              Provider.of<DataProvider>(context, listen: false).changeWiFiPassword(wifiPassword);
+
               if (DataSharedPreferences.getDeviceID() != 'NULL'){
                 Provider.of<DataProvider>(context, listen: false).changeAlarmSettings(
                   ringDuration: DataSharedPreferences.getRingDuration(),
@@ -74,7 +80,7 @@ class SplashScreen extends StatelessWidget {
                   child: Container(
                     child: const Image(
                       image: AssetImage(
-                        'assets/images/iot_image.png',
+                        'assets/images/mediTECH_logo.jpg',
                       ),
                       color: Colors.black,
                     ),

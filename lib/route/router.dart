@@ -1,4 +1,5 @@
 import 'package:flutter_meditech_app/route/routing_constants.dart';
+import 'package:flutter_meditech_app/screens/DiscoveryPage.dart';
 import 'package:flutter_meditech_app/screens/account_screen.dart';
 import 'package:flutter_meditech_app/screens/add_pill_setting_screen.dart';
 import 'package:flutter_meditech_app/screens/device_settings_screen.dart';
@@ -56,6 +57,9 @@ Route<dynamic> generateRoute(RouteSettings settings) {
 
   case MonitorSummaryScreenRoute:
       return MaterialPageRoute(builder: (context) => MonitorSummary());
+
+  // case BLUDiscoveryScreenRoute:
+  //     return MaterialPageRoute(builder: (context) => DiscoveryPage());
 
     default:
       return MaterialPageRoute(

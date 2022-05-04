@@ -41,5 +41,13 @@ class DataSharedPreferences {
   static Future setMonitorID(String monitorID) async =>
     await _preferences?.setString('monitorID', monitorID);
   static String getMonitorID() => _preferences?.get('pillList') as String;
+
+  static Future setWiFiSSID(String wifiSSID) async =>
+    await _preferences?.setString('wifiSSID', wifiSSID);
+  static String getWiFiSSID() => _preferences?.get('wifiSSID') as String;
+
+  static Future setWiFiPassword(String wifiPassword) async =>
+    await _preferences?.setString('wifiPassword', wifiPassword);
+  static String getWiFiPassword() => _preferences?.get('wifiPassword') as String;
   
 }

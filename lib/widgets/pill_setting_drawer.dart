@@ -133,7 +133,7 @@ class PillSettingDrawer extends StatelessWidget {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
-                ElevatedButton(child: const Text('EDIT', style: TextStyle(fontSize: 16)),
+                ElevatedButton(child: const Text('EDIT', style: TextStyle(fontSize: 18)),
                 style: ElevatedButton.styleFrom(
                   fixedSize: const Size(100, 30),
                   shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
@@ -149,7 +149,7 @@ class PillSettingDrawer extends StatelessWidget {
                   Navigator.of(context).pop();
                   Navigator.pushNamed(context, EditPillSettingScreenRoute);
                 }),
-                ElevatedButton(child: const Text('DELETE', style: TextStyle(fontSize: 16)),
+                ElevatedButton(child: const Text('DELETE', style: TextStyle(fontSize: 18)),
                 style: ElevatedButton.styleFrom(
                   fixedSize: const Size(100, 30),
                   shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
@@ -220,34 +220,36 @@ class PillSettingDrawer extends StatelessWidget {
 
     pillList.removeAt(index);
 
-    List<Map<String, dynamic>> pillSettings = pillList.map((pill)=> pill.toMap()).toList();
+    Provider.of<SelectedPillProvider>(context, listen:false).changeSelectedPill(pillList.elementAt(index));
+    Provider.of<DataProvider>(context, listen:false).changePillList(pillList);
 
-    var deviceID = Provider.of<DataProvider>(context, listen: false).deviceID;
-    var docRef =  FirebaseFirestore.instance.collection('DEVICES').doc(deviceID);
-    await docRef.update({'pillSettings': pillSettings})
-    .then((value) async{
-      Provider.of<SelectedPillProvider>(context, listen:false).changeSelectedPill(pillList.elementAt(index));
-      Provider.of<DataProvider>(context, listen:false).changePillList(pillList);
-      String jsonPillList = jsonEncode(pillList);
-      await DataSharedPreferences.setPillList(jsonPillList);
+    // List<Map<String, dynamic>> pillSettings = pillList.map((pill)=> pill.toMap()).toList();
 
-      var arrangedAlarms = getArrangedAlarm(pillList);
-      Provider.of<DataProvider>(context, listen: false).changeArrangedAlarms(arrangedAlarms);
+    // var deviceID = Provider.of<DataProvider>(context, listen: false).deviceID;
+    // var docRef =  FirebaseFirestore.instance.collection('DEVICES').doc(deviceID);
+    // await docRef.update({'pillSettings': pillSettings})
+    // .then((value) async{
+    //   Provider.of<SelectedPillProvider>(context, listen:false).changeSelectedPill(pillList.elementAt(index));
+    //   Provider.of<DataProvider>(context, listen:false).changePillList(pillList);
+    //   String jsonPillList = jsonEncode(pillList);
+    //   await DataSharedPreferences.setPillList(jsonPillList);
 
-      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-      content: Text('Pill has been removed from Pill Settings'),
-      backgroundColor: Color.fromARGB(255, 74, 204, 79),
-      ));
-    })
-    .catchError((error){
-      print(error);
-      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-      content: Text('Failed to remove Pill from Pill Settings'),
-      backgroundColor: Color.fromARGB(255, 196, 69, 69),
-      ));
-    });
+    //   var arrangedAlarms = getArrangedAlarm(pillList);
+    //   Provider.of<DataProvider>(context, listen: false).changeArrangedAlarms(arrangedAlarms);
+
+    //   ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+    //   content: Text('Pill has been removed from Pill Settings'),
+    //   backgroundColor: Color.fromARGB(255, 74, 204, 79),
+    //   ));
+    // })
+    // .catchError((error){
+    //   print(error);
+    //   ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+    //   content: Text('Failed to remove Pill from Pill Settings'),
+    //   backgroundColor: Color.fromARGB(255, 196, 69, 69),
+    //   ));
+    // });
     
-    Provider.of<DataProvider>(context, listen: false).changePillList(pillList);
     Navigator.of(context).pop();
   }
 }

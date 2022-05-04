@@ -157,10 +157,16 @@ class _ReminderScreenState extends State<ReminderScreen> {
                                                               CrossAxisAlignment
                                                                   .center,
                                                           children: [
-                                                            Text(dosage
-                                                                .toString()),
-                                                            Text(pillName),
-                                                            Text(status),
+                                                            Expanded(
+                                                              flex: 1,
+                                                              child: Center(child: Text(dosage.toString())),
+                                                            ),
+                                                            Expanded(
+                                                              flex: 1,
+                                                              child: Center(child: Text(pillName))),
+                                                            Expanded(
+                                                              flex: 1,
+                                                              child: Center(child: Text(status))),
                                                           ],
                                                         );
                                                       },
@@ -180,7 +186,12 @@ class _ReminderScreenState extends State<ReminderScreen> {
                                                             .centerRight,
                                                         child: ElevatedButton(
                                                           child: const Text(
-                                                              'Edit'),
+                                                              'EDIT'),
+                                                           style: ElevatedButton.styleFrom(
+                                                            fixedSize: const Size(100, 30),
+                                                            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+                                                            primary: Colors.blueAccent
+                                                          ),
                                                           onPressed: () async {
                                                             await showDialog(
                                                                 context:
@@ -305,6 +316,7 @@ class _ReminderScreenState extends State<ReminderScreen> {
     } else {
       alarmListEmpty = false;
     }
-    return temp;
+
+    return Map.fromEntries(temp.entries.toList()..sort((e1, e2) => e1.key.compareTo(e2.key)));
   }
 }

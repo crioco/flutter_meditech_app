@@ -31,11 +31,11 @@ class MySideMenu extends StatelessWidget {
                           children: [
                             Text(Provider.of<DataProvider>(
                               context, listen: false).firstName, 
-                              style: const TextStyle(fontSize: 20)),
+                              style: const TextStyle(fontSize: 25, color: Colors.white)),
                             const SizedBox(width: 5,),
                             Text(Provider.of<DataProvider>(
                               context, listen: false).lastName, 
-                              style: const TextStyle(fontSize: 20)),
+                              style: const TextStyle(fontSize: 25, color: Colors.white)),
                           ],
                         ),
                       ],
@@ -61,11 +61,11 @@ class MySideMenu extends StatelessWidget {
                 tileIcon: Fluent.pill_24_filled,
                 navRoute: PillSettingsScreenRoute,
               ),
-              const SideMenuListTile(
-                tileText: 'Monitoring',
-                tileIcon: Fluent.clipboard_task_list_rtl_24_filled,
-                navRoute: MonitoringScreenRoute,
-              ),
+              // const SideMenuListTile(
+              //   tileText: 'Monitoring',
+              //   tileIcon: Fluent.clipboard_task_list_rtl_24_filled,
+              //   navRoute: MonitoringScreenRoute,
+              // ),
               const SideMenuListTile(
                 tileText: 'My Account',
                 tileIcon: Fluent.person_circle_24_filled,

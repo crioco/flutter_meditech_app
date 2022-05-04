@@ -11,3 +11,4 @@ const String AccountScreenRoute = '/Account';
 const String QRScanScreenRoute = '/QRScan';
 const String MonitoringScreenRoute = '/Monitoring';
 const String MonitorSummaryScreenRoute = '/MonitorSummary';
+// const String BLUDiscoveryScreenRoute = 'BLUDiscoveryScreen';

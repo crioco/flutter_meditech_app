@@ -170,6 +170,12 @@ class _SignInScreenState extends State<SignInScreen> {
     await DataSharedPreferences.setFirstName(firstName);
     await DataSharedPreferences.setLastName(lastName);
 
+    var wifiPassword = DataSharedPreferences.getWiFiPassword();
+    var wifiSSID = DataSharedPreferences.getWiFiSSID();
+
+    Provider.of<DataProvider>(context, listen: false).changeWiFiSSID(wifiSSID);
+    Provider.of<DataProvider>(context, listen: false).changeWiFiPassword(wifiPassword);
+    
     var deviceID = data['device'];
 
     if(deviceID == 'NULL'){
