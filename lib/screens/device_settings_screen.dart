@@ -591,12 +591,10 @@ class _DeviceSettingsScreenState extends State<DeviceSettingsScreen> {
 
 
   Future updateDeviceSettings(BuildContext context) async {
-    var ringDuration = Provider.of<DataProvider>(context, listen: false).ringDuration;
-    var snoozeDuration = Provider.of<DataProvider>(context, listen: false).snoozeDuration;
-    var snoozeAmount = Provider.of<DataProvider>(context, listen: false).snoozeAmount;
+    // var ringDuration = Provider.of<DataProvider>(context, listen: false).ringDuration;
+    // var snoozeDuration = Provider.of<DataProvider>(context, listen: false).snoozeDuration;
+    // var snoozeAmount = Provider.of<DataProvider>(context, listen: false).snoozeAmount;
 
-    var deviceJson = '{"ringDuration":${ringDuration*60000},"snoozeDuration":${snoozeDuration*60000},"snoozeAmount":$snoozeAmount}';
-    print(deviceJson);
     // var deviceID = Provider.of<DataProvider>(context, listen: false).deviceID;
     // var docRef =  FirebaseFirestore.instance.collection('DEVICES').doc(deviceID);
     // await docRef.update({'ringDuration':ringDuration, 'snoozeDuration': snoozeDuration, 'snoozeAmount': snoozeAmount})

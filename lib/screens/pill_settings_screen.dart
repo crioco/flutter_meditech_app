@@ -262,23 +262,18 @@ void uploadToBLU() async {
         var wifiPassword = Provider.of<DataProvider>(context, listen: false).wifiPassword;
 
         var wifiJson = '2{"WIFI_SSID":"$wifiSSID","WIFI_PASSWORD":"$wifiPassword"}';
-
-
         var deviceJson = '3{"ringDuration":${ringDuration*60000},"snoozeDuration":${snoozeDuration*60000},"snoozeAmount":$snoozeAmount}';
         var jsonPillList = jsonEncode(pillList);
         
-        await Future.delayed(const Duration(seconds: 3));
+        await Future.delayed(const Duration(seconds: 2));
         String jsonPillListS = '1'+jsonPillList;
         _sendMessage(jsonPillListS);
-        // print(jsonEncode(pillList));
         
-        await Future.delayed(const Duration(seconds: 3));
+        await Future.delayed(const Duration(seconds: 2));
         _sendMessage(deviceJson);
-        // print(deviceJson);
         
-        await Future.delayed(const Duration(seconds: 3));
+        await Future.delayed(const Duration(seconds: 2));
         _sendMessage(wifiJson);
-        // print(wifiJson);
 
         await DataSharedPreferences.setPillList(jsonPillList);
         await DataSharedPreferences.setRingDuration(ringDuration);
@@ -290,32 +285,53 @@ void uploadToBLU() async {
         var arrangedAlarms = getArrangedAlarm(pillList);
         Provider.of<DataProvider>(context, listen: false).changeArrangedAlarms(arrangedAlarms);
 
-        // List<Map<String, dynamic>> pillSettings = pillList.map((pill)=> pill.toMap()).toList();
+        List<Map<String, dynamic>> pillSettings = pillList.map((pill)=> pill.toMap()).toList();
 
-        // var deviceID = Provider.of<DataProvider>(context, listen: false).deviceID;
-        // var docRef =  FirebaseFirestore.instance.collection('DEVICES').doc(deviceID);
-        // await docRef.update({'pillSettings': pillSettings})
-        // .then((value) async{
-        //   Provider.of<SelectedPillProvider>(context, listen:false).changeSelectedInitialSlot(containerSlot);
-        //   Provider.of<DataProvider>(context, listen:false).changePillList(pillList);
-        //   String jsonPillList = jsonEncode(pillList);
-        //   await DataSharedPreferences.setPillList(jsonPillList);
+        var deviceID = Provider.of<DataProvider>(context, listen: false).deviceID;
+        var docRef =  FirebaseFirestore.instance.collection('DEVICES').doc(deviceID);
+        await docRef.update({'pillSettings': pillSettings, 'ringDuration':ringDuration, 
+        'snoozeDuration': snoozeDuration, 'snoozeAmount': snoozeAmount, 'wifiSSID': wifiSSID, 
+        'wifiPassword': wifiPassword})
+        .then((value) async{
+          // Provider.of<SelectedPillProvider>(context, listen:false).changeSelectedInitialSlot(containerSlot);
+          // Provider.of<DataProvider>(context, listen:false).changePillList(pillList);
+          // String jsonPillList = jsonEncode(pillList);
+          // await DataSharedPreferences.setPillList(jsonPillList);
 
-        //   var arrangedAlarms = getArrangedAlarm(pillList);
-        //   Provider.of<DataProvider>(context, listen: false).changeArrangedAlarms(arrangedAlarms);
-        //   ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-        //   content: Text('Pill Settings Has Been Updated'),
-        //   backgroundColor: Color.fromARGB(255, 74, 204, 79),
-        //   ));
-        // })
-        // .catchError((error){
-        //   ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-        //   content: Text('Failed to Update Pill Settings'),
-        //   backgroundColor: Color.fromARGB(255, 196, 69, 69),
-        //   ));
-        // });
+          // var arrangedAlarms = getArrangedAlarm(pillList);
+          // Provider.of<DataProvider>(context, listen: false).changeArrangedAlarms(arrangedAlarms);
+          ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+          content: Text('Settings Has Been Updated'),
+          backgroundColor: Color.fromARGB(255, 74, 204, 79),
+          ));
+        })
+        .catchError((error){
+          ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+          content: Text('Failed to Update Settings'),
+          backgroundColor: Color.fromARGB(255, 196, 69, 69),
+          ));
+        });
 
-      }
+        // await docRef.update({'ringDuration':ringDuration, 'snoozeDuration': snoozeDuration, 'snoozeAmount': snoozeAmount})
+        //   .then((value) async{
+            
+        //     await DataSharedPreferences.setRingDuration(ringDuration);
+        //     await DataSharedPreferences.setSnoozeDuration(snoozeDuration);
+        //     await DataSharedPreferences.setSnoozeAmount(snoozeAmount);
+
+        //     ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+        //     content: Text('Device Settings Has Been Updated'),
+        //     backgroundColor: Color.fromARGB(255, 74, 204, 79),
+        //     ));
+        //   })
+        //   .catchError((error){
+        //     print(error);
+        //     ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+        //     content: Text('Failed to Update Device Settings'),
+        //     backgroundColor: Color.fromARGB(255, 196, 69, 69),
+        //     ));
+        //   });
+        }
 }
 
 // void _startChat(BuildContext context, BluetoothDevice server) {

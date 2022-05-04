@@ -75,6 +75,7 @@ class SplashScreen extends StatelessWidget {
         children: [
           Flexible(
             child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Center(
                   child: Container(
@@ -82,29 +83,9 @@ class SplashScreen extends StatelessWidget {
                       image: AssetImage(
                         'assets/images/mediTECH_logo.jpg',
                       ),
-                      color: Colors.black,
                     ),
                   ),
                 ),
-                const SizedBox(
-                  height: 20,
-                ),
-                const Text(
-                  "Firebase\nCloud Firestore",
-                  style: kHeadline,
-                  textAlign: TextAlign.left,
-                ),
-                const SizedBox(
-                  height: 20,
-                ),
-                Container(
-                  width: MediaQuery.of(context).size.width * 0.8,
-                  child: const Text(
-                    "This is a project that connects to hardware devices via Firebase and gets the readings from sensors. For detail, you can check out my channel.",
-                    style: kBodyText,
-                    textAlign: TextAlign.center,
-                  ),
-                )
               ],
             ),
           ),

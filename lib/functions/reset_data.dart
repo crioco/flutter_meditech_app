@@ -13,7 +13,6 @@ resetData(String userID, BuildContext context) async {
   if( await getUserDevice(userID, context)){
     getData(context);
   }
-
 }
 
 Future<bool> getUserDevice(String userID, BuildContext context) async{

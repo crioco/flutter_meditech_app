@@ -62,7 +62,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                             },
                             icon: const Image(
                               width: 24,
-                              color: Colors.white,
+                              color: Colors.black,
                               image: AssetImage('assets/images/back_arrow.png'),
                             ),
                           ),
@@ -118,10 +118,6 @@ class _SignUpScreenState extends State<SignUpScreen> {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        const Text(
-                          "Already have an account? ",
-                          style: kBodyText,
-                        ),
                         GestureDetector(
                           onTap: () {
                             Navigator.pushNamedAndRemoveUntil(
@@ -130,7 +126,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                                 (Route<dynamic> route) => false);
                           },
                           child: Text(
-                            "Sign In",
+                            "Already have an account?",
                             style: kBodyText.copyWith(
                               color: Colors.black,
                             ),
@@ -146,8 +142,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
                       onTap: () {
                         _signUp;
                         },
-                      bgColor: Colors.white,
-                      textColor: Colors.black87,
+                      bgColor: Colors.blueAccent,
+                      textColor: Colors.white,
                     )
                   ],
                 ),

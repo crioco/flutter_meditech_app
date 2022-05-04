@@ -58,14 +58,14 @@ class _SignInScreenState extends State<SignInScreen> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           const Text(
-                            "Welcome back.",
+                            "Hello!",
                             style: kHeadline,
                           ),
                           const SizedBox(
                             height: 10,
                           ),
                           const Text(
-                            "You've been missed!",
+                            "MediTECH at Your Service!",
                             style: kBodyText2,
                           ),
                           const SizedBox(
@@ -92,16 +92,12 @@ class _SignInScreenState extends State<SignInScreen> {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        const Text(
-                          "Dont't have an account? ",
-                          style: kBodyText,
-                        ),
                         GestureDetector(
                           onTap: () {
                             Navigator.pushNamed(context, SignUpScreenRoute);
                           },
                           child: Text(
-                            'Register',
+                            "Dont't have an account?",
                             style: kBodyText.copyWith(
                               color: Colors.black,
                             ),
@@ -115,8 +111,8 @@ class _SignInScreenState extends State<SignInScreen> {
                     MyTextButton(
                       buttonName: 'Sign In',
                       onTap: _signIn,
-                      bgColor: Colors.white,
-                      textColor: Colors.black87,
+                      bgColor: Colors.blueAccent,
+                      textColor: Colors.white,
                     ),
                   ],
                 ),
@@ -170,11 +166,11 @@ class _SignInScreenState extends State<SignInScreen> {
     await DataSharedPreferences.setFirstName(firstName);
     await DataSharedPreferences.setLastName(lastName);
 
-    var wifiPassword = DataSharedPreferences.getWiFiPassword();
-    var wifiSSID = DataSharedPreferences.getWiFiSSID();
+    // var wifiPassword = DataSharedPreferences.getWiFiPassword();
+    // var wifiSSID = DataSharedPreferences.getWiFiSSID();
 
-    Provider.of<DataProvider>(context, listen: false).changeWiFiSSID(wifiSSID);
-    Provider.of<DataProvider>(context, listen: false).changeWiFiPassword(wifiPassword);
+    // Provider.of<DataProvider>(context, listen: false).changeWiFiSSID(wifiSSID);
+    // Provider.of<DataProvider>(context, listen: false).changeWiFiPassword(wifiPassword);
     
     var deviceID = data['device'];
 
@@ -201,6 +197,11 @@ class _SignInScreenState extends State<SignInScreen> {
     var snoozeDuration = data['snoozeDuration'] as int;
     var snoozeAmount = data['snoozeAmount'] as int;
     var pillSettings = data['pillSettings'].cast<Map<String, dynamic>>();
+    var wifiSSID = data['wifiSSID'] as String;
+    var wifiPassword = data['wifiPassword'] as String;
+
+    Provider.of<DataProvider>(context, listen: false).changeWiFiSSID(wifiSSID);
+    Provider.of<DataProvider>(context, listen: false).changeWiFiPassword(wifiPassword);
 
     List<Pill> pillList = [];
 
@@ -230,6 +231,8 @@ class _SignInScreenState extends State<SignInScreen> {
     await DataSharedPreferences.setRingDuration(ringDuration);
     await DataSharedPreferences.setSnoozeDuration(snoozeDuration);
     await DataSharedPreferences.setSnoozeAmount(snoozeDuration);
+    await DataSharedPreferences.setWiFiPassword(wifiPassword);
+    await DataSharedPreferences.setWiFiSSID(wifiSSID);
 
   }
 
