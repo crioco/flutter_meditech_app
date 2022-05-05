@@ -46,7 +46,7 @@ void loadAlarms() {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
           const Text(
-            'Alarmdisplay',
+            'Alarm Display',
             style:
                 TextStyle(color: Color.fromARGB(255, 0, 0, 0), fontSize: 24),
           ),
