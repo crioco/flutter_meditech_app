@@ -9,6 +9,4 @@ const String AddPillSettingScreenRoute = '/AddPillSetting';
 const String DeviceSettingsScreenRoute = '/DeviceSettings';
 const String AccountScreenRoute = '/Account';
 const String QRScanScreenRoute = '/QRScan';
-const String MonitoringScreenRoute = '/Monitoring';
-const String MonitorSummaryScreenRoute = '/MonitorSummary';
-// const String BLUDiscoveryScreenRoute = 'BLUDiscoveryScreen';
+const String ClockViewScreenRoute = '/ClockView';

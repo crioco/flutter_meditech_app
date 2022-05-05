@@ -96,21 +96,19 @@ class SplashScreen extends StatelessWidget {
                 color: Colors.grey[850],
                 borderRadius: BorderRadius.circular(18),
               ),
-              child: Container(
-                child: TextButton(
-                  style: ButtonStyle(
-                    overlayColor: MaterialStateProperty.resolveWith(
-                      (states) => Colors.black12,
-                    ),
+              child: TextButton(
+                style: ButtonStyle(
+                  overlayColor: MaterialStateProperty.resolveWith(
+                    (states) => Colors.black12,
                   ),
-                  onPressed: () {
-                    Navigator.pushNamedAndRemoveUntil(context,
-                        SignInScreenRoute, (Route<dynamic> route) => false);
-                  },
-                  child: Text(
-                    'GET STARTED',
-                    style: kButtonText.copyWith(color: Colors.white),
-                  ),
+                ),
+                onPressed: () {
+                  Navigator.pushNamedAndRemoveUntil(context,
+                      SignInScreenRoute, (Route<dynamic> route) => false);
+                },
+                child: Text(
+                  'GET STARTED',
+                  style: kButtonText.copyWith(color: Colors.white),
                 ),
               ))
         ],
