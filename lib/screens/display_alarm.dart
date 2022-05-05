@@ -113,7 +113,7 @@ void loadAlarms() {
                                   ],
                                 ),
                                  IconButton(
-                                 icon: Icon(Icons.settings_suggest_rounded), 
+                                 icon: const Icon(Icons.settings_suggest_rounded), 
                                 color: Colors.white,
                                  onPressed: () {  },
                                 ),
