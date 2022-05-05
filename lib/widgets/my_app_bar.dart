@@ -48,7 +48,7 @@ class MyAppBar extends StatelessWidget implements PreferredSizeWidget {
             Navigator.of(context).pop();
         })
 
-        : IconButton( 
+        : IconButton(
         icon:const Iconify(Ion.reorder_three_sharp, color: Colors.white, size: 30,),
           onPressed: (){
             Scaffold.of(context).openDrawer();

@@ -45,7 +45,7 @@ void loadAlarms() {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
-          Text(
+          const Text(
             'Alarmdisplay',
             style:
                 TextStyle(color: Color.fromARGB(255, 0, 0, 0), fontSize: 24),
@@ -66,7 +66,7 @@ void loadAlarms() {
                         padding: const EdgeInsets.symmetric(
                             horizontal: 12, vertical: 8),
                         decoration: BoxDecoration(
-                            gradient: LinearGradient(
+                            gradient: const LinearGradient(
                               colors: [
                                 Color.fromARGB(255, 168, 168, 168),
                                 Color.fromARGB(255, 68, 67, 67)
@@ -79,11 +79,11 @@ void loadAlarms() {
                                 color: Colors.black.withOpacity(0.5),
                                 blurRadius: 8,
                                 spreadRadius: 4,
-                                offset: Offset(4, 4),
+                                offset: const Offset(4, 4),
                               ),
                             ],
                             borderRadius:
-                                BorderRadius.all(Radius.circular(24))),
+                                const BorderRadius.all(Radius.circular(24))),
                         child: Column(
                         
                           crossAxisAlignment: CrossAxisAlignment.start,
@@ -105,7 +105,7 @@ void loadAlarms() {
                                    
                                     Text(
                                       alarm.title!,
-                                      style: TextStyle(
+                                      style: const TextStyle(
                                         fontSize: 10,
                                         color: Color.fromARGB(255, 0, 0, 0)),
                                         
@@ -119,7 +119,7 @@ void loadAlarms() {
                                 ),
                               ],
                             ),
-                            Text(
+                            const Text(
                               'Mon-Fri',
                               style: TextStyle(
                                   color: Color.fromARGB(255, 255, 255, 255),
@@ -130,12 +130,12 @@ void loadAlarms() {
                               children: <Widget>[
                                 Text(
                                   alarmTime.toString(),
-                                  style: TextStyle(
+                                  style: const TextStyle(
                                       color: Color.fromARGB(255, 20, 63, 30),
                                       fontSize: 18),
                                 ),
                                 IconButton(
-                                    icon: Icon(Icons.delete),
+                                    icon: const Icon(Icons.delete),
                                     color: Colors.white,
                                     onPressed: () {
                                       deleteAlarm(alarm.id!);

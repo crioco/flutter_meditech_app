@@ -2,7 +2,7 @@
     package="com.example.flutter_meditech_app">
 
    <application
-        android:label="flutter_meditech_app"
+        android:label="MediTECH App"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
         <activity

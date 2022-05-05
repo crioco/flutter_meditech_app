@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_meditech_app/widgets/my_app_bar.dart';
+import 'package:flutter_meditech_app/widgets/my_side_menu.dart';
 import 'package:intl/intl.dart';
 import 'display_alarm.dart';
 
 class ClockView extends StatefulWidget {
+  const ClockView({Key? key}) : super(key: key);
+
   @override
   _ClockViewState createState() =>_ClockViewState();
 }
@@ -16,13 +19,14 @@ class _ClockViewState extends State<ClockView> {
     var formattedDate = DateFormat('yMMMMd').format(now);
     return Scaffold(
       appBar: MyAppBar(title: 'Clock'),
-      backgroundColor: Color.fromARGB(255, 255, 255, 255),
+      backgroundColor: const Color.fromARGB(255, 255, 255, 255),
+      drawer: const MySideMenu(),
       body: Container(
-        padding: EdgeInsets.all(32),
+        padding: const EdgeInsets.all(32),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
-            Text(
+            const Text(
               'Time',
               style:
                   TextStyle(color: Color.fromARGB(255, 0, 0, 0), fontSize: 24),
@@ -30,14 +34,14 @@ class _ClockViewState extends State<ClockView> {
             Text(
               formattedTime,
               style:
-                  TextStyle(color: Color.fromARGB(255, 0, 0, 0), fontSize: 64),
+                  const TextStyle(color: Color.fromARGB(255, 0, 0, 0), fontSize: 64),
             ),
             Text(
               formattedDate,
               style:
-                  TextStyle(color: Color.fromARGB(255, 0, 0, 0), fontSize: 20),
+                  const TextStyle(color: Color.fromARGB(255, 0, 0, 0), fontSize: 20),
             ),
-            Expanded(child: DisplayAlarm()),
+            const Expanded(child: DisplayAlarm()),
           ],
         ),
 
