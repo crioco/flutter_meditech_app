@@ -3,7 +3,6 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_meditech_app/auth_helper.dart';
 import 'package:flutter_meditech_app/const/custom_styles.dart';
-import 'package:flutter_meditech_app/functions/reset_data.dart';
 import 'package:flutter_meditech_app/route/routing_constants.dart';
 import 'package:flutter_meditech_app/widgets/my_password_field.dart';
 import 'package:flutter_meditech_app/widgets/my_text_button.dart';
@@ -62,7 +61,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                             },
                             icon: const Image(
                               width: 24,
-                              color: Colors.black,
+                              color: Colors.white,
                               image: AssetImage('assets/images/back_arrow.png'),
                             ),
                           ),
@@ -118,6 +117,10 @@ class _SignUpScreenState extends State<SignUpScreen> {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
+                        const Text(
+                          "Already have an account? ",
+                          style: kBodyText,
+                        ),
                         GestureDetector(
                           onTap: () {
                             Navigator.pushNamedAndRemoveUntil(
@@ -126,7 +129,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                                 (Route<dynamic> route) => false);
                           },
                           child: Text(
-                            "Already have an account?",
+                            "Sign In",
                             style: kBodyText.copyWith(
                               color: Colors.black,
                             ),
@@ -139,11 +142,9 @@ class _SignUpScreenState extends State<SignUpScreen> {
                     ),
                     MyTextButton(
                       buttonName: 'Register',
-                      onTap: () {
-                        _signUp;
-                        },
-                      bgColor: Colors.blueAccent,
-                      textColor: Colors.white,
+                      onTap: _signUp,
+                      bgColor: Colors.white,
+                      textColor: Colors.black87,
                     )
                   ],
                 ),
@@ -180,7 +181,6 @@ class _SignUpScreenState extends State<SignUpScreen> {
 
     if (obj is User) {
       addUser(firstname: firstname, lastname: lastname, user: obj);
-      resetData(obj.uid, context);
       Navigator.pushNamedAndRemoveUntil(
           context, ReminderScreenRoute, (Route<dynamic> route) => false);
     } else {
@@ -192,11 +192,9 @@ class _SignUpScreenState extends State<SignUpScreen> {
   }
 
   void addUser({required String firstname, required String lastname, required User user}) async{
-    Map<String, bool> monitoredMap = {};
-    List<String> monitoringList = [];
     DocumentReference users = FirebaseFirestore.instance.collection('Users').doc(user.uid);
     await users
-    .set({'firstname': firstname, 'lastname': lastname, 'device': 'NULL', 'monitoredMap': monitoredMap, 'monitoringList' : monitoringList})
+    .set({'firstname': firstname, 'lastname': lastname, 'device': null})
     .then((value) => print('User Added'))
     .catchError((error)=>{print('Failed to add user. $error')});
   }

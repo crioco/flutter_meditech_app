@@ -1,20 +1,13 @@
-import 'dart:convert';
-
 import 'package:adaptive_dialog/adaptive_dialog.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_meditech_app/const/custom_styles.dart';
-import 'package:flutter_meditech_app/functions/data_shared_preferences.dart';
-import 'package:flutter_meditech_app/providers/data_provider.dart';
 import 'package:flutter_meditech_app/route/routing_constants.dart';
 import 'package:flutter_meditech_app/widgets/my_password_field.dart';
 import 'package:flutter_meditech_app/widgets/my_text_button.dart';
 import 'package:flutter_meditech_app/widgets/my_text_field.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_meditech_app/model/pill_object.dart';
-import 'package:provider/provider.dart';
+
 import '../auth_helper.dart';
-import '../functions/global_functions.dart';
 
 class SignInScreen extends StatefulWidget {
   const SignInScreen({Key? key}) : super(key: key);
@@ -58,14 +51,14 @@ class _SignInScreenState extends State<SignInScreen> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           const Text(
-                            "Hello!",
+                            "Welcome back.",
                             style: kHeadline,
                           ),
                           const SizedBox(
                             height: 10,
                           ),
                           const Text(
-                            "MediTECH at Your Service!",
+                            "You've been missed!",
                             style: kBodyText2,
                           ),
                           const SizedBox(
@@ -92,12 +85,16 @@ class _SignInScreenState extends State<SignInScreen> {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
+                        const Text(
+                          "Dont't have an account? ",
+                          style: kBodyText,
+                        ),
                         GestureDetector(
                           onTap: () {
                             Navigator.pushNamed(context, SignUpScreenRoute);
                           },
                           child: Text(
-                            "Dont't have an account?",
+                            'Register',
                             style: kBodyText.copyWith(
                               color: Colors.black,
                             ),
@@ -111,8 +108,8 @@ class _SignInScreenState extends State<SignInScreen> {
                     MyTextButton(
                       buttonName: 'Sign In',
                       onTap: _signIn,
-                      bgColor: Colors.blueAccent,
-                      textColor: Colors.white,
+                      bgColor: Colors.white,
+                      textColor: Colors.black87,
                     ),
                   ],
                 ),
@@ -136,104 +133,16 @@ class _SignInScreenState extends State<SignInScreen> {
       return;
     }
 
-    var user = await AuthHelper.signIn(email, pw);
+    var obj = await AuthHelper.signIn(email, pw);
 
-    if (user is User) {
-      if (await getUserDevice(user)){
-        await getData();
-      }
+    if (obj is User) {
       Navigator.pushNamedAndRemoveUntil(
           context, ReminderScreenRoute, (Route<dynamic> route) => false);
     } else {
       await showOkAlertDialog(
         context: context,
-        message: user,
+        message: obj,
       );
     }
   }
-
-  Future<bool> getUserDevice(User user) async{
-    var userID = user.uid;
-
-    DocumentSnapshot<Map<String, dynamic>> query = await FirebaseFirestore.instance
-    .collection('Users').doc(userID).get();
-    var data = query.data();
-
-    var firstName = data!['firstname'];
-    var lastName = data['lastname'];
-    Provider.of<DataProvider>(context, listen: false).changeUser(userID: userID, firstName: firstName, lastName: lastName);
-    await DataSharedPreferences.setUserID(userID);
-    await DataSharedPreferences.setFirstName(firstName);
-    await DataSharedPreferences.setLastName(lastName);
-
-    // var wifiPassword = DataSharedPreferences.getWiFiPassword();
-    // var wifiSSID = DataSharedPreferences.getWiFiSSID();
-
-    // Provider.of<DataProvider>(context, listen: false).changeWiFiSSID(wifiSSID);
-    // Provider.of<DataProvider>(context, listen: false).changeWiFiPassword(wifiPassword);
-    
-    var deviceID = data['device'];
-
-    if(deviceID == 'NULL'){
-      await DataSharedPreferences.setPillList('');
-      await DataSharedPreferences.setRingDuration(0);
-      await DataSharedPreferences.setSnoozeDuration(0);
-      await DataSharedPreferences.setSnoozeAmount(0);
-      await DataSharedPreferences.setDeviceID('NULL');
-      return false;
-    } 
-
-    Provider.of<DataProvider>(context, listen: false).changeDeviceID(deviceID);
-    await DataSharedPreferences.setDeviceID(deviceID);
-    return true;
-  }
-
-  getData() async{
-    DocumentSnapshot<Map<String, dynamic>> query = await FirebaseFirestore.instance
-    .collection('DEVICES').doc(Provider.of<DataProvider>(context, listen: false).deviceID).get();
-
-    var data = query.data();
-    var ringDuration = data!['ringDuration'] as int;
-    var snoozeDuration = data['snoozeDuration'] as int;
-    var snoozeAmount = data['snoozeAmount'] as int;
-    var pillSettings = data['pillSettings'].cast<Map<String, dynamic>>();
-    var wifiSSID = data['wifiSSID'] as String;
-    var wifiPassword = data['wifiPassword'] as String;
-
-    Provider.of<DataProvider>(context, listen: false).changeWiFiSSID(wifiSSID);
-    Provider.of<DataProvider>(context, listen: false).changeWiFiPassword(wifiPassword);
-
-    List<Pill> pillList = [];
-
-    for (var pill in pillSettings){
-      var pillName = pill['pillName'] as String;
-      var days = pill['days'].cast<int>();
-      var containerSlot = pill['containerSlot'] as int;
-      var alarmListObj = pill['alarmList'].cast<Map<String, dynamic>>();
-
-      List<Map<String,dynamic>> alarmList = [];
-      for (var alarm in alarmListObj){
-        alarmList.add({'dosage': alarm['dosage'] as int, 'time': alarm['time'] as int});
-      }
-
-      pillList.add(Pill(pillName: pillName, days: days, containerSlot: containerSlot, alarmList: alarmList));
-    }
-
-    Provider.of<DataProvider>(context, listen: false).changeAlarmSettings(snoozeDuration: snoozeDuration, snoozeAmount: snoozeAmount, ringDuration: ringDuration);
-    Provider.of<DataProvider>(context, listen: false).changePillList(pillList);
-
-    var arrangedAlarms = getArrangedAlarm(pillList);
-    Provider.of<DataProvider>(context, listen: false).changeArrangedAlarms(arrangedAlarms);
-
-    String jsonPillList = jsonEncode(pillList);
-
-    await DataSharedPreferences.setPillList(jsonPillList);
-    await DataSharedPreferences.setRingDuration(ringDuration);
-    await DataSharedPreferences.setSnoozeDuration(snoozeDuration);
-    await DataSharedPreferences.setSnoozeAmount(snoozeDuration);
-    await DataSharedPreferences.setWiFiPassword(wifiPassword);
-    await DataSharedPreferences.setWiFiSSID(wifiSSID);
-
-  }
-
 }
