@@ -3,35 +3,39 @@ import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:flutter_meditech_app/route/router.dart' as router;
 import 'package:flutter_meditech_app/route/routing_constants.dart';
-import 'const/custom_colors.dart';
+import 'package:provider/provider.dart';
+import 'package:flutter_meditech_app/providers/data_provider.dart';
+import 'package:flutter_meditech_app/functions/data_shared_preferences.dart';
+import 'package:flutter_meditech_app/providers/selected_pill_provider.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+
 final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
     FlutterLocalNotificationsPlugin();
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-   var initializationSettingsAndroid =
-      AndroidInitializationSettings('alarm_icon');
+  var initializationSettingsAndroid = const AndroidInitializationSettings('alarm_icon');
   final IOSInitializationSettings initializationSettingsIOS =
-      IOSInitializationSettings(
-          requestAlertPermission: false,
-          requestBadgePermission: false,
-          requestSoundPermission: false,
-          onDidReceiveLocalNotification: (
-            int id,
-            String? title,
-            String? body,
-            String? payload,
-          ) async {});
+    IOSInitializationSettings(
+      requestAlertPermission: false,
+      requestBadgePermission: false,
+      requestSoundPermission: false,
+      onDidReceiveLocalNotification: (
+        int id,
+        String? title,
+        String? body,
+        String? payload,
+      ) async {});
   var initializationSettings = InitializationSettings(
       android: initializationSettingsAndroid, iOS: initializationSettingsIOS);
 
-await flutterLocalNotificationsPlugin.initialize(initializationSettings,
+  await flutterLocalNotificationsPlugin.initialize(initializationSettings,
       onSelectNotification: (String? payload) async {
     if (payload != null) {
       debugPrint('notification payload: ' + payload);
     }
   });
+  await DataSharedPreferences.init();
   runApp(MyApp());
 
   SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp])
@@ -45,7 +49,12 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return MultiProvider(
+      providers: [
+        ChangeNotifierProvider(create: (context) => DataProvider()),
+        ChangeNotifierProvider(create: (context) => SelectedPillProvider())
+      ],
+      child: MaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'MediTECH App',
       theme: ThemeData(
@@ -57,6 +66,7 @@ class MyApp extends StatelessWidget {
       onGenerateRoute: router.generateRoute,
       initialRoute: SplashScreenRoute,
       // initialRoute: ReminderScreenRoute,
+      ),
     );
   }
 }

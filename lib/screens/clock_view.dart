@@ -15,7 +15,7 @@ class _ClockViewState extends State<ClockView> {
     var formattedTime = DateFormat('jm').format(now);
     var formattedDate = DateFormat('yMMMMd').format(now);
     return Scaffold(
-      appBar: const MyAppBar(title: 'Clock'),
+      appBar: MyAppBar(title: 'Clock'),
       backgroundColor: Color.fromARGB(255, 255, 255, 255),
       body: Container(
         padding: EdgeInsets.all(32),
@@ -41,10 +41,10 @@ class _ClockViewState extends State<ClockView> {
           ],
         ),
 
-        /**  child: Container(
-            alignment: Alignment.center,
-            child: ClockView()
-            ),*/
+        // /**  child: Container(
+        //     alignment: Alignment.center,
+        //     child: ClockView()
+        //     ),*/
       ),
     );
   }
