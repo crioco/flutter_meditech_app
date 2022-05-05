@@ -1,2 +1,2 @@
-# flutter_meditech_app
- Flutter Mobile App of MediTECH Smart Pill Organizer
+# MediTECH_app_clock
+ Clock/Alarm portion of the MediTECH app
