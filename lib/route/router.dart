@@ -1,13 +1,6 @@
 import 'package:flutter_meditech_app/route/routing_constants.dart';
-import 'package:flutter_meditech_app/screens/DiscoveryPage.dart';
-import 'package:flutter_meditech_app/screens/account_screen.dart';
-import 'package:flutter_meditech_app/screens/add_pill_setting_screen.dart';
-import 'package:flutter_meditech_app/screens/device_settings_screen.dart';
-import 'package:flutter_meditech_app/screens/edit_pill_setting_screen.dart';
-import 'package:flutter_meditech_app/screens/monitor_summary.dart';
-import 'package:flutter_meditech_app/screens/monitoring_screen.dart';
-import 'package:flutter_meditech_app/screens/pill_settings_screen.dart';
-import 'package:flutter_meditech_app/screens/qr_scan_screen.dart';
+import 'package:flutter_meditech_app/screens/dashboard_screen.dart';
+import 'package:flutter_meditech_app/screens/clock_view.dart';
 import 'package:flutter_meditech_app/screens/signin_screen.dart';
 import 'package:flutter_meditech_app/screens/signup_screen.dart';
 import 'package:flutter_meditech_app/screens/splash_screen.dart';
@@ -15,6 +8,7 @@ import 'package:flutter_meditech_app/screens/undefined_screen.dart';
 import 'package:flutter_meditech_app/screens/reminder_screen.dart';
 import 'package:flutter_meditech_app/screens/summary_screen.dart';
 import 'package:flutter/material.dart';
+
 
 Route<dynamic> generateRoute(RouteSettings settings) {
   switch (settings.name) {
@@ -34,32 +28,12 @@ Route<dynamic> generateRoute(RouteSettings settings) {
     case SummaryScreenRoute:
       return MaterialPageRoute(builder: (context) => SummaryScreen());
 
-    case PillSettingsScreenRoute:
-      return MaterialPageRoute(builder: (context) => PillSettingsScreen());
-
-    case EditPillSettingScreenRoute:
-      return MaterialPageRoute(builder: (context) => EditPillSettingScreen());
+    case DashboardScreenRoute:
+      return MaterialPageRoute(builder: (context) => DashboardScreen());
     
-    case AddPillSettingScreenRoute:
-      return MaterialPageRoute(builder: (context) => AddPillSettingScreen());
+    case ClockViewScreenRoute:
+      return MaterialPageRoute(builder: (context) => ClockView());
 
-    case DeviceSettingsScreenRoute:
-      return MaterialPageRoute(builder: (context) => DeviceSettingsScreen());
-
-    case AccountScreenRoute:
-      return MaterialPageRoute(builder: (context) => AccountScreen());
-
-   case QRScanScreenRoute:
-      return MaterialPageRoute(builder: (context) => QRScanScreen());
-
-   case MonitoringScreenRoute:
-      return MaterialPageRoute(builder: (context) => MonitoringScreen());
-
-  case MonitorSummaryScreenRoute:
-      return MaterialPageRoute(builder: (context) => MonitorSummary());
-
-  // case BLUDiscoveryScreenRoute:
-  //     return MaterialPageRoute(builder: (context) => DiscoveryPage());
 
     default:
       return MaterialPageRoute(
