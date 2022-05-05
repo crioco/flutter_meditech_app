@@ -15,11 +15,11 @@ void scheduleAlarm(DateTime scheduledNotificationDateTime, AlarmInfo alarmInfo) 
       priority: Priority.high,
       ticker: 'ticker',
       additionalFlags: Int32List.fromList(<int>[4]),
-      sound: RawResourceAndroidNotificationSound('a_long_cold_sting'),
-      largeIcon: DrawableResourceAndroidBitmap('alarm_icon'),
+      sound: const RawResourceAndroidNotificationSound('a_long_cold_sting'),
+      largeIcon: const DrawableResourceAndroidBitmap('alarm_icon'),
     );
 
-    var iOSPlatformChannelSpecifics = IOSNotificationDetails(
+    var iOSPlatformChannelSpecifics = const IOSNotificationDetails(
         sound: 'a_long_cold_sting.wav',
         presentAlert: true,
         presentBadge: true,

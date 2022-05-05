@@ -31,21 +31,21 @@ class AddAlarmButtonState extends State<AddAlarmButton> {
     return Container(
       width: MediaQuery.of(context).size.width * 0.10,
       height: MediaQuery.of(context).size.height * 0.10,
-      decoration: BoxDecoration(
+      decoration: const BoxDecoration(
           color: Color.fromARGB(251, 0, 162, 255),
           borderRadius: BorderRadius.all(Radius.circular(100))),
       padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 16),
-      child: FlatButton(
+      child: TextButton(
         child: Column(
           children: <Widget>[
             Image.asset(
               'assets/images/addw.png',
               scale: 3,
             ),
-            SizedBox(
+            const SizedBox(
               width: 3,
             ),
-            Text(
+            const Text(
               'Add Alarm',
               style: TextStyle(
                 color: Colors.white,
@@ -61,7 +61,7 @@ class AddAlarmButtonState extends State<AddAlarmButton> {
             useRootNavigator: true,
             context: context,
             clipBehavior: Clip.antiAlias,
-            shape: RoundedRectangleBorder(
+            shape: const RoundedRectangleBorder(
               borderRadius: BorderRadius.vertical(
                 top: Radius.circular(24),
               ),
@@ -99,7 +99,7 @@ class AddAlarmButtonState extends State<AddAlarmButton> {
                             },
                             child: Text(
                               alarmTimeString!,
-                              style: TextStyle(fontSize: 32),
+                              style: const TextStyle(fontSize: 32),
                             ),
                             style: ElevatedButton.styleFrom(
                               primary: Color.fromARGB(183, 207, 206, 202), // background
@@ -131,8 +131,8 @@ class AddAlarmButtonState extends State<AddAlarmButton> {
                           ),
                           FloatingActionButton.extended(
                             onPressed: onSaveAlarm,
-                            icon: Icon(Icons.alarm),
-                            label: Text('Save'),
+                            icon: const Icon(Icons.alarm),
+                            label: const Text('Save'),
                           ),
                         ],
                       ),
@@ -154,9 +154,10 @@ class AddAlarmButtonState extends State<AddAlarmButton> {
 
     if (DisplayAlarmState.alarmTime!.isAfter(DateTime.now())) {
       scheduleAlarmDateTime = DisplayAlarmState.alarmTime!;
-    } else
+    } else {
       scheduleAlarmDateTime =
-          DisplayAlarmState.alarmTime!.add(Duration(days: 1));
+          DisplayAlarmState.alarmTime!.add(const Duration(days: 1));
+    }
 
     if (alarmlabel.text.isEmpty) {
       alarmlabel.text = 'Time to take your medicine';
@@ -177,7 +178,7 @@ class AddAlarmButtonState extends State<AddAlarmButton> {
     Navigator.pop(context);
     Navigator.pushAndRemoveUntil(
       context,
-      MaterialPageRoute(builder: (context) => ClockView()),
+      MaterialPageRoute(builder: (context) => const ClockView()),
       (Route<dynamic> route) => false,
     );
   }
