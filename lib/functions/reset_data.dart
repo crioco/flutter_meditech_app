@@ -15,7 +15,7 @@ resetData(String userID, BuildContext context) async {
   }
 }
 
-Future<bool> getUserDevice(String userID, BuildContext context) async{
+ Future<bool> getUserDevice(String userID, BuildContext context ) async{
 
     DocumentSnapshot<Map<String, dynamic>> query = await FirebaseFirestore.instance
     .collection('Users').doc(userID).get();
@@ -27,14 +27,17 @@ Future<bool> getUserDevice(String userID, BuildContext context) async{
     await DataSharedPreferences.setUserID(userID);
     await DataSharedPreferences.setFirstName(firstName);
     await DataSharedPreferences.setLastName(lastName);
-
+    
     var deviceID = data['device'];
+
     if(deviceID == 'NULL'){
       await DataSharedPreferences.setPillList('');
       await DataSharedPreferences.setRingDuration(0);
       await DataSharedPreferences.setSnoozeDuration(0);
       await DataSharedPreferences.setSnoozeAmount(0);
-      await DataSharedPreferences.setDeviceID(deviceID);
+      await DataSharedPreferences.setDeviceID('NULL');
+      await DataSharedPreferences.setWiFiSSID('');
+      await DataSharedPreferences.setWiFiPassword('');
       return false;
     } 
 
@@ -43,7 +46,7 @@ Future<bool> getUserDevice(String userID, BuildContext context) async{
     return true;
   }
 
-   getData(BuildContext context) async{
+  getData(BuildContext context) async{
     DocumentSnapshot<Map<String, dynamic>> query = await FirebaseFirestore.instance
     .collection('DEVICES').doc(Provider.of<DataProvider>(context, listen: false).deviceID).get();
 
@@ -52,6 +55,11 @@ Future<bool> getUserDevice(String userID, BuildContext context) async{
     var snoozeDuration = data['snoozeDuration'] as int;
     var snoozeAmount = data['snoozeAmount'] as int;
     var pillSettings = data['pillSettings'].cast<Map<String, dynamic>>();
+    var wifiSSID = data['wifiSSID'] as String;
+    var wifiPassword = data['wifiPassword'] as String;
+
+    Provider.of<DataProvider>(context, listen: false).changeWiFiSSID(wifiSSID);
+    Provider.of<DataProvider>(context, listen: false).changeWiFiPassword(wifiPassword);
 
     List<Pill> pillList = [];
 
@@ -81,5 +89,7 @@ Future<bool> getUserDevice(String userID, BuildContext context) async{
     await DataSharedPreferences.setRingDuration(ringDuration);
     await DataSharedPreferences.setSnoozeDuration(snoozeDuration);
     await DataSharedPreferences.setSnoozeAmount(snoozeDuration);
+    await DataSharedPreferences.setWiFiPassword(wifiPassword);
+    await DataSharedPreferences.setWiFiSSID(wifiSSID);
 
   }

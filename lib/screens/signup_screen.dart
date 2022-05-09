@@ -140,7 +140,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                     MyTextButton(
                       buttonName: 'Register',
                       onTap: () {
-                        _signUp;
+                        _signUp();
                         },
                       bgColor: Colors.blueAccent,
                       textColor: Colors.white,
@@ -180,7 +180,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
 
     if (obj is User) {
       addUser(firstname: firstname, lastname: lastname, user: obj);
-      resetData(obj.uid, context);
+      await resetData(obj.uid, context);
       Navigator.pushNamedAndRemoveUntil(
           context, ReminderScreenRoute, (Route<dynamic> route) => false);
     } else {
@@ -192,11 +192,9 @@ class _SignUpScreenState extends State<SignUpScreen> {
   }
 
   void addUser({required String firstname, required String lastname, required User user}) async{
-    Map<String, bool> monitoredMap = {};
-    List<String> monitoringList = [];
     DocumentReference users = FirebaseFirestore.instance.collection('Users').doc(user.uid);
     await users
-    .set({'firstname': firstname, 'lastname': lastname, 'device': 'NULL', 'monitoredMap': monitoredMap, 'monitoringList' : monitoringList})
+    .set({'firstname': firstname, 'lastname': lastname, 'device': 'NULL'})
     .then((value) => print('User Added'))
     .catchError((error)=>{print('Failed to add user. $error')});
   }

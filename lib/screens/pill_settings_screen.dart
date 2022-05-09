@@ -301,7 +301,10 @@ void uploadToBLU() async {
           var hour = (time/100).floor();
           var minute = time%100;
           var now = DateTime.now();
-          await scheduleAlarm(DateTime(now.year, now.month, now.day, hour, minute), index);
+          var alarmTime = DateTime(now.year, now.month, now.day, hour, minute);
+          if (alarmTime.isAfter(now)) {
+            await scheduleAlarm(alarmTime, index);
+          }
         }
 
         var arrangedAlarms = getArrangedAlarm(pillList);

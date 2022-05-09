@@ -1,14 +1,9 @@
-import 'dart:convert';
-
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_meditech_app/const/day_of_week.dart';
-import 'package:flutter_meditech_app/functions/data_shared_preferences.dart';
 import 'package:flutter_meditech_app/functions/global_functions.dart';
 import 'package:flutter_meditech_app/model/pill_object.dart';
 import 'package:flutter_meditech_app/providers/data_provider.dart';
 import 'package:flutter_meditech_app/providers/selected_pill_provider.dart';
-import 'package:flutter_meditech_app/widgets/my_app_bar.dart';
 import 'package:iconify_flutter/iconify_flutter.dart';
 import 'package:iconify_flutter/icons/ion.dart';
 import 'package:provider/provider.dart';
@@ -87,7 +82,6 @@ class _EditPillSettingScreenState extends State<EditPillSettingScreen> {
                       child: TextFormField(
                         textAlignVertical: TextAlignVertical.center,
                         initialValue: pillName,
-                        // controller: pillNameController,
                         keyboardType: TextInputType.name,
                         textInputAction: TextInputAction.done,
                         decoration: const InputDecoration(
@@ -468,7 +462,6 @@ class _EditPillSettingScreenState extends State<EditPillSettingScreen> {
                       alignment: Alignment.center,
                       value: dosage,
                       elevation: 8,
-                      // style: const TextStyle(color: Colors.black),
                       underline: Container(
                         height: 2,
                         color: Colors.blue,

@@ -66,11 +66,11 @@ class MySideMenu extends StatelessWidget {
                 tileIcon: Fluent.person_circle_24_filled,
                 navRoute: AccountScreenRoute,
               ),
-              const SideMenuListTile(
-                    tileText: 'Try Alarm',
-                    tileIcon: Fluent.person_circle_24_filled,
-                    navRoute: ClockViewScreenRoute,
-              ),
+              // const SideMenuListTile(
+              //       tileText: 'Try Alarm',
+              //       tileIcon: Fluent.person_circle_24_filled,
+              //       navRoute: ClockViewScreenRoute,
+              // ),
             ],
           ),
           const Expanded(child: SizedBox()),

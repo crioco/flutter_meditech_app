@@ -97,7 +97,7 @@ class _SignInScreenState extends State<SignInScreen> {
                             Navigator.pushNamed(context, SignUpScreenRoute);
                           },
                           child: Text(
-                            "Dont't have an account?",
+                            "Don't have an account?",
                             style: kBodyText.copyWith(
                               color: Colors.black,
                             ),
@@ -165,12 +165,6 @@ class _SignInScreenState extends State<SignInScreen> {
     await DataSharedPreferences.setUserID(userID);
     await DataSharedPreferences.setFirstName(firstName);
     await DataSharedPreferences.setLastName(lastName);
-
-    // var wifiPassword = DataSharedPreferences.getWiFiPassword();
-    // var wifiSSID = DataSharedPreferences.getWiFiSSID();
-
-    // Provider.of<DataProvider>(context, listen: false).changeWiFiSSID(wifiSSID);
-    // Provider.of<DataProvider>(context, listen: false).changeWiFiPassword(wifiPassword);
     
     var deviceID = data['device'];
 
@@ -180,6 +174,8 @@ class _SignInScreenState extends State<SignInScreen> {
       await DataSharedPreferences.setSnoozeDuration(0);
       await DataSharedPreferences.setSnoozeAmount(0);
       await DataSharedPreferences.setDeviceID('NULL');
+      await DataSharedPreferences.setWiFiSSID('');
+      await DataSharedPreferences.setWiFiPassword('');
       return false;
     } 
 

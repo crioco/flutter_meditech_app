@@ -7,7 +7,6 @@ import 'package:flutter_meditech_app/functions/global_functions.dart';
 import 'package:flutter_meditech_app/model/pill_object.dart';
 import 'package:flutter_meditech_app/providers/data_provider.dart';
 import 'package:flutter_meditech_app/providers/selected_pill_provider.dart';
-import 'package:flutter_meditech_app/widgets/my_app_bar.dart';
 import 'package:iconify_flutter/iconify_flutter.dart';
 import 'package:iconify_flutter/icons/ion.dart';
 import 'package:provider/provider.dart';
@@ -54,7 +53,7 @@ class _AddPillSettingScreenState extends State<AddPillSettingScreen> {
       ),
       body: SingleChildScrollView(
         child: Padding(
-          padding: const EdgeInsets.all(40),
+          padding: const EdgeInsets.all(20),
           child: Column(
             children: [
             // PILL NAME
@@ -151,30 +150,34 @@ class _AddPillSettingScreenState extends State<AddPillSettingScreen> {
                       ],
                     ),
                     const Divider(thickness: 1, height: 1,),
+                    const SizedBox(height: 20),
                     Column(
                       children: [1,2,3,4,5,6,7].map((day){      
                       bool isChecked = days.contains(day);
-                        return Row(
-                          children: [
-                          Text(dayOfWeekFull[day] as String, style: const TextStyle(fontSize: 16)),
-                          const Spacer(),
-                          SizedBox(
-                            height: 26,
-                            width: 26,
-                            child: Checkbox(value: isChecked, 
-                            onChanged: (value){
-                              setState(() {
-                                // isChecked = value as bool;
-                                // print(value);                          
-                                  if(value as bool){
-                                    days.add(day);
-                                  } else if(days.length > 1){days.remove(day);}
-                                  days.sort((a,b) => a.compareTo(b));
-                                  Provider.of<SelectedPillProvider>(context, listen: false).changeSelectedDays(days);
-                              });
-                            }),
-                          )
-                        ],);
+                        return Padding(
+                          padding: const EdgeInsets.symmetric(vertical: 5),
+                          child: Row(
+                            children: [
+                            Text(dayOfWeekFull[day] as String, style: const TextStyle(fontSize: 16)),
+                            const Spacer(),
+                            SizedBox(
+                              height: 26,
+                              width: 26,
+                              child: Checkbox(value: isChecked, 
+                              onChanged: (value){
+                                setState(() {
+                                  // isChecked = value as bool;
+                                  // print(value);                          
+                                    if(value as bool){
+                                      days.add(day);
+                                    } else if(days.length > 1){days.remove(day);}
+                                    days.sort((a,b) => a.compareTo(b));
+                                    Provider.of<SelectedPillProvider>(context, listen: false).changeSelectedDays(days);
+                                });
+                              }),
+                            )
+                          ],),
+                        );
                       }).toList(),
                     ),
                     //List view builder of days
@@ -239,23 +242,41 @@ class _AddPillSettingScreenState extends State<AddPillSettingScreen> {
   void showDeleteDialog(BuildContext context, List<Map<String,dynamic>> alarmList, int index){
     showDialog(context: context,  builder: (BuildContext context){
       return AlertDialog(
-        title: const Text('Delete Alarm?'),
+        content: const SizedBox(
+          width: double.maxFinite,
+        ),
+        title: const Center(child: Text('Delete Alarm?', style: TextStyle(fontSize: 25))),
         actions: [
-          ElevatedButton(
-            onPressed: () {
-              Navigator.of(context).pop();
-            },
-            child: const Text('CANCEL')
-          ),
-          ElevatedButton(
-            onPressed: () {
-              setState(() {
-                alarmList.removeAt(index);
-                Provider.of<SelectedPillProvider>(context, listen: false).changeSelectedAlarmList(alarmList);
-              });
-              Navigator.of(context).pop();
-            },
-            child: const Text('DELETE')
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            children: [
+              ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                  fixedSize: const Size(100, 30),
+                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+                  primary: Colors.grey
+                ),
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+                child: const Text('CANCEL')
+              ),
+              ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                  fixedSize: const Size(100, 30),
+                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+                  primary: Colors.redAccent
+                ),
+                onPressed: () {
+                  setState(() {
+                    alarmList.removeAt(index);
+                    Provider.of<SelectedPillProvider>(context, listen: false).changeSelectedAlarmList(alarmList);
+                  });
+                  Navigator.of(context).pop();
+                },
+                child: const Text('DELETE')
+              ),
+            ],
           ),
         ],
       );
@@ -276,68 +297,94 @@ class _AddPillSettingScreenState extends State<AddPillSettingScreen> {
               Divider(thickness: 1, height: 1)
             ],
           ),
-          content: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Row(
-               children: [
-                 const Text('Time: '),
-                 TextButton(child: Text(convertToTwelveHour(intTime)), onPressed: (){
-                  Navigator.of(context).push(showPicker(
-                    value: _timeNow,
-                    context: context,
-                    onChange: (time){
-                      setState(() {
-                        _timeNow = time;
-                        intTime = _timeNow.hour*100 + _timeNow.minute;
-                      });
-                    }));
-                 })
-               ],
-              ),
-              Row(children: [
-                const Text('Dosage'),
-                DropdownButton<int>(
-                      value: dosage,
-                      elevation: 8,
-                      // style: const TextStyle(color: Colors.black),
-                      underline: Container(
-                        height: 2,
-                        color: Colors.blue,
-                      ),
-                      onChanged: (value) {
+          content: SizedBox(
+            width: double.maxFinite,
+            height: 100,
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Row(
+                 children: [
+                   const Text('Time: ', style: TextStyle(fontSize: 18)),
+                   const Spacer(),
+                   TextButton(child: Text(convertToTwelveHour(intTime), style: const TextStyle(fontSize: 18)), onPressed: (){
+                    Navigator.of(context).push(showPicker(
+                      value: _timeNow,
+                      context: context,
+                      onChange: (time){
                         setState(() {
-                         dosage = value as int;               
+                          _timeNow = time;
+                          intTime = _timeNow.hour*100 + _timeNow.minute;
                         });
-                      },
-                      items: [1,2,3,4]
-                          .map<DropdownMenuItem<int>>((int value) {
-                        return DropdownMenuItem<int>(
-                          value: value,
-                          child: Text(value.toString()),
-                        );
-                      }).toList(),
-                        )
-              ],)
-            ],
+                      }));
+                   })
+                 ],
+                ),
+                Row(children: [
+                  const Text('Dosage', style: TextStyle(fontSize: 18)),
+                  const Spacer(),
+                  Container(
+                    padding: const EdgeInsets.only(right: 10),
+                    width: 75,
+                    child: DropdownButton<int>(
+                          isExpanded: true,
+                          value: dosage,
+                          elevation: 8,
+                          // style: const TextStyle(color: Colors.black),
+                          underline: Container(
+                            height: 2,
+                            color: Colors.blue,
+                          ),
+                          onChanged: (value) {
+                            setState(() {
+                             dosage = value as int;               
+                            });
+                          },
+                          items: [1,2,3,4]
+                              .map<DropdownMenuItem<int>>((int value) {
+                            return DropdownMenuItem<int>(
+                              value: value,
+                              child: Text(value.toString()),
+                            );
+                          }).toList(),
+                            ),
+                  )
+                ],)
+              ],
+            ),
           ),
           actions: [
-            ElevatedButton(
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-              child: const Text('Cancel')
-            ),
-            ElevatedButton(
-              onPressed: () {
-                setState(() {
-                  print('Time: ${convertToTwelveHour(intTime)} Dosage: $dosage');
-                  alarmList.add({'dosage': dosage, 'time': intTime});
-                  Provider.of<SelectedPillProvider>(context, listen: false).changeSelectedAlarmList(alarmList);
-                });
-                Navigator.of(context).pop();
-              },
-              child: const Text('Add')
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              children: [
+                ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                      fixedSize: const Size(100, 30),
+                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+                      primary: Colors.grey
+                   ),
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                  child: const Text('CANCEL')
+                ),
+                ElevatedButton(
+                   style: ElevatedButton.styleFrom(
+                    fixedSize: const Size(100, 30),
+                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+                    primary: Colors.blueAccent
+                  ),
+                  onPressed: () {
+                    setState(() {
+                      print('Time: ${convertToTwelveHour(intTime)} Dosage: $dosage');
+                      alarmList.add({'dosage': dosage, 'time': intTime});
+                      Provider.of<SelectedPillProvider>(context, listen: false).changeSelectedAlarmList(alarmList);
+                    });
+                    Navigator.of(context).pop();
+                  },
+                  child: const Text('ADD')
+                ),
+              ],
             ),
           ],
         );},
@@ -358,73 +405,99 @@ class _AddPillSettingScreenState extends State<AddPillSettingScreen> {
         return AlertDialog(
           title: Column(
             children: const [
-              Text('Edit Alarm'),
+              Text('Edit Alarm', style: TextStyle(fontSize: 25)),
               Divider(thickness: 1, height: 1)
             ],
           ),
-          content: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Row(
-               children: [
-                 const Text('Time: '),
-                 TextButton(child: Text(convertToTwelveHour(intTime)), onPressed: (){
-                  Navigator.of(context).push(showPicker(
-                    value: _timeNow,
-                    context: context,
-                    onChange: (time){
-                      setState(() {
-                        _timeNow = time;
-                        intTime = _timeNow.hour*100 + _timeNow.minute;
-                      });
-                    }));
-                 })
-               ],
-              ),
-              Row(children: [
-                const Text('Dosage'),
-                DropdownButton<int>(
-                      value: dosage,
-                      elevation: 8,
-                      // style: const TextStyle(color: Colors.black),
-                      underline: Container(
-                        height: 2,
-                        color: Colors.blue,
-                      ),
-                      onChanged: (value) {
+          content: SizedBox(
+            width: double.maxFinite,
+            height: 100,
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Row(
+                 children: [
+                   const Text('Time: ', style: TextStyle(fontSize: 18)),
+                   const Spacer(),
+                   TextButton(child: Text(convertToTwelveHour(intTime), style: const TextStyle(fontSize: 18)), onPressed: (){
+                    Navigator.of(context).push(showPicker(
+                      value: _timeNow,
+                      context: context,
+                      onChange: (time){
                         setState(() {
-                         dosage = value as int;               
+                          _timeNow = time;
+                          intTime = _timeNow.hour*100 + _timeNow.minute;
                         });
-                      },
-                      items: [1,2,3,4]
-                          .map<DropdownMenuItem<int>>((int value) {
-                        return DropdownMenuItem<int>(
-                          value: value,
-                          child: Text(value.toString()),
-                        );
-                      }).toList(),
-                        )
-              ],)
-            ],
+                      }));
+                   })
+                 ],
+                ),
+                Row(children: [
+                  const Text('Dosage'),
+                  const Spacer(),
+                  Container(
+                    padding: const EdgeInsets.only(right: 10),
+                    width: 75,
+                    child: DropdownButton<int>(
+                          isExpanded: true,
+                          alignment: Alignment.center,
+                          value: dosage,
+                          elevation: 8,
+                          underline: Container(
+                            height: 2,
+                            color: Colors.blue,
+                          ),
+                          onChanged: (value) {
+                            setState(() {
+                             dosage = value as int;               
+                            });
+                          },
+                          items: [1,2,3,4]
+                              .map<DropdownMenuItem<int>>((int value) {
+                            return DropdownMenuItem<int>(
+                              value: value,
+                              child: Center(child: Text(value.toString())),
+                            );
+                          }).toList(),
+                            ),
+                  )
+                ],)
+              ],
+            ),
           ),
           actions: [
-            ElevatedButton(
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-              child: const Text('Cancel')
-            ),
-            ElevatedButton(
-              onPressed: () {
-                setState(() {
-                  alarmList.removeAt(index);
-                  alarmList.add({'dosage': dosage, 'time': intTime});
-                  alarmList.sort((a,b)=> (a['time'] as int).compareTo(b['time'] as int));
-                  Provider.of<SelectedPillProvider>(context, listen: false).changeSelectedAlarmList(alarmList);
-                });
-                Navigator.of(context).pop();
-              },
-              child: const Text('Edit')
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              children: [
+                ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    fixedSize: const Size(110, 30),
+                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+                    primary: Colors.grey
+                  ),
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                  child: const Text('CANCEL')
+                ),
+                ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    fixedSize: const Size(110, 30),
+                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+                    primary: Colors.blueAccent
+                  ),
+                  onPressed: () {
+                    setState(() {
+                      alarmList.removeAt(index);
+                      alarmList.add({'dosage': dosage, 'time': intTime});
+                      alarmList.sort((a,b)=> (a['time'] as int).compareTo(b['time'] as int));
+                      Provider.of<SelectedPillProvider>(context, listen: false).changeSelectedAlarmList(alarmList);
+                    });
+                    Navigator.of(context).pop();
+                  },
+                  child: const Text('EDIT')
+                ),
+              ],
             ),
           ],
         );},
