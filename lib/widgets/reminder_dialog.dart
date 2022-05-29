@@ -42,7 +42,7 @@ class _ReminderDialogState extends State<ReminderDialog> {
       ),
       actions: [
         Row(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: [
             ElevatedButton(
                 onPressed: () {
@@ -51,7 +51,7 @@ class _ReminderDialogState extends State<ReminderDialog> {
                 },
                 child: const Text('CANCEL'),
                 style: ElevatedButton.styleFrom(
-                      fixedSize: const Size(100, 30),
+                      fixedSize: const Size(115, 30),
                       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
                       primary: Colors.grey)
             ),
@@ -93,7 +93,7 @@ class _ReminderDialogState extends State<ReminderDialog> {
                   Navigator.of(context).pop();               
                 },
                 style: ElevatedButton.styleFrom(
-                  fixedSize: const Size(100, 30),
+                  fixedSize: const Size(115, 30),
                   shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
                   primary: Colors.blueAccent),
                 child: const Text('CONFIRM'))

@@ -1,11 +1,12 @@
 import 'dart:convert';
 import 'dart:typed_data';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bluetooth_serial/flutter_bluetooth_serial.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_meditech_app/functions/data_shared_preferences.dart';
 import 'package:flutter_meditech_app/functions/global_functions.dart';
+import 'package:flutter_meditech_app/main.dart';
 import 'package:flutter_meditech_app/model/pill_object.dart';
 import 'package:flutter_meditech_app/providers/data_provider.dart';
 import 'package:flutter_meditech_app/providers/selected_pill_provider.dart';
@@ -106,12 +107,10 @@ class _PillSettingsScreenState extends State<PillSettingsScreen> {
               enableBLU(context);
             }),
             (isConnected()) 
-            ?IconButton( icon: const Iconify(Ion.md_cloud_upload, color: Colors.white), onPressed: (){
+            ? IconButton( icon: const Iconify(Ion.md_cloud_upload, color: Colors.white), onPressed: (){
               uploadToBLU();
             })
-            : Container()
-
-            
+            : Container(),
           ],
         ),
         drawer: const MySideMenu(),
@@ -265,14 +264,14 @@ void uploadToBLU() async {
         var deviceJson = '3{"ringDuration":${ringDuration*60000},"snoozeDuration":${snoozeDuration*60000},"snoozeAmount":$snoozeAmount}';
         var jsonPillList = jsonEncode(pillList);
         
-        await Future.delayed(const Duration(seconds: 2));
+        await Future.delayed(const Duration(seconds: 1));
         String jsonPillListS = '1'+jsonPillList;
         _sendMessage(jsonPillListS);
         
-        await Future.delayed(const Duration(seconds: 2));
+        await Future.delayed(const Duration(seconds: 1));
         _sendMessage(deviceJson);
         
-        await Future.delayed(const Duration(seconds: 2));
+        await Future.delayed(const Duration(seconds: 1));
         _sendMessage(wifiJson);
 
         await DataSharedPreferences.setPillList(jsonPillList);
@@ -281,6 +280,32 @@ void uploadToBLU() async {
         await DataSharedPreferences.setSnoozeAmount(snoozeAmount);
         await DataSharedPreferences.setWiFiSSID(wifiSSID);
         await DataSharedPreferences.setWiFiPassword(wifiPassword);
+
+
+        // SETTING MOBILE APP ALARM
+        var alarmTimeList = [];
+
+        for (var pill in pillList){
+          var alarmList = pill.alarmList;
+          for(var map in alarmList){
+            var alarmTime = map['time'];
+            if(!alarmTimeList.contains(alarmTime)){
+              alarmTimeList.add(alarmTime);
+            }
+          } 
+        }
+       
+        await flutterLocalNotificationsPlugin.cancelAll();
+        for (var index = 0; index < alarmTimeList.length; index++){
+          var time = alarmTimeList[index];
+          var hour = (time/100).floor();
+          var minute = time%100;
+          var now = DateTime.now();
+          var alarmTime = DateTime(now.year, now.month, now.day, hour, minute);
+          if (alarmTime.isAfter(now)) {
+            await scheduleAlarm(alarmTime, index);
+          }
+        }
 
         var arrangedAlarms = getArrangedAlarm(pillList);
         Provider.of<DataProvider>(context, listen: false).changeArrangedAlarms(arrangedAlarms);
@@ -422,5 +447,32 @@ void uploadToBLU() async {
       }
     }
   }
+
+  Future<void> scheduleAlarm(DateTime scheduledNotificationDateTime, int id) async {
+  var androidPlatformChannelSpecifics = AndroidNotificationDetails(
+    'alarm_notif',
+    'alarm_notif',
+    channelDescription: 'your channel description',
+    icon: 'alarm_icon',
+    importance: Importance.max,
+    priority: Priority.high,
+    ticker: 'ticker',
+    additionalFlags: Int32List.fromList(<int>[4]),
+    sound: const RawResourceAndroidNotificationSound('alarm_sound'),
+    largeIcon: const DrawableResourceAndroidBitmap('alarm_icon'),
+  );
+
+  var iOSPlatformChannelSpecifics = const IOSNotificationDetails(
+      sound: 'alarm_sound.mp3',
+      presentAlert: true,
+      presentBadge: true,
+      presentSound: true);
+  var platformChannelSpecifics = NotificationDetails(
+      android: androidPlatformChannelSpecifics, iOS: iOSPlatformChannelSpecifics);
+
+  await flutterLocalNotificationsPlugin.schedule(id ,'Alarm', 'Please Take Your Scheduled Pills. uwu', 
+      scheduledNotificationDateTime, platformChannelSpecifics);
+
+}
 
 }

@@ -37,16 +37,18 @@ class MyAppBar extends StatelessWidget implements PreferredSizeWidget {
             // Navigator.of(context).pop();
         })
 
-        : (title == 'Device Settings')
-        ? IconButton( 
-          icon:const Iconify(Ion.md_arrow_back, color: Colors.white, size: 30,),
-          onPressed: (){
-            // Provider.of<DataProvider>(context, listen: false).changeRingDuration(DataSharedPreferences.getRingDuration());
-            // Provider.of<DataProvider>(context, listen: false).changeSnoozeDuration(DataSharedPreferences.getSnoozeDuration());
-            // Provider.of<DataProvider>(context, listen: false).changeSnoozeAmount(DataSharedPreferences.getSnoozeAmount());
+        // : (title == 'Device Settings')
+        // ? IconButton( 
+        //   icon:const Iconify(Ion.md_arrow_back, color: Colors.white, size: 30,),
+        //   onPressed: (){
+        //     Provider.of<DataProvider>(context, listen: false).changeRingDuration(DataSharedPreferences.getRingDuration());
+        //     Provider.of<DataProvider>(context, listen: false).changeSnoozeDuration(DataSharedPreferences.getSnoozeDuration());
+        //     Provider.of<DataProvider>(context, listen: false).changeSnoozeAmount(DataSharedPreferences.getSnoozeAmount());
+        //     Provider.of<DataProvider>(context, listen: false).changeWiFiPassword(DataSharedPreferences.getWiFiPassword());
+        //      Provider.of<DataProvider>(context, listen: false).changeWiFiSSID(DataSharedPreferences.getWiFiSSID());
 
-            Navigator.of(context).pop();
-        })
+        //     Navigator.of(context).pop();
+        // })
 
         : IconButton(
         icon:const Iconify(Ion.reorder_three_sharp, color: Colors.white, size: 30,),

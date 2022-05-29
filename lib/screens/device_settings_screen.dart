@@ -27,7 +27,24 @@ class _DeviceSettingsScreenState extends State<DeviceSettingsScreen> {
     String wifiPassword = Provider.of<DataProvider>(context).wifiPassword;
     
     return Scaffold(
-      appBar: MyAppBar(title: 'Device Settings'),
+      appBar: AppBar(
+        title: const Text('Device Settings'),
+        leading: IconButton( 
+          icon:const Iconify(Ion.md_arrow_back, color: Colors.white, size: 30,),
+          onPressed: (){
+            Provider.of<DataProvider>(context, listen: false).changeRingDuration(DataSharedPreferences.getRingDuration());
+            Provider.of<DataProvider>(context, listen: false).changeSnoozeDuration(DataSharedPreferences.getSnoozeDuration());
+            Provider.of<DataProvider>(context, listen: false).changeSnoozeAmount(DataSharedPreferences.getSnoozeAmount());
+            Provider.of<DataProvider>(context, listen: false).changeWiFiPassword(DataSharedPreferences.getWiFiPassword());
+            Provider.of<DataProvider>(context, listen: false).changeWiFiSSID(DataSharedPreferences.getWiFiSSID());
+            Navigator.of(context).pop();
+        }),
+        actions: [
+        IconButton( icon: const Iconify(Ion.md_checkmark, color: Colors.white), onPressed: () async{
+          Navigator.of(context).pop();
+        }),
+      ]
+      ),
       resizeToAvoidBottomInset: false,
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 10),
